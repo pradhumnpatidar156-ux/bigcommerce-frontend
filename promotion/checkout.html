@@ -1,0 +1,1002 @@
+{{#partial "head"}}
+
+{{{ checkout.checkout_head }}}
+{{{ stylesheet '/assets/css/optimized-checkout.css' }}}
+{{ getFontsCollection }}
+
+<script type="text/javascript">
+    window.language = {{ {langJson 'optimized_checkout' } }};
+</script>
+
+{{{head.scripts}}}
+
+{{/partial}}
+
+{{#partial "page"}}
+<header class="checkoutHeader optimizedCheckout-header">
+    <div class="checkoutHeader-content">
+        <h1 class="is-srOnly">{{lang 'checkout.title'}}</h1>
+        <h2 class="checkoutHeader-heading">
+            <a class="checkoutHeader-link" href="{{urls.home}}">
+                {{#if checkout.header_image}}
+                <img alt="{{settings.store_logo.title}}" class="checkoutHeader-logo" id="logoImage"
+                    src="{{ checkout.header_image }}" />
+                {{ else }}
+                <span class="header-logo-text">{{settings.store_logo.title}}</span>
+                {{/if}}
+            </a>
+        </h2>
+    </div>
+</header>
+
+
+{{{ checkout.checkout_content }}}
+
+
+{{{ footer.scripts }}}
+
+{{/partial}}
+
+{{> layout/empty}}
+
+
+
+
+
+<!-- custom script for postal code  -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+
+<script>
+
+    // new format postal code jQuery
+    jQuery(function ($) {
+        // Try to grab native setter for input.value (best for React-controlled inputs)
+        var nativeValueSetter = null;
+        try {
+            nativeValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
+        } catch (e) { }
+
+        function setNativeValue(el, value) {
+            if (!el) return;
+            if (nativeValueSetter) {
+                nativeValueSetter.call(el, value);
+            } else {
+                el.value = value;
+            }
+            // Notify frameworks (React) that value changed
+            var ev = new Event('input', { bubbles: true });
+            el.dispatchEvent(ev);
+        }
+
+        function cleanPostal(v) {
+            return (v || '').toUpperCase().replace(/^(.{3})\s+/, '$1'); // remove space after first 3 chars + uppercase
+        }
+
+        // Delegated handler: works even if element is injected later
+        $(document).on('input change blur', '#postCodeInput', function () {
+            var el = this;
+            var cleaned = cleanPostal(el.value);
+            if (el.value !== cleaned) {
+                setNativeValue(el, cleaned);
+                try { el.setSelectionRange(cleaned.length, cleaned.length); } catch (e) { }
+            }
+        });
+
+        // Small polling window to catch autofill that doesn't trigger events (10s)
+        var checks = 0;
+        var poll = setInterval(function () {
+            var el = document.getElementById('postCodeInput');
+            if (el) {
+                var cleaned = cleanPostal(el.value);
+                if (el.value !== cleaned) setNativeValue(el, cleaned);
+            }
+            checks++;
+            if (checks > 40) clearInterval(poll); // 40 * 250ms = 10s
+        }, 250);
+
+        // MutationObserver to handle cases where the input node is replaced
+        var observer = new MutationObserver(function () {
+            var el = document.getElementById('postCodeInput');
+            if (el) {
+                var cleaned = cleanPostal(el.value);
+                if (el.value !== cleaned) setNativeValue(el, cleaned);
+            }
+        });
+        observer.observe(document.body, { childList: true, subtree: true });
+    });
+
+    $(document).ready(function () {
+        function changeShippingText() {
+
+            var $shippingHeader = $(".stepHeader-title.optimizedCheckout-headingPrimary");
+
+            if ($shippingHeader.length) {
+                $shippingHeader.filter(function () {
+                    // Check for the specific text "Shipping"
+                    return $(this).text().trim() === "Shipping";
+                }).text("Delivery");
+            } else {
+                // Retry after 100ms if not found
+                setTimeout(changeShippingText, 100);
+            }
+        }
+
+        // Function to change the "Shipping Address" legend text to "Delivery Address"
+        function changeShippingAddressText() {
+            var $shippingLegend = $("legend.form-legend.optimizedCheckout-headingSecondary[data-test='shipping-address-heading']");
+
+            if ($shippingLegend.length) {
+                $shippingLegend.filter(function () {
+                    // Check for the specific text "Shipping Address"
+                    return $(this).text().trim() === "Shipping Address";
+                }).text("Delivery Address");
+            } else {
+                // Retry after 100ms if not found
+                setTimeout(changeShippingAddressText, 100);
+            }
+        }
+
+        // Function to change the "Shipping Method" legend text to "Delivery Method"
+        function changeShippingMethodText() {
+            var $shippingMethodLegend = $("legend.form-legend.optimizedCheckout-headingSecondary");
+
+            if ($shippingMethodLegend.length) {
+                $shippingMethodLegend.filter(function () {
+                    // Check for the specific text "Shipping Method"
+                    return $(this).text().trim() === "Shipping Method";
+                }).text("Delivery Method");
+            } else {
+                // Retry after 100ms if not found
+                setTimeout(changeShippingMethodText, 100);
+            }
+        }
+
+        // Function to change the checkbox label text
+        function changeCheckboxLabelText() {
+            var $checkboxLabel = $("label.form-label.optimizedCheckout-form-label[for='sameAsBilling']");
+
+            if ($checkboxLabel.length) {
+                $checkboxLabel.filter(function () {
+                    // Check for the specific text in the checkbox label
+                    return $(this).text().trim() === "My billing address is the same as my shipping address.";
+                }).text("My billing address is the same as my delivery address.");
+            } else {
+                // Retry after 100ms if not found
+                setTimeout(changeCheckboxLabelText, 100);
+            }
+        }
+
+        // Function to change the cart shipping text to delivery
+        function changeCartShippingText() {
+            var $cartShippingLabel = $("div[data-test='cart-shipping'] .cart-priceItem-label span[data-test='cart-price-label']");
+
+            if ($cartShippingLabel.length) {
+                $cartShippingLabel.filter(function () {
+                    // Check for the specific text "Shipping"
+                    return $(this).text().trim() === "Shipping";
+                }).text("Delivery");
+            } else {
+                // Retry after 100ms if not found
+                setTimeout(changeCartShippingText, 100);
+            }
+        }
+
+        // Call all functions to make the necessary text changes
+        changeShippingText();
+        changeShippingAddressText();
+        changeShippingMethodText();
+        changeCheckboxLabelText();
+        changeCartShippingText();
+    });
+
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+        function isPastSameDayCutoff() {
+            var now = new Date();
+            var hours = now.getHours();
+            var minutes = now.getMinutes();
+            // console.log("Current Time:", hours + ":" + minutes);
+            return (hours > 12) || (hours === 12 && minutes > 0);
+        }
+
+        function disableSameDayDelivery() {
+            if (!isPastSameDayCutoff()) return;
+
+            var sameDayOption = $("input[type='radio']").filter(function () {
+                return $(this)
+                    .next("label")
+                    .find(".shippingOption-desc")
+                    .text()
+                    .toLowerCase()
+                    .includes("same day");
+            });
+
+            if (sameDayOption.length > 0) {
+                console.log("Same-day delivery option found.");
+
+                sameDayOption.each(function () {
+                    if ($(this).is(":checked")) {
+                        // Deselect same-day and select another available option
+                        $(this).prop("checked", false).trigger("change");
+                        $("input[type='radio']").not(sameDayOption).first().prop("checked", true).trigger("change");
+                        // console.log("Same-day delivery deselected.");
+                    }
+
+                    $(this).prop("disabled", true).closest(".form-checklist-item").css("opacity", "0.5");
+                    // console.log("Same-day delivery disabled.");
+                });
+
+                // ✅ If nothing else is selected, force select first available
+                if (!$("input[type='radio']").is(":checked")) {
+                    var firstAvailable = $("input[type='radio']").not(sameDayOption).first();
+                    firstAvailable.prop("checked", true).trigger("change");
+                    // console.log("First available shipping option selected.");
+                }
+
+            } else {
+                // console.log("Same-day option not found.");
+            }
+        }
+
+        function waitForShippingOptions() {
+            if ($(".form-checklist-item").length > 0) {
+                // console.log("Shipping options loaded.");
+                disableSameDayDelivery();
+                // ✅ run every 2 sec properly
+                setInterval(disableSameDayDelivery, 2000);
+            } else {
+                // console.log("Waiting for shipping options...");
+                // ✅ just re-check until loaded
+                setTimeout(waitForShippingOptions, 500);
+            }
+        }
+
+        waitForShippingOptions();
+
+        // Re-check if shipping options change dynamically
+        var targetNode = document.querySelector(".form-checklist");
+        if (targetNode) {
+            new MutationObserver(disableSameDayDelivery).observe(targetNode, { childList: true, subtree: true });
+        }
+
+        // Re-check on any manual change
+        $(document).on("change", ".form-checklist-checkbox, input[type='radio']", disableSameDayDelivery);
+
+        // Final safeguard on checkout button
+        // $(document).on("click", "#checkout-payment-continue", function (e) {
+        //     if (isPastSameDayCutoff()) {
+        //         alert("Same Day Delivery is not available after 12 PM. Please select another option.");
+        //         e.preventDefault();
+        //         return false;
+        //     }
+        // });
+
+        $(document).on("click", "#checkout-payment-continue", function (e) {
+            // Find the checked shipping radio
+            var selectedOption = $("input[name^='shippingOptionIds']:checked");
+
+            // Find its description span
+            var selectedOptionText = selectedOption
+                .closest('.form-field')
+                .find('.shippingOption-desc')
+                .text()
+                .trim();
+
+            //alert(selectedOptionText);
+
+            // Check both conditions
+            if (selectedOptionText.includes("Delivery Same Day") && isPastSameDayCutoff()) {
+                alert("Same Day Delivery is not available after 12 PM. Please select another option.");
+                e.preventDefault();
+                return false;
+            }
+
+        });
+
+
+
+    });
+
+
+    $(document).ready(function () {
+
+        let totalMailPrice2 = 0;
+        let totalDisPrice2 = 0;
+
+        setTimeout(() => {
+            $('li.productList-item').each(function () {
+                let totalPriceText = $(this).find('div.product div.product-actions .product-price').first().text();
+                let unitPriceText = $(this).find('div.product div.product-actions .product-price--beforeDiscount').last().text() || totalPriceText;
+                let unitPrice = parseFloat(unitPriceText.replace('$', '').replace(',', '').trim()) || 0;
+                let totalPrice = parseFloat(totalPriceText.replace('$', '').replace(',', '').trim()) || 0;
+                totalMailPrice2 += unitPrice;
+                totalDisPrice2 += totalPrice;
+            });
+            dfsdf = parseFloat(totalMailPrice2) - parseFloat(totalDisPrice2)
+            console.log('dfsdf', dfsdf)
+            let formatteddfsdf = dfsdf.toLocaleString('en-US', {
+                style: 'currency',
+                currency: 'USD'
+            });
+            $('section.cart-section > div[data-test="cart-subtotal"]').after(`<div data-test="cart-discount"><div aria-live="polite" class="cart-priceItem optimizedCheckout-contentPrimary cart-priceItem--discount33"><span class="cart-priceItem-label"><span data-test="cart-price-label">Discount  </span></span><span class="cart-priceItem-value"><span data-test="cart-price-value">${formatteddfsdf}</span></span></div></div>`)
+            console.log('Total of Unit Prices:', totalMailPrice2.toFixed(2));
+            console.log('Total of Total Prices:', totalDisPrice2.toFixed(2));
+        }, 5000)
+
+    });
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+        function replaceAfterpayText() {
+            // Select the Afterpay "Pay over time" text only
+            const afterpayLabel = document.querySelector(
+                'label[for="radio-afterpay-pay_by_installment"] .paymentProviderHeader-name'
+            );
+
+            if (afterpayLabel && afterpayLabel.textContent.trim() === "Pay over time") {
+                afterpayLabel.innerHTML =
+                    '<span>Multiple financing structures - <a href="https://www.afterpay.com/en-CA/how-it-works" target="_blank" style="text-decoration: underline; color: #0070ba;">how it works</a></span>';
+                return true;
+            }
+            return false;
+        }
+
+        // Try immediately
+        if (!replaceAfterpayText()) {
+            // Keep trying every 500ms until it appears
+            const interval = setInterval(() => {
+                if (replaceAfterpayText()) {
+                    clearInterval(interval);
+                }
+            }, 500);
+        }
+    });
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+        function syncHummRadioState() {
+            const radioHumm = document.getElementById('radio-humm');
+            const customRadio = document.querySelector('.humm-custom-radio');
+            const customDot = document.querySelector('.humm-custom-dot');
+            const hummContent = document.getElementById('humm-payment-content');
+
+            if (radioHumm && customRadio && customDot) {
+                if (radioHumm.checked) {
+                    customRadio.style.borderColor = '#333333';
+                    customDot.style.display = 'block';
+                    if (hummContent) hummContent.style.display = 'block';
+                } else {
+                    customRadio.style.borderColor = '#b8b8b8';
+                    customDot.style.display = 'none';
+                    if (hummContent) hummContent.style.display = 'none';
+                }
+            }
+        }
+
+        function checkAndInjectHumm() {
+            const afterpayInput = document.querySelector('input[id*="afterpay"]') || document.querySelector('label[for*="afterpay"]');
+            if (!afterpayInput) return;
+
+            const list = afterpayInput.closest('ul') || afterpayInput.closest('.form-checklist');
+            if (!list) return;
+
+            if (document.getElementById('custom-humm-payment')) {
+                syncHummRadioState();
+                return;
+            }
+
+            const afterpayLi = afterpayInput.closest('li');
+            if (!afterpayLi) return;
+
+            const hummLi = document.createElement('li');
+            hummLi.className = 'form-checklist-item paymentProvider';
+            hummLi.id = 'custom-humm-payment';
+            hummLi.style.cssText = 'border-bottom: 1px solid #e2e8f0; list-style: none; padding: 0;';
+            hummLi.innerHTML = `
+      <div class="form-field" style="margin: 0; padding: 0; position: relative;">
+        <input class="form-radio optimizedCheckout-form-radio" id="radio-humm" name="paymentProviderRadio" type="radio" value="humm" style="display: none !important;">
+        <label class="form-label" for="radio-humm" style="display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 18px 20px 18px 20px; margin: 0; cursor: pointer; box-sizing: border-box; gap: 15px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div class="humm-custom-radio" style="width: 26px; height: 26px; border: 1px solid #b8b8b8; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: #fff; flex-shrink: 0; box-sizing: border-box; transition: all 0.2s ease;">
+              <div class="humm-custom-dot" style="width: 12px; height: 12px; border-radius: 50%; background: #333333; display: none;"></div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <img src="https://cdn.crucials.io/upload/5vtkmzi0yn/images-36693704.png" alt="Humm" class="humm-payment-logo" style="height: 32px; width: auto; object-fit: contain; display: block; margin: 0 !important;">
+              <div style="display: flex; align-items: baseline; gap: 8px; margin: 0 !important; padding: 0 !important;">
+                <span class="paymentProviderHeader-name" style="font-weight: 700; font-size: 15.5px; margin: 0 !important; padding: 0 !important; line-height: normal !important; display: inline-block !important; position: static !important; transform: none !important;">Humm Financing</span>
+                <span style="font-size: 13.5px; color: #64748b; font-weight: normal; margin: 0 !important; padding: 0 !important; line-height: normal !important; display: inline-block !important;">— No Fees No Interest For 5 Years</span>
+              </div>
+            </div>
+          </div>
+        </label>
+      </div>
+      <div class="paymentProviderContent" id="humm-payment-content" style="display: none; padding: 20px 20px 20px 61px; background: #f8fafc; border-top: 1px solid #e2e8f0; font-size: 13.5px; line-height: 1.5; color: #334155; font-family: sans-serif;">
+        <p style="margin: 0 0 10px 0; font-weight: 700; color: #1e293b;">Pay with Humm financing in 3 easy steps:</p>
+        <ol style="margin: 0 0 0 15px; padding: 0; list-style-type: decimal;">
+          <li style="margin-bottom: 6px;">Place order</li>
+          <li style="margin-bottom: 6px;"><a href="https://undervalueappliances.ca/finance/" target="_blank" style="text-decoration: underline; color: #0070ba; font-weight: 600;">Click here to apply for Humm financing</a></li>
+          <li style="margin-bottom: 0;">Call us at <a href="tel:+18338637858" style="color: #0070ba; font-weight: 600;">+1 (833) 863-7858</a> so we can link your order to your Humm application</li>
+        </ol>
+      </div>
+    `;
+
+            afterpayLi.after(hummLi);
+
+            const radioHumm = document.getElementById('radio-humm');
+
+            // Prevent link click from selecting the radio button
+            const link = hummLi.querySelector('.humm-info-link');
+            if (link) {
+                link.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                });
+            }
+
+            // Label click handler
+            hummLi.addEventListener('click', function (e) {
+                if (e.target.closest('#humm-payment-content')) return;
+                if (e.target.classList.contains('humm-info-link')) return;
+                e.preventDefault();
+                radioHumm.checked = true;
+
+                // Trigger change event manually
+                const event = new Event('change', { bubbles: true });
+                radioHumm.dispatchEvent(event);
+                syncHummRadioState();
+            });
+
+            // Handle Humm radio checked status
+            radioHumm.addEventListener('change', function () {
+                if (radioHumm.checked) {
+                    // Unselect other radios
+                    const otherRadios = list.querySelectorAll('input[name="paymentProviderRadio"]:not(#radio-humm)');
+                    otherRadios.forEach(r => {
+                        r.checked = false;
+                    });
+                }
+                syncHummRadioState();
+            });
+
+            syncHummRadioState();
+        }
+
+        // Poll check because checkout is highly dynamic React app
+        setInterval(checkAndInjectHumm, 500);
+
+        // General click handler to hide Humm content if another radio is selected
+        document.addEventListener('click', function (e) {
+            const clickedRadio = e.target.closest('input[name="paymentProviderRadio"]');
+            if (clickedRadio && clickedRadio.id !== 'radio-humm') {
+                const radioHumm = document.getElementById('radio-humm');
+                if (radioHumm) radioHumm.checked = false;
+                syncHummRadioState();
+            }
+            // Handle click on labels
+            const clickedLabel = e.target.closest('label');
+            if (clickedLabel && clickedLabel.getAttribute('for') && clickedLabel.getAttribute('for') !== 'radio-humm') {
+                const correspondingRadio = document.getElementById(clickedLabel.getAttribute('for'));
+                if (correspondingRadio && correspondingRadio.name === 'paymentProviderRadio') {
+                    const radioHumm = document.getElementById('radio-humm');
+                    if (radioHumm) radioHumm.checked = false;
+                    syncHummRadioState();
+                }
+            }
+        });
+
+        // Intercept place order button click
+        document.addEventListener('click', function (e) {
+            const submitBtn = e.target.closest('#checkout-payment-continue, [data-test="checkout-payment-continue"]');
+            if (submitBtn) {
+                const radioHumm = document.getElementById('radio-humm');
+                if (radioHumm && radioHumm.checked) {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    if (window.Swal) {
+                        window.Swal.fire({
+                            title: 'Humm Financing',
+                            html: `To complete your purchase with Humm Financing, please contact our support team at <a href="tel:+18338637858"><strong>+1 (833) 863-7858</strong></a> to link your approved Humm plan.<br><br>Or you can read more and apply on our <a href="https://undervalueappliances.ca/finance/" target="_blank" style="text-decoration:underline;color:#0070ba;">Financing Page</a>.`,
+                            icon: 'info',
+                            confirmButtonText: 'View Financing Details',
+                            showCancelButton: true,
+                            cancelButtonText: 'Close'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.open('https://undervalueappliances.ca/finance/', '_blank');
+                            }
+                        });
+                    } else {
+                        alert("To complete your purchase with Humm Financing, please contact our support team at +1 (833) 863-7858 to link your approved Humm plan.");
+                        window.open('https://undervalueappliances.ca/finance/', '_blank');
+                    }
+                }
+            }
+        }, true);
+    });
+
+
+
+
+</script>
+
+<script>
+    // ─── Repair Service Checkout Promotion for New Customers ──────────────────────
+    $(document).ready(function () {
+        async function isItemAppliance(item) {
+            if (!item) return false;
+            if (item.productId == 1206) return false;
+
+            const nameLower = (item.name || '').toLowerCase();
+            const partKeywords = [
+                'kit', 'hose', 'hoses', 'connector', 'connectors', 'part', 'parts',
+                'accessory', 'accessories', 'filter', 'filters', 'cord', 'cords',
+                'knob', 'knobs', 'valve', 'valves', 'latch', 'latches', 'belt', 'belts',
+                'shelf', 'shelves', 'bin', 'bins', 'bulb', 'bulbs', 'fuse', 'fuses',
+                'igniter', 'igniters', 'roller', 'rollers', 'wheel', 'wheels', 'screw',
+                'screws', 'bracket', 'brackets', 'handle', 'handles', 'cleaner', 'cleaners'
+            ];
+
+            if (partKeywords.some(keyword => nameLower.includes(keyword))) {
+                return false;
+            }
+
+            if (item.url) {
+                try {
+                    let res = await fetch(item.url);
+                    if (res.ok) {
+                        let htmlText = await res.text();
+                        let parser = new DOMParser();
+                        let doc = parser.parseFromString(htmlText, 'text/html');
+                        let breadcrumbs = doc.querySelector('.breadcrumbs, .breadcrumb, [class*="breadcrumb"]');
+                        if (breadcrumbs) {
+                            let catLinks = breadcrumbs.querySelectorAll('a');
+                            let text = Array.from(catLinks).map(link => link.textContent.toLowerCase()).join(' ');
+                            
+                            if (text.trim() === '') {
+                                let items = breadcrumbs.querySelectorAll('.breadcrumb:not(.is-active), li:not(.is-active)');
+                                if (items.length > 0) {
+                                    text = Array.from(items).map(i => i.textContent.toLowerCase()).join(' ');
+                                } else {
+                                    text = breadcrumbs.textContent.toLowerCase();
+                                }
+                            }
+
+                            if (text.includes('part') || text.includes('service') || text.includes('accessory') || text.includes('accessories')) {
+                                return false;
+                            }
+                            if (text.includes('appliance')) {
+                                return true;
+                            }
+                        }
+                        let canonical = doc.querySelector('link[rel="canonical"]');
+                        let urlStr = canonical ? canonical.href.toLowerCase() : item.url.toLowerCase();
+                        if (urlStr.includes('/services/') || urlStr.includes('/appliance-parts/') || urlStr.includes('/parts/')) {
+                            return false;
+                        }
+                    }
+                } catch (e) {
+                    console.error("Error fetching product page for appliance check:", e);
+                }
+            }
+            return true;
+        }
+
+        async function getRepairServiceOptionId() {
+            try {
+                let res = await fetch('/lifetime-half-price-repair-service/');
+                let html = await res.text();
+                let match = html.match(/name=["']attribute\[(\d+)\]["']/i);
+                if (match) {
+                    return parseInt(match[1]);
+                }
+            } catch (e) {
+                console.error("Failed to fetch option ID:", e);
+            }
+            return null;
+        }
+
+        async function isNewCustomer() {
+            const customerId = "{{customer.id}}";
+            if (!customerId || customerId === "0" || customerId === "") {
+                // Guests are treated as new customers
+                return true;
+            }
+
+            try {
+                // Fetch the customer's order history page to check for completed orders
+                let response = await fetch('/account.php?action=order_status');
+                let htmlText = await response.text();
+                let lowerHtml = htmlText.toLowerCase();
+
+                // Typical Cornerstone indications of no orders
+                if (lowerHtml.includes("you have completed no orders") ||
+                    lowerHtml.includes("you haven't placed any orders") ||
+                    lowerHtml.includes("no orders") ||
+                    (!lowerHtml.includes("account-listitem") && !lowerHtml.includes("order-list"))) {
+                    return true;
+                }
+                return false;
+            } catch (e) {
+                console.error("Error checking customer orders:", e);
+                return true; // Fallback
+            }
+        }
+
+        async function checkCheckoutPromotion() {
+            try {
+                let res = await fetch('/api/storefront/carts?include=lineItems.physicalItems.options,lineItems.digitalItems.options', {
+                    credentials: 'include',
+                    headers: { 'Accept': 'application/json' }
+                });
+                if (res.status === 204) return;
+                let cartData = await res.json();
+                if (!cartData || !Array.isArray(cartData) || cartData.length === 0) return;
+
+                let cart = cartData[0];
+                let cartId = cart.id;
+
+                // Check appliance and repair service counts
+                let applianceCount = 0;
+                let repairServiceCount = 0;
+                let itemsToCheck = [];
+                let coveredSkus = [];
+
+                if (cart.lineItems) {
+                    let collectCovered = (item) => {
+                        if (item.productId == 1206) {
+                            repairServiceCount += item.quantity;
+                            if (item.options) {
+                                item.options.forEach(opt => {
+                                    if (opt.value) {
+                                        opt.value.split(',').forEach(v => {
+                                            let trimmed = v.trim();
+                                            if (trimmed) coveredSkus.push(trimmed);
+                                        });
+                                    }
+                                });
+                            }
+                        } else {
+                            itemsToCheck.push(item);
+                        }
+                    };
+                    if (cart.lineItems.physicalItems) {
+                        cart.lineItems.physicalItems.forEach(collectCovered);
+                    }
+                    if (cart.lineItems.digitalItems) {
+                        cart.lineItems.digitalItems.forEach(collectCovered);
+                    }
+                }
+
+                let results = await Promise.all(itemsToCheck.map(item => isItemAppliance(item)));
+                let uncoveredSkus = [];
+                results.forEach((isAppliance, idx) => {
+                    if (isAppliance) {
+                        let item = itemsToCheck[idx];
+                        applianceCount += item.quantity;
+                        let sku = item.sku || 'No SKU';
+                        let countInCart = item.quantity;
+                        let countCovered = coveredSkus.filter(s => s === sku).length;
+                        let needed = countInCart - countCovered;
+                        for (let i = 0; i < needed; i++) {
+                            uncoveredSkus.push(sku);
+                        }
+                    }
+                });
+
+                if (applianceCount > 0 && repairServiceCount === 0) {
+                    // Check if they already declined or accepted the modal
+                    if (sessionStorage.getItem('free_repair_modal_shown') === 'true') {
+                        return;
+                    }
+
+                    // Check if they have entered their email yet by calling Checkout API
+                    let checkoutRes = await fetch(`/api/storefront/checkouts/${cartId}`, {
+                        credentials: 'include',
+                        headers: { 'Accept': 'application/json' }
+                    });
+                    if (!checkoutRes.ok) return;
+                    let checkout = await checkoutRes.json();
+                    let email = null;
+                    if (checkout && checkout.email) {
+                        email = checkout.email;
+                    } else if (checkout && checkout.billingAddress && checkout.billingAddress.email) {
+                        email = checkout.billingAddress.email;
+                    } else if (checkout && checkout.customer && checkout.customer.email) {
+                        email = checkout.customer.email;
+                    }
+
+                    // If email is not entered yet, we wait (return and let the next polling check handle it)
+                    if (!email) {
+                        return;
+                    }
+
+                    // Email is present! Check if new customer
+                    let isNew = await isNewCustomer();
+                    if (isNew) {
+                        // Show the beautiful modal dialog!
+                        showFreeRepairModal(cartId, uncoveredSkus);
+                    } else {
+                        // Existing customer, don't show modal
+                        sessionStorage.setItem('free_repair_modal_shown', 'true');
+                    }
+                }
+            } catch (e) {
+                console.error("Error in checkout promotion:", e);
+            }
+        }
+
+        function showFreeRepairModal(cartId, uncoveredSkus) {
+            // Prevent duplicate modals
+            if ($('.repair-modal-overlay').length > 0) return;
+            sessionStorage.setItem('free_repair_modal_shown', 'true');
+
+            // Inject CSS styles for the modal
+            if ($('#repair-modal-styles').length === 0) {
+                $('head').append(`
+                    <style id="repair-modal-styles">
+                        .repair-modal-overlay {
+                            position: fixed;
+                            top: 0;
+                            left: 0;
+                            width: 100vw;
+                            height: 100vh;
+                            background: rgba(15, 23, 42, 0.6);
+                            backdrop-filter: blur(6px);
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            z-index: 999999;
+                            opacity: 0;
+                            transition: opacity 0.3s ease;
+                        }
+                        .repair-modal-overlay.active {
+                            opacity: 1;
+                        }
+                        .repair-modal-card {
+                            background: #ffffff;
+                            border-radius: 16px;
+                            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+                            width: 90%;
+                            max-width: 480px;
+                            padding: 30px;
+                            text-align: center;
+                            border: 1px solid #e2e8f0;
+                            transform: scale(0.9);
+                            transition: transform 0.3s ease;
+                        }
+                        .repair-modal-overlay.active .repair-modal-card {
+                            transform: scale(1);
+                        }
+                        .repair-modal-icon {
+                            font-size: 44px;
+                            color: #10b981;
+                            margin-bottom: 16px;
+                        }
+                        .repair-modal-icon svg {
+                            width: 64px !important;
+                            height: 64px !important;
+                            display: inline-block;
+                        }
+                        .repair-modal-tag {
+                            background: #dcfce7;
+                            color: #15803d;
+                            font-size: 11px;
+                            font-weight: 700;
+                            padding: 4px 12px;
+                            border-radius: 20px;
+                            text-transform: uppercase;
+                            letter-spacing: 1px;
+                            display: inline-block;
+                            margin-bottom: 12px;
+                        }
+                        .repair-modal-title {
+                            font-size: 22px;
+                            font-weight: 800;
+                            color: #1e3a8a;
+                            margin: 0 0 10px 0;
+                            line-height: 1.3;
+                        }
+                        .repair-modal-desc {
+                            font-size: 14px;
+                            color: #475569;
+                            line-height: 1.5;
+                            margin: 0 0 24px 0;
+                        }
+                        .repair-modal-buttons {
+                            display: flex;
+                            flex-direction: column;
+                            gap: 10px;
+                        }
+                        .repair-modal-btn-claim {
+                            background: #1959d1;
+                            color: #ffffff !important;
+                            border: none;
+                            padding: 14px 20px;
+                            border-radius: 8px;
+                            font-size: 16px;
+                            font-weight: 700;
+                            cursor: pointer;
+                            transition: background 0.2s ease;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            gap: 8px;
+                            text-decoration: none !important;
+                        }
+                        .repair-modal-btn-claim:hover {
+                            background: #1b4594;
+                        }
+                        .repair-modal-btn-decline {
+                            background: transparent;
+                            color: #64748b !important;
+                            border: 1px solid #cbd5e1;
+                            padding: 12px 20px;
+                            border-radius: 8px;
+                            font-size: 14px;
+                            font-weight: 600;
+                            cursor: pointer;
+                            transition: all 0.2s ease;
+                            text-decoration: none !important;
+                        }
+                        .repair-modal-btn-decline:hover {
+                            background: #f1f5f9;
+                            color: #334155 !important;
+                        }
+                    </style>
+                `);
+            }
+
+            // Create modal HTML
+            let modalHtml = `
+                <div class="repair-modal-overlay">
+                    <div class="repair-modal-card">
+                        <div class="repair-modal-icon">
+                            <svg viewBox="0 0 1024 1024" class="icon" version="1.1" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M804.6 473.9v292.6c0 21.9-17.8 39.7-39.7 39.7H259.7c-21.9 0-39.7-17.8-39.7-39.7V473.9h-18.8c-21.9 0-39.7-17.8-39.7-39.7v-68.3c0-21.9 17.8-39.7 39.7-39.7h622.1c21.9 0 39.7 17.8 39.7 39.7v68.3c0 21.9-17.8 39.7-39.7 39.7h-18.7z" fill="#FFFFFF"></path><path d="M764.9 832.7H259.7c-36.5 0-66.2-29.7-66.2-66.2V499.9c-32.9-3.8-58.5-31.9-58.5-65.7v-68.3c0-36.5 29.7-66.2 66.2-66.2h622.1c36.5 0 66.2 29.7 66.2 66.2v68.3c0 33.9-25.6 61.9-58.5 65.7v266.6c0.1 36.5-29.6 66.2-66.1 66.2z m-563.7-480c-7.3 0-13.2 5.9-13.2 13.2v68.3c0 7.3 5.9 13.2 13.2 13.2h45.2v319.1c0 7.3 5.9 13.2 13.2 13.2h505.3c7.3 0 13.2-5.9 13.2-13.2V447.4h45.2c7.3 0 13.2-5.9 13.2-13.2v-68.3c0-7.3-5.9-13.2-13.2-13.2H201.2z" fill="#333333"></path><path d="M473.3 492.3h78v295.4h-78z" fill="#3a91ee"></path><path d="M239.5 447.4h545.6v51.7H239.5z" fill="#333333"></path><path d="M305.751 228.226l19.659-11.35c15.502-8.95 35.246-3.952 44.665 11.163l41.115 66.213-104.068 2.35-13.486-23.16c-9.237-15.799-3.82-36.016 11.979-45.252 0.05 0.086 0.05 0.086 0.136 0.036z" fill="#3a91ee"></path><path d="M277.11 350.417l-29.174-50.129c-23.786-41-9.93-93.801 31.069-117.588l0.26-0.15 19.658-11.35c40.444-23.35 91.48-10.553 116.078 29.053l90.15 144.944-228.041 5.22z m28.641-122.19l-0.346 0.2c-15.539 9.086-20.906 29.39-11.806 45.151l13.437 23.073 104.154-2.399-41.115-66.213c-9.52-15.288-29.163-20.113-44.665-11.163l-19.659 11.35zM414.8 492.3h58.5v295.4h-58.5zM551.3 492.3h58.5v295.4h-58.5z" fill="#333333"></path><path d="M716.76 228.266l-19.66-11.35c-15.501-8.95-35.245-3.952-44.665 11.163l-41.115 66.213 104.068 2.349 13.437-23.073c9.237-15.798 3.82-36.015-11.979-45.252l-0.086-0.05z" fill="#3a91ee"></path><path d="M745.364 350.32l-228.041-5.22 90.15-144.943c24.649-39.694 75.634-52.404 116.078-29.054l20.611 11.9c19.509 11.61 33.455 30.054 39.262 51.997 5.88 22.217 2.787 45.373-8.8 65.241l-29.26 50.08zM611.27 294.38l104.068 2.349 13.487-23.16c4.4-7.62 5.655-16.596 3.386-25.065-2.22-8.556-7.707-15.65-15.278-20.137l-19.832-11.45c-15.589-9-35.196-4.039-44.666 11.163l-41.165 66.3z" fill="#333333"></path></g></svg>
+                        </div>
+                        <span class="repair-modal-tag">Only For You</span>
+                        <h3 class="repair-modal-title">Get Free Lifetime Appliances Repair Service</h3>
+                        <p class="repair-modal-desc">
+                            Since you are a new customer, you are eligible to receive our <strong>Lifetime Half-Price Appliances Repair Service completely FREE</strong> ($75 value)!
+                        </p>
+                        <div class="repair-modal-buttons">
+                            <button class="repair-modal-btn-claim" id="repair-claim-btn">
+                                Yes, Claim My Free Protection
+                            </button>
+                            <button class="repair-modal-btn-decline" id="repair-decline-btn">
+                                No thanks, I'm not interested
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Append modal to body
+            $('body').append(modalHtml);
+
+            // Animate entrance
+            setTimeout(() => {
+                $('.repair-modal-overlay').addClass('active');
+            }, 100);
+
+            // Handle claim click
+            $(document).on('click', '#repair-claim-btn', async function () {
+                $(this).prop('disabled', true).html('Claiming... please wait...');
+                try {
+                    let optionId = await getRepairServiceOptionId();
+
+                    let lineItems = uncoveredSkus.map(sku => {
+                        let payload = {
+                            quantity: 1,
+                            productId: 1206
+                        };
+                        if (optionId) {
+                            payload.optionSelections = [
+                                {
+                                    optionId: optionId,
+                                    optionValue: sku
+                                }
+                            ];
+                        }
+                        return payload;
+                    });
+
+                    // Add to cart
+                    let addRes = await fetch(`/api/storefront/carts/${cartId}/items`, {
+                        method: "POST",
+                        credentials: "include",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Accept": "application/json"
+                        },
+                        body: JSON.stringify({
+                            lineItems: lineItems
+                        })
+                    });
+
+                    if (addRes.ok) {
+                        // Apply coupon
+                        await fetch(`/api/storefront/checkouts/${cartId}/coupons`, {
+                            method: "POST",
+                            credentials: "include",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "Accept": "application/json"
+                            },
+                            body: JSON.stringify({
+                                couponCode: "FREEREPAIR"
+                            })
+                        });
+
+                        // Reload checkout page
+                        window.location.reload();
+                    } else {
+                        alert("Could not add free protection. Please try again or check out.");
+                        closeModal();
+                    }
+                } catch (e) {
+                    console.error("Failed to add free service:", e);
+                    closeModal();
+                }
+            });
+
+            // Handle decline click
+            $(document).on('click', '#repair-decline-btn', function () {
+                closeModal();
+            });
+
+            function closeModal() {
+                $('.repair-modal-overlay').removeClass('active');
+                setTimeout(() => {
+                    $('.repair-modal-overlay').remove();
+                }, 300);
+            }
+        }
+
+        // Run check every 3 seconds to monitor when email step is filled
+        setInterval(checkCheckoutPromotion, 3000);
+        // Also run once immediately
+        checkCheckoutPromotion();
+    });
+</script>
+
+
+
+
+<style>
+    #custom-humm-payment label::before,
+    #custom-humm-payment label::after {
+        display: none !important;
+        content: none !important;
+    }
+
+    #custom-humm-payment .paymentProviderHeader-name {
+        margin: 0 !important;
+        padding: 0 !important;
+        line-height: normal !important;
+        display: inline-block !important;
+        position: static !important;
+        transform: none !important;
+    }
+
+    span.cart-priceItem-postFix.optimizedCheckout-contentSecondary {
+        display: none;
+        color: red;
+        text-decoration: underline;
+    }
+
+    .cart-priceItem-link a {
+        color: red;
+        text-decoration: underline;
+    }
+
+    .swal2-modal .swal2-content {
+        color: #000;
+        font-size: 1.14286rem;
+    }
+</style>

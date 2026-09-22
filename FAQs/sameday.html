@@ -1,0 +1,84 @@
+<style>
+.faq_item {
+            border: 1px solid #ddd;
+            margin-bottom: 10px; /* Space between questions */
+            background: #1a5bd1;
+        }
+        .faq_item h3 {
+            padding: 15px;
+            margin: 0;
+            cursor: pointer;
+            background: #1a5bd1;
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .faq_item .faq_answer {
+            display: none;
+            padding: 15px;
+            background: #1a5bd1; /* Light blue background */
+            color: #fff;
+            font-size: 18px;
+        }
+        .faq_item.active h3 {
+            background: #4a90e2; /* Lighter blue when active */
+        }
+        .faq_item.active .faq_answer {
+            display: block;
+        }
+    </style>
+<div class="container-faq">
+    <div class="faq_item">
+        <h3>What is the turn around time for delivery?</h3>
+        <div class="faq_answer">
+            <p><b>As early as same day delivery</b> (if ordered by noon). We also offer next-day delivery, or within one week delivery.</p>
+        </div>
+    </div>
+
+    <div class="faq_item">
+        <h3>Is removal of my broken or unwanted appliance an option?</h3>
+        <div class="faq_answer">
+            <p>Yes, removal service is only $19.95.</p>
+        </div>
+    </div>
+
+    <div class="faq_item">
+        <h3>Do you offer hookup service?</h3>
+        <div class="faq_answer">
+            <p>Yes, hookup is only $19.95 (connecting hot and cold hoses, fridge water lines, and dryer vents).</p>
+        </div>
+    </div>
+
+    <div class="faq_item">
+        <h3>How much does delivery cost?</h3>
+        <div class="faq_answer">
+            <p>
+                Local delivery is FREE when spending over $699 pre-tax on appliances.<br />
+                Local delivery within 25kms of our distribution center is $74.95.
+                Next-day delivery is $109.95, and same-day delivery is $149.95 (when ordered before noon EST).<br />
+                Deliveries are done between 8AM-8PM, and the delivery company will provide a courtesy call the day before, and roughly 20 minutes to 3 hours before arrival.
+            </p>
+        </div>
+    </div>
+
+    <div class="faq_item">
+        <h3>Is pick-up an option?</h3>
+        <div class="faq_answer">
+            <p>Yes, we have curbside pickup in Hyde Park London, by appointment.</p>
+        </div>
+    </div>
+</div>
+    <!--script>
+    document.querySelectorAll(".faq_item h3").forEach((question) => {
+        question.addEventListener("click", function () {
+            const parent = this.parentElement;
+            const isActive = parent.classList.contains("active");
+
+            document.querySelectorAll(".faq_item").forEach((item) => item.classList.remove("active"));
+
+            if (!isActive) {
+                parent.classList.add("active");
+            }
+        });
+    });
+</script-->

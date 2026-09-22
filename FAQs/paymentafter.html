@@ -1,0 +1,73 @@
+<style>
+.faq_item {
+            border: 1px solid #ddd;
+            margin-bottom: 10px; /* Space between questions */
+            background: #1a5bd1;
+        }
+        .faq_item h3 {
+            padding: 15px;
+            margin: 0;
+            cursor: pointer;
+            background: #1a5bd1;
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .faq_item .faq_answer {
+            display: none;
+            padding: 15px;
+            background: #1a5bd1; /* Light blue background */
+            color: #fff;
+            font-size: 18px;
+        }
+        .faq_item.active h3 {
+            background: #4a90e2; /* Lighter blue when active */
+        }
+        .faq_item.active .faq_answer {
+            display: block;
+        }
+        .faq_item h3::after {
+            content: " >";
+            float: right;
+            font-weight: bold;
+            color: #fff;
+        }
+        .faq_answer a {
+            color: #fff;
+            text-decoration: underline;
+            font-weight: 600;
+        }
+        .faq_answer a:hover {
+            color: #d6e4ff;
+        }
+    </style>
+<div class="container-faq">
+    <div class="faq_item">
+        <h3>What forms of payment do you accept?</h3>
+          <div class="faq_answer">
+          <p>
+            We make checkout easy with a wide range of payment options: <b>E-Transfer auto deposit (our preferred method)</b>, PayPal, credit card, Google Pay, and Apple Pay. Prefer to spread out the cost? We also offer <b>buy now, pay later through AfterPay & Humm</b>, with 0 fees and 0% interest, so you can take your new appliance home today and pay over time. Want to see if you qualify or learn more about flexible payment plans? Visit our <a href="https://undervalueappliances.ca/finance/">Financing</a> page for full details.
+          </p>
+          </div>
+        </div>
+    <div class="faq_item">
+        <h3>When is payment due for your order?</h3>
+         <div class="faq_answer">
+          <p>
+            With buy now, pay later, you can get your appliance today without paying a cent today — payments are split into manageable installments through AfterPay. If you're paying by credit card, PayPal, Google Pay, or Apple Pay, payment is simply made at checkout. If you choose E-Transfer Auto Deposit, payment is due within 2 hours of placing your order to keep your delivery or pickup on schedule. Curious which payment option is the best fit for you, or want help completing your order? Visit our <a href="https://undervalueappliances.ca/finance/">Financing</a> page, or reach out through our <a href="https://undervalueappliances.ca/contact-us/">Contact Us</a> page and our team will walk you through it.
+          </p>
+        </div>
+      </div>
+    </div>
+        <script>
+    document.querySelectorAll(".faq_item h3").forEach((question) => {
+        question.addEventListener("click", function () {
+            const parent = this.parentElement;
+            const isActive = parent.classList.contains("active");
+            document.querySelectorAll(".faq_item").forEach((item) => item.classList.remove("active"));
+            if (!isActive) {
+                parent.classList.add("active");
+            }
+        });
+    });
+</script>

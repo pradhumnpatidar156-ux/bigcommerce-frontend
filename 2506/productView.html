@@ -1,0 +1,830 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+/*productView-images*/
+.productView{
+    align-items: flex-start;
+}
+@media (min-width:800px){
+.productView-images{
+    position: sticky;
+    top: 150px;
+}
+}
+/*end productView-images*/
+/*Apply finance*/
+    .sd-button-7b9b17bd-1b0d-4954-a916-5cf886775fb2 {
+        display: flex;
+        align-items: center;
+            justify-content: flex-start;
+    }
+
+    .sd-button-7b9b17bd-1b0d-4954-a916-5cf886775fb2 .buttonLink > a {
+        text-decoration: none;
+        background-color: rgba(255,255,255,1);
+        border: 1px solid rgba(255,255,255,1);
+        border-radius: 4px;
+        color: rgba(26,91,209,1);
+        font-size: 16px;
+        font-family: inherit;
+        font-weight: 400;
+        padding-top: 8px;
+        padding-right: 24px;
+        padding-bottom: 8px;
+        padding-left: 24px;
+        margin-top: 20px;
+        margin-right: 0px;
+        margin-bottom: 20px;
+        margin-left: 0px;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    .sd-button-7b9b17bd-1b0d-4954-a916-5cf886775fb2 .buttonLink > a:hover {
+        background-color: rgba(156,219,255,1);
+        border-color: rgba(156,219,255,1);
+        color: #FFFFFF;
+    }
+
+    @media only screen and (max-width: 700px) {
+        .sd-button-7b9b17bd-1b0d-4954-a916-5cf886775fb2 { }
+    }
+
+    #sd-simple-button-editable-7b9b17bd-1b0d-4954-a916-5cf886775fb2 {
+        min-width: 14px;
+        line-height: 1.5;
+        display: inline-block;
+    }
+
+    #sd-simple-button-editable-7b9b17bd-1b0d-4954-a916-5cf886775fb2 * {
+        margin: 0;
+        padding: 0;
+    }
+
+    #sd-simple-button-editable-7b9b17bd-1b0d-4954-a916-5cf886775fb2[data-edit-mode="true"]:hover,
+    #sd-simple-button-editable-7b9b17bd-1b0d-4954-a916-5cf886775fb2[data-edit-mode="true"]:active,
+    #sd-simple-button-editable-7b9b17bd-1b0d-4954-a916-5cf886775fb2[data-edit-mode="true"]:focus {
+        outline: 1px dashed #3C64F4;
+    }
+
+    #sd-simple-button-editable-7b9b17bd-1b0d-4954-a916-5cf886775fb2 strong,
+    #sd-simple-button-editable-7b9b17bd-1b0d-4954-a916-5cf886775fb2 strong * {
+        font-weight: bold;
+    }
+/*end apply finance*/
+
+        /* The Modal (background) */
+        .modal__cus__pr {
+            display: none; 
+            position: fixed; 
+            z-index: 9999; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgb(0,0,0); 
+            background-color: rgba(0,0,0,0.4); 
+        }
+
+        /* Modal Content */
+        .modal-content {
+            background-color: #007aff;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 100%;
+            max-width: 800px;
+            color:#fff;
+        }
+
+        /* Close Button */
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 24px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: #45a049;
+        }
+        .vsi__modal__box{
+            display: flex;
+            gap:10px;
+            margin: 20px 0px;
+        }
+        .vsi__modal__box h5{
+            margin-top: 0px !important;
+        }
+        .vsi__modal__box i, .modal__cus__pr i{
+        color: #00C200 ;
+        }
+        .vsi__modal__box a{
+            color: #aac3ef !important;
+            text-decoration: underline;
+        }
+        .modal__cus__pr h2{
+            font-size: 24px;
+        }
+        .productView-options .form-action{
+            float: none !important;
+        }
+        
+        
+        .add-to-cart-wrapper label{
+    color:white !important;
+  }
+  .productView-options .socialLinks .icon svg{
+    fill:white !important;
+  }
+  .productView-images, .productView-details{
+    border:1px solid #6698f1;
+    padding:20px;
+    margin-bottom:3rem;
+  }
+  .productView{
+    gap:20px;
+  }
+  .container:has(.accordion-block) {
+    border:1px solid #6698f1;
+  }
+  .productView-rating{
+    display:none;
+  }
+  .body{
+    border-top:1px solid #6698f1;
+    padding-top:0px;
+  }
+  #form-action-addToCart{
+    background-color:white;
+    color:#6698f1;
+  }
+  .form-increment .button{
+    background:transparent;
+  }
+  .form-increment .button svg{
+    fill:white;
+  }
+  input.form-input--incrementTotal{
+    border: 1px solid white;
+    color: white;
+    background:transparent;
+    
+  }
+  .productView-title{
+    font-family:"Fira Sans", sans-serif !important;
+    font-weight:500;
+  }
+  .accordion-indicator{
+   fill:white; 
+  }
+  .form-field label.form-label{
+    color:white !important;
+    font-size:16px;
+  }
+  .productView-price{
+    font-size:26px !important;
+    margin:20px 0px;
+  }
+  .form-field--stock dt{
+    color:#fff !important;
+  }
+  .price--non-sale{
+      margin-right: 20px;
+  }
+  .productView .sale-flag-side{
+      margin-bottom: 10px;
+  }
+  
+  /*save sale price*/
+  .productView-price .price-section--saving:before{
+    content: 'Save';
+    }
+    .productView-price .price-section--saving span:nth-of-type(1), .productView-price .price-section--saving span:nth-of-type(2) {
+    display: none;
+    }
+    .productView-price .price-section--saving span:nth-of-type(3){
+        margin-left: 5px;
+    }
+    .rrp-price--withoutTax{
+        display: none;
+    }
+    .price-section--saving{
+        background: #f54a3a;
+        display: inline-block;
+        padding: 5px 20px;
+    }
+    .productGrid .card .price-section .price--rrp{
+        display: none;
+    }
+    .price--discounted, .price--rrp{
+        display: none;
+    }
+    
+    .cus__price_section{
+        background: #f54a3a;
+    display: inline-block;
+    padding: 5px 20px;
+    }
+    .cus__price_section {
+        font-size: 15px;
+    }
+    .productView-price .price-section--saving, .price--non-sale{
+        display: none !important;
+    }
+    #non__sale__price__dis{
+            text-decoration: line-through;
+            margin-right: 10px;
+    }
+    
+    .delivery_info {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  
+    }
+    
+    .pickup {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  
+    }
+
+  .delivery_info h6 {
+    margin-top: 1.5rem;
+    position: relative;
+    padding-left: 20px;
+    margin-bottom: 10px;
+    font-weight: normal;
+    text-transform: none;
+    font-size:15px;
+    
+}
+
+.delivery_info h6::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #fff;
+  font-size: 20px;
+  line-height: 1;
+}
+
+/* Phones (max-width: 767px) */
+@media screen and (max-width: 767px) {
+  .vsi__modal__box {
+    display: block;
+  }
+   .delivery_info{
+    margin-bottom: 10px;
+   }
+}
+
+/* Tablets (min-width: 768px and max-width: 1024px) */
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  .vsi__modal__box {
+    display: block;
+  }
+   .delivery_info{
+    margin-bottom: 10px;
+   }
+}
+
+
+  /*end save sale price*/
+.product-promo-warranty-wrap {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  margin: 18px 0 20px;
+}
+
+.humm-inline-promo {
+  flex: 0 0 260px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid #6698f1;
+  border-left: 4px solid #f58220;
+  border-radius: 8px;
+  padding: 14px 16px 12px;
+  text-align: left;
+  margin-bottom: 5px;
+}
+
+.humm-inline-promo p {
+  margin: 0;
+  color: #fff;
+  font-size: 15px;
+  line-height: 1.55;
+  font-weight: 500;
+}
+
+.humm-inline-promo p span {
+  display: block;
+}
+
+.humm-inline-promo strong {
+  color: #fff;
+  font-weight: 700;
+}
+
+.humm-inline-promo__btn-wrap {
+  margin-top: 12px;
+}
+
+.humm-inline-promo__btn {
+  display: inline-block;
+  background: #fff;
+  color: #3d6fd1 !important;
+  text-decoration: none !important;
+  border: 1px solid #fff;
+  border-radius: 4px;
+  padding: 6px 14px;
+  font-size: 8px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.humm-inline-promo__btn:hover {
+  background: #eaf3ff;
+  color: #2d5fc0 !important;
+}
+
+.repair-service-upsell{
+    margin:20px 0;
+    padding:18px;
+    border:2px solid #1a56c4;
+    border-radius:10px;
+    background:#f8fbff;
+}
+
+.repair-title{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    font-size:18px;
+    font-weight:700;
+    color:#1a56c4;
+    margin-bottom:10px;
+}
+
+.repair-badge{
+    background:#e53935;
+    color:#fff;
+    padding:5px 12px;
+    border-radius:20px;
+    font-size:13px;
+    font-weight:700;
+    white-space:nowrap;
+}
+
+.repair-description{
+    margin:0 0 15px;
+    color:#555;
+    font-size:14px;
+    line-height:1.5;
+}
+
+.repair-checkbox{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    cursor:pointer;
+    font-size:15px;
+    font-weight:600;
+    color:#222;
+}
+
+.repair-checkbox input{
+    width:18px;
+    height:18px;
+}
+
+@media(max-width:768px){
+    .repair-title{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+}
+}
+</style>
+
+{{#each product.reviews.messages}}
+    {{#if error}}
+        {{> components/common/alert/alert-error error}}
+    {{/if}}
+    {{#if success}}
+        {{> components/common/alert/alert-success success}}
+    {{/if}}
+{{/each}}
+
+<div class="productView" {{#if settings.data_tag_enabled}} data-event-type="product"
+data-entity-id="{{product.id}}" data-name="{{product.title}}" data-product-category="{{#each product.category}}{{#if @last}}{{this}}{{else}}{{this}}, {{/if}}{{/each}}"
+data-product-brand="{{product.brand.name}}" data-product-price="{{#or customer (unless theme_settings.restrict_to_login)}}{{#if product.price.with_tax}}{{product.price.with_tax.value}}{{else}}{{product.price.without_tax.value}}{{/if}}{{else}}{{lang 'common.login_for_pricing'}}{{/or}}"
+data-product-variant="single-product-option" {{/if}}>
+  <section class="productView-images" data-image-gallery>
+    {{!-- Note that these image sizes are coupled to image sizes used in /assets/js/theme/common/product-details.js
+    for variant/rule image replacement --}} {{#if product.images.length '>'
+    1 }} {{> components/carousel-content-announcement}} {{/if}}
+    <figure class="productView-image" data-image-gallery-main {{#if product.main_image}}
+    data-zoom-image="{{getImageSrcset product.main_image (cdn theme_settings.default_image_product) 1x=theme_settings.zoom_size }}"
+    {{/if}}>
+      <div class="productView-img-container">
+        {{!-- Remove the surrounding a-element if there is no main image. --}}
+        {{#if product.main_image}}
+        <a href="{{getImageSrcset product.main_image (cdn theme_settings.default_image_product) 1x=theme_settings.zoom_size}}"
+        target="_blank">
+          {{/if}} {{> components/common/responsive-img image=product.main_image
+          class="productView-image--default" fallback_size=theme_settings.product_size
+          lazyload=theme_settings.lazyload_mode default_image=theme_settings.default_image_product
+          otherAttributes="data-main-image" }} {{!-- Remove the surrounding a-element
+          if there is no main image. --}} {{#if product.main_image}}
+        </a>
+        {{/if}}
+      </div>
+    </figure>
+    <ul class="productView-thumbnails" {{#gt product.images.length 7}} data-slick='{ "infinite": false, "mobileFirst": true, "dots": false, "accessibility": false, "slidesToShow": 7, "slidesToScroll": 1 }'
+    data-arrow-label="{{lang 'carousel.arrowAriaLabel'}} {{product.images.length}}"
+    {{/gt}}>
+      {{#each product.images}}
+      <li class="productView-thumbnail">
+        <a class="productView-thumbnail-link" href="{{getImageSrcset this (cdn ../theme_settings.default_image_product) 1x=../theme_settings.zoom_size}}"
+        data-image-gallery-item data-image-gallery-new-image-url="{{getImageSrcset this (cdn ../theme_settings.default_image_product) 1x=../theme_settings.product_size}}"
+        data-image-gallery-new-image-srcset="{{getImageSrcset this use_default_sizes=true}}"
+        data-image-gallery-zoom-image-url="{{getImageSrcset this (cdn ../theme_settings.default_image_product) 1x=../theme_settings.zoom_size}}">
+          <img class="lazyload" data-sizes="auto" src="{{cdn 'img/loading.svg'}}"
+          data-src="{{getImage this 'productview_thumb_size' (cdn ../theme_settings.default_image_product)}}"
+          alt="{{this.alt}}" title="{{this.alt}}">
+        </a>
+      </li>
+      {{/each}}
+    </ul>
+  </section>
+  <section class="productView-details product-data">
+    <div class="productView-product">
+      {{#if page_type '===' 'product'}} {{#or product.price.non_sale_price_with_tax
+      product.price.non_sale_price_without_tax}}
+      <div class="sale-flag-side">
+        <span class="sale-text">
+          Sale
+        </span>
+      </div>
+      {{/or}} {{/if}}
+      <h1 class="productView-title main-heading">
+        {{product.title}}
+      </h1>
+      {{#if product.brand}}
+      <span class="productView-brand">
+        <a href="{{product.brand.url}}">
+          <span>
+            <strong>
+              {{product.brand.name}}
+            </strong>
+          </span>
+        </a>
+      </span>
+      {{/if}}
+      <div class="productSKU">
+        <dt class="productView-info-name sku-label" {{#unless product.sku}} style="display: none;"
+        {{/unless}}>
+          {{lang 'products.sku'}}
+        </dt>
+        <dd class="productView-info-value" data-product-sku{{#if schema}} itemprop="sku"
+        {{/if}}>
+          {{product.sku}}
+        </dd>
+      </div>
+      {{#and product.sku product.upc}}
+      <span style="position:relative; padding: 0 3px; top: -1px;">
+        |
+      </span>
+      {{/and}} {{#if product.upc}}
+      <div class="productUPC">
+        <dt class="productView-info-name upc-label">
+          {{lang 'products.upc'}}
+        </dt>
+        <dd class="productView-info-value" data-product-upc>
+          {{product.upc}}
+        </dd>
+      </div>
+      {{/if}} {{#if product.availability}}
+      <div>
+        <dt class="productView-info-name">
+          {{lang 'products.availability'}}
+        </dt>
+        <dd class="productView-info-value">
+          {{product.availability}}
+        </dd>
+      </div>
+      {{/if}} {{#if product.call_for_price}}
+      <p class="productView-price">
+        <span>
+          {{product.call_for_price}}
+        </span>
+      </p>
+      {{/if}}
+      <div class="productView-price sadsad">
+        {{#or customer (if theme_settings.restrict_to_login '!==' true)}} {{>
+        components/products/price price=product.price}} {{else}} {{> components/common/login-for-pricing}}
+        {{/or}}
+      </div>
+      <!--<div class="humm-finance-wrap">-->
+      <!-- <div class="humm-inline-promo">-->
+      <!-- <p>-->
+      <!-- <span><strong>Buy now with HUMM Canada</strong></span>-->
+      <!-- <span>— no fees, no interest</span>-->
+      <!-- <span>for 12 months.</span>-->
+      <!-- </p>-->
+      <!-- <div class="humm-inline-promo__btn-wrap">-->
+      <!-- <a href="/finance" target="_top" class="humm-inline-promo__btn">-->
+      <!-- Apply for Financing-->
+      <!-- </a>-->
+      <!-- </div>-->
+      <!-- </div>-->
+      <!--</div>-->
+      <!--end apply finance button-->
+      {{#and settings.bulk_discount_enabled product.bulk_discount_rates.length}}
+      <div class="productView-info-bulkPricing">
+        {{> components/products/bulk-discount-rates bulk_discount_rates=product.bulk_discount_rates}}
+      </div>
+      {{/and}} {{{region name="product_below_price"}}}
+      <div class="productView-rating">
+        {{#if settings.show_product_rating}} {{> components/products/ratings rating=product.rating}}
+        {{#if product.num_reviews '>' 0}}
+        <a href="{{product.url}}{{#if is_ajax}}#product-reviews{{/if}}" id="productReview_link">
+          {{lang 'products.reviews.link_to_review' total=product.num_reviews}}
+        </a>
+        {{else}}
+        <span>
+          {{lang 'products.reviews.link_to_review' total=product.num_reviews}}
+        </span>
+        {{/if}} {{/if}} {{#if settings.show_product_reviews}}
+        <button class="productView-reviewLink productView-reviewLink--new">
+          <a href="{{product.url}}{{#if is_ajax}}#write_review{{/if}}" {{#unless
+          is_ajax}}data-reveal-id="modal-review-form" {{/unless}} role="button">
+            <i class="icon" aria-hidden="true" style="position: relative; top: -1px;">
+              <svg>
+                <use xlink:href="#icon-plus" />
+              </svg>
+            </i>
+            <strong style="text-decoration: underline;">
+              {{lang 'products.reviews.new'}}
+            </strong>
+          </a>
+        </button>
+        {{> components/products/modals/writeReview}} {{/if}}
+      </div>
+      <div class="productView-specs">
+        {{#all product.weight theme_settings.show_product_weight}}
+        <div class="productView-info">
+          <dt class="productView-info-name">
+            {{lang 'products.weight'}}
+          </dt>
+          <dd class="productView-info-value" data-product-weight>
+            {{product.weight}}
+          </dd>
+        </div>
+        {{/all}} {{#all product.width product.height product.depth theme_settings.show_product_dimensions}}
+        <div>
+          <dt class="productView-info-name">
+            {{lang 'products.width'}}
+          </dt>
+          <dd class="productView-info-value" data-product-width>
+            {{product.width}} {{#if settings.measurements.length '==' 'Centimeters'}}
+            ({{lang 'products.measurement.metric'}}) {{else}} ({{lang 'products.measurement.imperial'}})
+            {{/if}}
+          </dd>
+        </div>
+        <div>
+          <dt class="productView-info-name">
+            {{lang 'products.height'}}
+          </dt>
+          <dd class="productView-info-value" data-product-height>
+            {{product.height}} {{#if settings.measurements.length '==' 'Centimeters'}}
+            ({{lang 'products.measurement.metric'}}) {{else}} ({{lang 'products.measurement.imperial'}})
+            {{/if}}
+          </dd>
+        </div>
+        <div>
+          <dt class="productView-info-name">
+            {{lang 'products.depth'}}
+          </dt>
+          <dd class="productView-info-value" data-product-depth>
+            {{product.depth}} {{#if settings.measurements.length '==' 'Centimeters'}}
+            ({{lang 'products.measurement.metric'}}) {{else}} ({{lang 'products.measurement.imperial'}})
+            {{/if}}
+          </dd>
+        </div>
+        {{/all}} {{#if product.condition}}
+        <div>
+          <dt class="productView-info-name">
+            {{lang 'products.condition'}}
+          </dt>
+          <dd class="productView-info-value">
+            {{product.condition}}
+          </dd>
+        </div>
+        {{/if}}
+      </div>
+      {{product.detail_messages}}
+    </div>
+    {{#and product.warranty theme_settings.show_short_desc}}
+    <div class="productView-warranty">
+      {{{product.warranty}}}
+    </div>
+    {{/and}}
+    <div class="product-promo-warranty-wrap">
+      <div class="productView-options">
+        <form class="form" method="post" action="{{product.cart_url}}" enctype="multipart/form-data"
+        data-cart-item-add>
+          <input type="hidden" name="action" value="add" />
+          <input type="hidden" name="product_id" value="{{product.id}}" />
+          <div class="productView-options-wrap" data-product-option-change style="display:none;">
+            {{inject 'showSwatchNames' theme_settings.show_product_swatch_names}}
+            {{#if product.options}}
+            <div class="productView-options-inner">
+              {{#each product.options}} {{{dynamicComponent 'components/products/options'}}}
+              {{/each}}
+            </div>
+            {{/if}}
+          </div>
+          <div class="shipping-giftWrap-stock">
+            {{#if product.shipping}} {{#unless product.shipping.calculated}} {{#if
+            product.shipping.price.value '===' 0}}
+            <div class="productView-shipping productView-shipping--free">
+              <dt class="productView-info-name hide-label">
+                {{lang 'products.shipping'}}
+              </dt>
+              <dd class="productView-info-value uppercase">
+                <strong>
+                  {{lang 'products.shipping_free'}}
+                </strong>
+              </dd>
+            </div>
+            {{else}}
+            <div class="productView-shipping">
+              <dt class="productView-info-name">
+                Fixed Shipping Cost:
+              </dt>
+              <dd class="productView-info-value">
+                {{product.shipping.price.formatted}}
+              </dd>
+            </div>
+            {{/if}} {{/unless}} {{/if}} {{#if product.gift_wrapping_available}}
+            <div class="productView-giftWrap">
+              <dt class="productView-info-name">
+                {{lang 'products.gift_wrapping'}}
+              </dt>
+              <dd class="productView-info-value">
+                {{lang 'products.gift_wrapping_available'}}
+              </dd>
+            </div>
+            {{/if}}
+            <div class="form-field--stock{{#unless product.stock_level}} u-hiddenVisually{{/unless}}">
+              <dt class="productView-info-name">
+                {{lang 'products.current_stock'}}
+              </dt>
+              <dd class="productView-info-value">
+                <span data-product-stock>
+                  {{product.stock_level}}
+                </span>
+              </dd>
+            </div>
+          </div>
+    <div class="repair-service-upsell">
+
+    <div class="repair-title">
+        Add Lifetime Half-Price Repair Service
+        <span class="repair-badge">Only $45</span>
+    </div>
+
+    <p class="repair-description">
+        Get 50% OFF all future appliance repairs for the lifetime of your appliance.
+    </p>
+
+    <label class="repair-checkbox">
+        <input
+            type="checkbox"
+            id="repair-service-checkbox"
+            name="repair_service"
+        >
+        <span>Yes, protect my appliance</span>
+    </label>
+
+</div>
+          <div class="humm-inline-promo">
+            <p>
+              <span>
+Finance your purchase, up to $30,000 for 5 years. $0 down, no fees, no interest.
+              </span>
+
+
+            </p>
+            <div class="humm-inline-promo__btn-wrap">
+              <a href="/finance" target="_top" class="humm-inline-promo__btn">
+                Apply for Financing
+              </a>
+            </div>
+          </div>
+          {{> components/products/add-to-cart}} {{#if product.out_of_stock}} {{#if
+          product.out_of_stock_message}} {{> components/common/alert/alert-error
+          product.out_of_stock_message}} {{else}} {{> components/common/alert/alert-error
+          (lang 'products.sold_out')}} {{/if}}
+          <span class="button button--primary button--out-of-stock">
+            Out of Stock
+          </span>
+          {{/if}}
+        </form>
+      </div>
+      <!--<div class="humm-inline-promo">-->
+      <!-- <p>-->
+      <!-- <span><strong>Buy now with HUMM Canada</strong></span>-->
+      <!-- <span>— no fees, no interest</span>-->
+      <!-- <span>for 12 months.</span>-->
+      <!-- </p>-->
+      <!-- <div class="humm-inline-promo__btn-wrap">-->
+      <!-- <a href="/finance" target="_top" class="humm-inline-promo__btn">-->
+      <!-- Apply for Financing-->
+      <!-- </a>-->
+      <!-- </div>-->
+      <!--</div>-->
+      <!--<div class="humm-inline-promo">-->
+      <!--  <p>-->
+      <!--    <span>-->
+      <!--      <strong>-->
+      <!--        Get Financing Up to $30,000 with HUMM Canada-->
+      <!--      </strong>-->
+      <!--    </span>-->
+      <!--    <span>-->
+      <!--      — 0% interest for 12 months,-->
+      <!--    </span>-->
+      <!--    <span>-->
+      <!--      $0 down and no monthly fees on eligible plans.-->
+      <!--    </span>-->
+      <!--  </p>-->
+      <!--  <div class="humm-inline-promo__btn-wrap">-->
+      <!--    <a href="/finance" target="_top" class="humm-inline-promo__btn">-->
+      <!--      Apply for Financing-->
+      <!--    </a>-->
+      <!--  </div>-->
+      <!--</div>-->
+    </div>
+    <div id="previewModal" class="modal modal--large" data-reveal>
+      {{> components/common/modal/modal-close-btn }}
+      <div class="modal-content">
+      </div>
+      <div class="loadingOverlay">
+      </div>
+    </div>
+    <script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const addToCartBtn = document.getElementById('form-action-addToCart');
+
+    if (!addToCartBtn) return;
+
+    addToCartBtn.addEventListener('click', function () {
+
+        const checkbox = document.getElementById('repair-service-checkbox');
+
+        if (!checkbox || !checkbox.checked) return;
+
+        // thoda delay taaki main product pehle add ho jaye
+        setTimeout(function () {
+
+            fetch('/cart.php?action=add&product_id=1206&qty=1', {
+                method: 'GET',
+                credentials: 'same-origin'
+            })
+            .then(() => {
+                console.log('Repair service added');
+            })
+            .catch(err => {
+                console.error('Repair service error', err);
+            });
+
+        }, 1500);
+
+    });
+
+});
+</script>

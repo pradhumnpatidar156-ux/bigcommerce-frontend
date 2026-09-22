@@ -1,0 +1,93 @@
+{{inject 'noCompareMessage' (lang 'compare.no_compare')}}
+
+{{#if category.products}}
+    <div class="sort-and-pagination">
+        {{> components/products/filter sort=pagination.category.sort}}
+        {{> components/common/paginator pagination.category}}
+    </div>
+
+    <div {{#if settings.data_tag_enabled}} data-list-name="Category: {{category.name}}" {{/if}}>
+        {{#if theme_settings.product_list_display_mode '===' 'grid'}}
+            {{#if settings.data_tag_enabled}}
+                {{> components/products/grid products=category.products show_compare=category.show_compare theme_settings=theme_settings event="list" }}
+            {{else}}
+              {{> components/products/grid products=category.products show_compare=category.show_compare theme_settings=theme_settings}}
+{{/if}}
+        {{else}}
+            {{#if settings.data_tag_enabled}}
+                {{> components/products/list products=category.products show_compare=category.show_compare theme_settings=theme_settings event="list" }}
+            {{else}}
+                {{> components/products/list products=category.products show_compare=category.show_compare theme_settings=theme_settings}}
+            {{/if}}
+        {{/if}}
+    </div>
+
+    {{> components/common/paginator pagination.category}}
+{{else}}
+    {{#if category.search_error}}
+        <p>{{lang 'search.errorMessage'}}</p>
+    {{else}}
+        <p data-no-products-notification
+           role="alert"
+           aria-live="assertive"
+           tabindex="-1"
+        >
+            {{lang 'categories.no_products'}}
+        </p>
+    {{/if}}
+{{/if}}
+
+<div class="dlv__info {{category.name}}" style="display:none">
+    <h2 style="margin-top:0;">Delivery</h2>
+    <p style="margin-bottom:0;">
+        Delivery is calculated at checkout, and based on amount added to cart,
+        promotions applied, address input, and speed selected.<br>
+        We offer within one week delivery, next day delivery or same day delivery.
+    </p>
+</div>
+<div class="dlv__info_appliances {{category.name}}" style="display:none">
+    <div class="appliances container">
+        <div class="column"><img src="https://cdn11.bigcommerce.com/s-5vtkmzi0yn/images/stencil/original/image-manager/60-days.png" alt="days"></div>
+        <div class="column"><img src="https://cdn11.bigcommerce.com/s-5vtkmzi0yn/images/stencil/original/image-manager/group-1171279445.png?t=1769506139" alt="business"></div>
+        <div class="column"></div>
+    </div>
+</div>    
+<style>
+    .productGrid{
+        margin-bottom: 0;
+    }
+    div.go316439965{
+        padding-top:10px!important;
+    }
+.dlv__info.Services {
+    text-align: center;
+    padding: 10px;
+    display: block !important;
+}
+.dlv__info_appliances.Appliances {
+    display: block !important;
+    padding: 10px;
+}
+.appliances.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.appliances .column {
+  flex: 1 1 22%; /* four columns, each about 25% minus spacing */
+  margin: 10px;
+  box-sizing: border-box;
+  text-align: center;
+}
+.appliances .column img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+@media (max-width: 768px) {
+ .appliances .column {
+    flex: 1 1 45%; /* two columns on tablets */
+  }
+}
+</style>
+

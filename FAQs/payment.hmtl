@@ -1,0 +1,64 @@
+<style>
+.faq_item {
+            border: 1px solid #ddd;
+            margin-bottom: 10px; /* Space between questions */
+            background: #1a5bd1;
+        }
+        .faq_item h3 {
+            padding: 15px;
+            margin: 0;
+            cursor: pointer;
+            background: #1a5bd1;
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .faq_item .faq_answer {
+            display: none;
+            padding: 15px;
+            background: #1a5bd1; /* Light blue background */
+            color: #fff;
+            font-size: 18px;
+        }
+        .faq_item.active h3 {
+            background: #4a90e2; /* Lighter blue when active */
+        }
+        .faq_item.active .faq_answer {
+            display: block;
+        }
+    </style>
+<div class="container-faq">
+    <div class="faq_item">
+        <h3>What forms of payment do you accept?</h3>
+          <div class="faq_answer">
+          <p>
+            <b>E-Transfer auto deposit (preferred)</b>, PayPal,
+            credit card, Google Pay, Apple Pay, Buy now pay later with AfterPay which has 0 fees and 0% interest.
+          </p>
+          </div>
+        </div>
+    <div class="faq_item">
+        <h3>When is payment due for your order?</h3>
+         <div class="faq_answer">
+          <p>
+            Using buy now pay later, you can get your appliances today without paying today. Otherwise, payment is made at checkout. If paying by E-Transfer Auto Deposit, payment is due within 2 hours of placing the order.
+          </p>
+        </div>
+      </div>
+    </div>
+
+
+        <script>
+    document.querySelectorAll(".faq_item h3").forEach((question) => {
+        question.addEventListener("click", function () {
+            const parent = this.parentElement;
+            const isActive = parent.classList.contains("active");
+
+            document.querySelectorAll(".faq_item").forEach((item) => item.classList.remove("active"));
+
+            if (!isActive) {
+                parent.classList.add("active");
+            }
+        });
+    });
+</script>

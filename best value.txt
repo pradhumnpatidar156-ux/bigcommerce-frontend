@@ -1,0 +1,255 @@
+<div id="best-seller-container"></div>
+<style>
+#best-seller-container{
+    background:#1a56c4;
+    padding:30px 20px;
+    position:relative;
+}
+.best-seller-grid{
+    display:grid;
+    grid-template-columns:repeat(6,1fr);
+    gap:20px;
+}
+.product-card{
+    text-align:center;
+    display:flex;
+    flex-direction:column;
+    height:100%;
+}
+.product-card a{
+    display:block;
+    background:transparent !important;
+    border:1px solid #d9d9d9;
+}
+.product-card img{
+    width: initial;
+    max-width: 100%;
+    height: 270px;
+    background:transparent;
+}
+.product-title{
+    color:#fff !important;
+    font-size:16px;
+    min-height:100px;
+    height:auto !important;
+    overflow:visible !important;
+    margin:12px 0 8px;
+    line-height:1.3;
+    word-wrap:break-word;
+}
+.product-price{
+    color:#fff !important;
+    font-size:18px;
+    margin-bottom:10px;
+}
+.old-price{
+    color:#cfd9f0 !important;
+    text-decoration:line-through;
+    font-size:10px;
+    margin-left:6px;
+}
+.product-price-wrap{
+    flex-grow:1;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+.product-price-row{
+    display:flex;
+    align-items:baseline;
+    justify-content:center;
+    gap:8px;
+    flex-wrap:nowrap;
+    white-space:nowrap;
+}
+.cart-btn{
+    margin-top:18px;
+    padding:10px 22px;
+    border:none !important;
+    cursor:pointer;
+    background:#fff !important;
+    border-radius:4px;
+    font-size:14px;
+    font-weight:300;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    color:#000 !important;
+    transition:opacity 0.2s;
+    min-width:140px;
+    justify-content:center;
+}
+.cart-btn:hover{
+    background:#f0f0f0 !important;
+}
+.cart-btn:disabled{
+    opacity:0.7;
+    cursor:not-allowed;
+}
+.cart-btn.added{
+    background:#1f9e4d !important;
+    color:#fff !important;
+}
+#bs-toast{
+    position:fixed;
+    bottom:30px;
+    left:50%;
+    transform:translateX(-50%);
+    padding:12px 24px;
+    border-radius:6px;
+    font-size:14px;
+    z-index:9999;
+    box-shadow:0 4px 12px rgba(0,0,0,0.25);
+    opacity:0;
+    transition:opacity 0.4s;
+    pointer-events:none;
+    color:#fff;
+}
+@media(max-width:1200px){
+    .best-seller-grid{ grid-template-columns:repeat(3,1fr); }
+}
+@media(max-width:768px){
+    .best-seller-grid{ grid-template-columns:repeat(2,1fr); }
+}
+</style>
+<script>
+function showToast(message, isError) {
+    let toast = document.getElementById('bs-toast');
+    if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'bs-toast';
+        document.body.appendChild(toast);
+    }
+    toast.textContent = message;
+    toast.style.background = isError ? '#d9342b' : '#1a56c4';
+    toast.style.opacity = '1';
+    clearTimeout(toast._hideTimeout);
+    toast._hideTimeout = setTimeout(() => {
+        toast.style.opacity = '0';
+    }, 2500);
+}
+
+async function updateCartCount() {
+    try {
+        const res = await fetch('/api/storefront/carts', { credentials: 'same-origin' });
+        if (!res.ok) return;
+        const carts = await res.json();
+        const cart = carts[0];
+        if (!cart) return;
+        const totalQty =
+            (cart.lineItems?.physicalItems || []).reduce((s, i) => s + i.quantity, 0) +
+            (cart.lineItems?.digitalItems || []).reduce((s, i) => s + i.quantity, 0);
+
+        // Default cart count selector for BigCommerce Cornerstone theme.
+        // If the count doesn't update, inspect and set the actual class/attribute.
+        document.querySelectorAll('.cart-quantity, [data-cart-quantity], .countPill').forEach(el => {
+            el.textContent = totalQty;
+            if (totalQty > 0) el.classList.add('countPill--positive');
+        });
+    } catch (e) {
+        console.error('Cart count update error:', e);
+    }
+}
+
+async function customBestSellerAddToCart(productId, sku, btn) {
+    console.log('ADD FUNCTION');
+
+    const original = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = 'Adding...';
+console.log('ADD', productId, sku);
+
+    try {
+        const formData = new FormData();
+        formData.append('product_id', productId);
+        formData.append('qty[]', 1);
+        formData.append('sku', sku);
+        const response = await fetch('/remote/v1/cart/add', {
+            method: 'POST',
+            body: formData,
+            credentials: 'same-origin'
+        });
+
+        const result = await response.json().catch(() => ({}));
+
+        // Handle stock/inventory or any backend-returned error
+        // Error can come either at the top level or nested inside "data"
+        const errMsg = result.error || result.message ||
+            result.data?.error || result.data?.message ||
+            (result.success === false ? 'Could not be added' : null);
+
+        if (!response.ok || errMsg) {
+            showToast(errMsg || 'Stock not available', true);
+            btn.innerHTML = original;
+            btn.disabled = false;
+            return;
+        }
+
+        showToast('Added to cart!', false);
+        btn.classList.add('added');
+        btn.innerHTML = '✓ Added';
+        updateCartCount();
+
+        setTimeout(() => {
+            window.location.href = 'https://undervalueappliances.ca/cart.php';
+        }, 800);
+
+    } catch (error) {
+        console.error('Add To Cart Error:', error);
+        showToast('Something went wrong, please try again', true);
+        btn.innerHTML = original;
+        btn.disabled = false;
+    }
+}
+
+async function loadBestSeller() {
+    try {
+        const response = await fetch(
+          'https://bigcommerce-backend-production-ef02.up.railway.app/api/best-value'
+        );
+        const products = await response.json();
+        console.log(products);
+        let html = '<div class="best-seller-grid">';
+        products.slice(0,6).forEach(product => {
+            html += `
+                <div class="product-card">
+                    <a href="${product.url}">
+                        <img src="${product.image}" alt="${product.name}">
+                    </a>
+                    <div class="product-title">
+                        ${product.name}
+                    </div>
+                    <div class="product-price-wrap">
+                        <div class="product-price-row">
+                            <span class="product-price">
+                                <span>$</span>${Number(product.sale_price || product.price).toFixed(2)}
+                            </span>
+                            ${
+                              product.sale_price
+                              ? `<span class="old-price"><span>$</span>${Number(product.price).toFixed(2)}</span>`
+                              : ''
+                            }
+                        </div>
+                    </div>
+                    <button
+                        class="cart-btn"
+                        type="button"
+                        style="margin-top:auto;"
+                        onclick="customBestSellerAddToCart('${product.id}','${product.sku}', this)"
+                    >
+                        <svg width="18" height="18" viewBox="0 0 122.9 107.5" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3.9,7.9C1.8,7.9,0,6.1,0,3.9C0,1.8,1.8,0,3.9,0h10.2c0.1,0,0.3,0,0.4,0c3.6,0.1,6.8,0.8,9.5,2.5c3,1.9,5.2,4.8,6.4,9.1 c0,0.1,0,0.2,0.1,0.3l1,4H119c2.2,0,3.9,1.8,3.9,3.9c0,0.4-0.1,0.8-0.2,1.2l-10.2,41.1c-0.4,1.8-2,3-3.8,3v0H44.7 c1.4,5.2,2.8,8,4.7,9.3c2.3,1.5,6.3,1.6,13,1.5h0.1v0h45.2c2.2,0,3.9,1.8,3.9,3.9c0,2.2-1.8,3.9-3.9,3.9H62.5v0 c-8.3,0.1-13.4-0.1-17.5-2.8c-4.2-2.8-6.4-7.6-8.6-16.3l0,0L23,13.9c0-0.1,0-0.1-0.1-0.2c-0.6-2.2-1.6-3.7-3-4.5 c-1.4-0.9-3.3-1.3-5.5-1.3c-0.1,0-0.2,0-0.3,0H3.9L3.9,7.9z M96,88.3c5.3,0,9.6,4.3,9.6,9.6c0,5.3-4.3,9.6-9.6,9.6 c-5.3,0-9.6-4.3-9.6-9.6C86.4,92.6,90.7,88.3,96,88.3L96,88.3z M53.9,88.3c5.3,0,9.6,4.3,9.6,9.6c0,5.3-4.3,9.6-9.6,9.6 c-5.3,0-9.6-4.3-9.6-9.6C44.3,92.6,48.6,88.3,53.9,88.3L53.9,88.3z M33.7,23.7l8.9,33.5h63.1l8.3-33.5H33.7L33.7,23.7z"/>
+                        </svg>
+                        Add to cart
+                    </button>
+                </div>
+            `;
+        });
+        html += '</div>';
+        document.getElementById('best-seller-container').innerHTML = html;
+    } catch(err) {
+        console.error(err);
+    }
+}
+loadBestSeller();
+</script>

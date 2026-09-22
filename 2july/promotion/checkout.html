@@ -1,0 +1,523 @@
+{{#partial "head"}}
+
+{{{ checkout.checkout_head }}}
+{{{ stylesheet '/assets/css/optimized-checkout.css' }}}
+{{ getFontsCollection }}
+
+<script type="text/javascript">
+    window.language = {{{langJson 'optimized_checkout'}}};
+</script>
+
+{{{head.scripts}}}
+
+{{/partial}}
+
+{{#partial "page"}}
+<header class="checkoutHeader optimizedCheckout-header">
+    <div class="checkoutHeader-content">
+        <h1 class="is-srOnly">{{lang 'checkout.title'}}</h1>
+        <h2 class="checkoutHeader-heading">
+            <a class="checkoutHeader-link" href="{{urls.home}}">
+                {{#if checkout.header_image}}
+                    <img alt="{{settings.store_logo.title}}" class="checkoutHeader-logo" id="logoImage" src="{{ checkout.header_image }}"/>
+                {{ else }}
+                    <span class="header-logo-text">{{settings.store_logo.title}}</span>
+                {{/if}}
+            </a>
+        </h2>
+     </div>
+</header>
+
+ 
+{{{ checkout.checkout_content }}}
+
+
+{{{ footer.scripts }}}
+
+{{/partial}}
+
+{{> layout/empty}}
+
+
+
+
+
+<!-- custom script for postal code  -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+
+<script>
+
+// new format postal code jQuery
+jQuery(function($) {
+    // Try to grab native setter for input.value (best for React-controlled inputs)
+    var nativeValueSetter = null;
+    try {
+        nativeValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
+    } catch (e) {}
+
+    function setNativeValue(el, value) {
+        if (!el) return;
+        if (nativeValueSetter) {
+            nativeValueSetter.call(el, value);
+        } else {
+            el.value = value;
+        }
+        // Notify frameworks (React) that value changed
+        var ev = new Event('input', { bubbles: true });
+        el.dispatchEvent(ev);
+    }
+
+    function cleanPostal(v) {
+        return (v || '').toUpperCase().replace(/^(.{3})\s+/, '$1'); // remove space after first 3 chars + uppercase
+    }
+
+    // Delegated handler: works even if element is injected later
+    $(document).on('input change blur', '#postCodeInput', function() {
+        var el = this;
+        var cleaned = cleanPostal(el.value);
+        if (el.value !== cleaned) {
+            setNativeValue(el, cleaned);
+            try { el.setSelectionRange(cleaned.length, cleaned.length); } catch (e) {}
+        }
+    });
+
+    // Small polling window to catch autofill that doesn't trigger events (10s)
+    var checks = 0;
+    var poll = setInterval(function() {
+        var el = document.getElementById('postCodeInput');
+        if (el) {
+            var cleaned = cleanPostal(el.value);
+            if (el.value !== cleaned) setNativeValue(el, cleaned);
+        }
+        checks++;
+        if (checks > 40) clearInterval(poll); // 40 * 250ms = 10s
+    }, 250);
+
+    // MutationObserver to handle cases where the input node is replaced
+    var observer = new MutationObserver(function() {
+        var el = document.getElementById('postCodeInput');
+        if (el) {
+            var cleaned = cleanPostal(el.value);
+            if (el.value !== cleaned) setNativeValue(el, cleaned);
+        }
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+});
+
+ $(document).ready(function() {
+   function changeShippingText() {
+    
+                var $shippingHeader = $(".stepHeader-title.optimizedCheckout-headingPrimary");
+                
+                if ($shippingHeader.length) {
+                    $shippingHeader.filter(function() {
+                        // Check for the specific text "Shipping"
+                        return $(this).text().trim() === "Shipping";
+                    }).text("Delivery");
+                } else {
+                    // Retry after 100ms if not found
+                    setTimeout(changeShippingText, 100);
+                }
+            }
+            
+            // Function to change the "Shipping Address" legend text to "Delivery Address"
+            function changeShippingAddressText() {
+                var $shippingLegend = $("legend.form-legend.optimizedCheckout-headingSecondary[data-test='shipping-address-heading']");
+                
+                if ($shippingLegend.length) {
+                    $shippingLegend.filter(function() {
+                        // Check for the specific text "Shipping Address"
+                        return $(this).text().trim() === "Shipping Address";
+                    }).text("Delivery Address");
+                } else {
+                    // Retry after 100ms if not found
+                    setTimeout(changeShippingAddressText, 100);
+                }
+            }
+            
+            // Function to change the "Shipping Method" legend text to "Delivery Method"
+            function changeShippingMethodText() {
+                var $shippingMethodLegend = $("legend.form-legend.optimizedCheckout-headingSecondary");
+                
+                if ($shippingMethodLegend.length) {
+                    $shippingMethodLegend.filter(function() {
+                        // Check for the specific text "Shipping Method"
+                        return $(this).text().trim() === "Shipping Method";
+                    }).text("Delivery Method");
+                } else {
+                    // Retry after 100ms if not found
+                    setTimeout(changeShippingMethodText, 100);
+                }
+            }
+            
+            // Function to change the checkbox label text
+            function changeCheckboxLabelText() {
+                var $checkboxLabel = $("label.form-label.optimizedCheckout-form-label[for='sameAsBilling']");
+                
+                if ($checkboxLabel.length) {
+                    $checkboxLabel.filter(function() {
+                        // Check for the specific text in the checkbox label
+                        return $(this).text().trim() === "My billing address is the same as my shipping address.";
+                    }).text("My billing address is the same as my delivery address.");
+                } else {
+                    // Retry after 100ms if not found
+                    setTimeout(changeCheckboxLabelText, 100);
+                }
+            }
+            
+            // Function to change the cart shipping text to delivery
+            function changeCartShippingText() {
+                var $cartShippingLabel = $("div[data-test='cart-shipping'] .cart-priceItem-label span[data-test='cart-price-label']");
+                
+                if ($cartShippingLabel.length) {
+                    $cartShippingLabel.filter(function() {
+                        // Check for the specific text "Shipping"
+                        return $(this).text().trim() === "Shipping";
+                    }).text("Delivery");
+                } else {
+                    // Retry after 100ms if not found
+                    setTimeout(changeCartShippingText, 100);
+                }
+            }
+            
+            // Call all functions to make the necessary text changes
+            changeShippingText();
+            changeShippingAddressText();
+            changeShippingMethodText();
+            changeCheckboxLabelText();
+            changeCartShippingText();
+        });
+        
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function () {
+    
+ function isPastSameDayCutoff() {
+        var now = new Date();
+        var hours = now.getHours();
+        var minutes = now.getMinutes();
+        // console.log("Current Time:", hours + ":" + minutes);
+        return (hours > 12) || (hours === 12 && minutes > 0);
+    }
+
+    function disableSameDayDelivery() {
+        if (!isPastSameDayCutoff()) return;
+
+        var sameDayOption = $("input[type='radio']").filter(function () {
+            return $(this)
+                .next("label")
+                .find(".shippingOption-desc")
+                .text()
+                .toLowerCase()
+                .includes("same day");
+        });
+
+        if (sameDayOption.length > 0) {
+            console.log("Same-day delivery option found.");
+
+            sameDayOption.each(function () {
+                if ($(this).is(":checked")) {
+                    // Deselect same-day and select another available option
+                    $(this).prop("checked", false).trigger("change");
+                    $("input[type='radio']").not(sameDayOption).first().prop("checked", true).trigger("change");
+                    // console.log("Same-day delivery deselected.");
+                }
+
+                $(this).prop("disabled", true).closest(".form-checklist-item").css("opacity", "0.5");
+                // console.log("Same-day delivery disabled.");
+            });
+
+            // ✅ If nothing else is selected, force select first available
+            if (!$("input[type='radio']").is(":checked")) {
+                var firstAvailable = $("input[type='radio']").not(sameDayOption).first();
+                firstAvailable.prop("checked", true).trigger("change");
+                // console.log("First available shipping option selected.");
+            }
+
+        } else {
+            // console.log("Same-day option not found.");
+        }
+    }
+
+    function waitForShippingOptions() {
+        if ($(".form-checklist-item").length > 0) {
+            // console.log("Shipping options loaded.");
+            disableSameDayDelivery();
+            // ✅ run every 2 sec properly
+            setInterval(disableSameDayDelivery, 2000);
+        } else {
+            // console.log("Waiting for shipping options...");
+            // ✅ just re-check until loaded
+            setTimeout(waitForShippingOptions, 500);
+        }
+    }
+
+    waitForShippingOptions();
+
+    // Re-check if shipping options change dynamically
+    var targetNode = document.querySelector(".form-checklist");
+    if (targetNode) {
+        new MutationObserver(disableSameDayDelivery).observe(targetNode, { childList: true, subtree: true });
+    }
+
+    // Re-check on any manual change
+    $(document).on("change", ".form-checklist-checkbox, input[type='radio']", disableSameDayDelivery);
+
+    // Final safeguard on checkout button
+    // $(document).on("click", "#checkout-payment-continue", function (e) {
+    //     if (isPastSameDayCutoff()) {
+    //         alert("Same Day Delivery is not available after 12 PM. Please select another option.");
+    //         e.preventDefault();
+    //         return false;
+    //     }
+    // });
+    
+ $(document).on("click", "#checkout-payment-continue", function (e) {
+    // Find the checked shipping radio
+    var selectedOption = $("input[name^='shippingOptionIds']:checked");
+
+    // Find its description span
+    var selectedOptionText = selectedOption
+        .closest('.form-field')
+        .find('.shippingOption-desc')
+        .text()
+        .trim();
+        
+        //alert(selectedOptionText);
+
+    // Check both conditions
+    if (selectedOptionText.includes("Delivery Same Day") && isPastSameDayCutoff()) {
+        alert("Same Day Delivery is not available after 12 PM. Please select another option.");
+        e.preventDefault();
+        return false;
+    }
+    
+ });
+ 
+
+
+});
+
+
+$(document).ready(function() {
+    
+let totalMailPrice2 = 0;
+let totalDisPrice2 = 0;
+
+setTimeout(() => {    
+$('li.productList-item').each(function () {
+    let totalPriceText = $(this).find('div.product div.product-actions .product-price').first().text();
+    let unitPriceText = $(this).find('div.product div.product-actions .product-price--beforeDiscount').last().text() || totalPriceText;
+    let unitPrice = parseFloat(unitPriceText.replace('$', '').replace(',', '').trim()) || 0;
+    let totalPrice = parseFloat(totalPriceText.replace('$', '').replace(',', '').trim()) || 0;
+    totalMailPrice2 += unitPrice;
+    totalDisPrice2 += totalPrice;
+});
+dfsdf = parseFloat(totalMailPrice2) - parseFloat(totalDisPrice2)
+console.log('dfsdf',dfsdf)
+let formatteddfsdf = dfsdf.toLocaleString('en-US', {
+    style: 'currency',
+    currency: 'USD'
+});
+$('section.cart-section > div[data-test="cart-subtotal"]').after(`<div data-test="cart-discount"><div aria-live="polite" class="cart-priceItem optimizedCheckout-contentPrimary cart-priceItem--discount33"><span class="cart-priceItem-label"><span data-test="cart-price-label">Discount  </span></span><span class="cart-priceItem-value"><span data-test="cart-price-value">${formatteddfsdf}</span></span></div></div>`)
+console.log('Total of Unit Prices:', totalMailPrice2.toFixed(2));
+console.log('Total of Total Prices:', totalDisPrice2.toFixed(2));
+},5000)
+    
+});
+
+
+document.addEventListener("DOMContentLoaded", function() {
+  function replaceAfterpayText() {
+    // Select the Afterpay "Pay over time" text only
+    const afterpayLabel = document.querySelector(
+      'label[for="radio-afterpay-pay_by_installment"] .paymentProviderHeader-name'
+    );
+
+    if (afterpayLabel && afterpayLabel.textContent.trim() === "Pay over time") {
+      afterpayLabel.innerHTML =
+        '<span>Multiple financing structures - <a href="https://www.afterpay.com/en-CA/how-it-works" target="_blank" style="text-decoration: underline; color: #0070ba;">how it works</a></span>';
+      return true;
+    }
+    return false;
+  }
+
+  // Try immediately
+  if (!replaceAfterpayText()) {
+    // Keep trying every 500ms until it appears
+    const interval = setInterval(() => {
+      if (replaceAfterpayText()) {
+        clearInterval(interval);
+      }
+    }, 500);
+  }
+});
+
+
+
+
+</script>
+
+<script>
+    // ─── Repair Service Checkout Promotion for New Customers ──────────────────────
+    $(document).ready(function() {
+        async function isNewCustomer() {
+            const customerId = "{{customer.id}}";
+            if (!customerId || customerId === "0" || customerId === "") {
+                // Guests are treated as new customers
+                return true;
+            }
+            
+            try {
+                // Fetch the customer's order history page to check for completed orders
+                let response = await fetch('/account.php?action=order_status');
+                let htmlText = await response.text();
+                
+                // Typical Cornerstone indications of no orders
+                if (htmlText.includes("You have completed no orders") || 
+                    htmlText.includes("You haven't placed any orders") ||
+                    htmlText.includes("no orders") || 
+                    (!htmlText.includes("account-listItem") && !htmlText.includes("order-list"))) {
+                    return true;
+                }
+                return false;
+            } catch (e) {
+                console.error("Error checking customer orders:", e);
+                return true; // Fallback
+            }
+        }
+
+        async function checkCheckoutPromotion() {
+            try {
+                let res = await fetch('/api/storefront/carts', {
+                    credentials: 'include',
+                    headers: { 'Accept': 'application/json' }
+                });
+                let cartData = await res.json();
+                if (!cartData || cartData.length === 0) return;
+
+                let cart = cartData[0];
+                let cartId = cart.id;
+
+                // Check appliance and repair service counts
+                let applianceCount = 0;
+                let repairServiceCount = 0;
+                if (cart.lineItems) {
+                    if (cart.lineItems.physicalItems) {
+                        cart.lineItems.physicalItems.forEach(item => {
+                            if (item.productId == 1206) {
+                                repairServiceCount += item.quantity;
+                            } else {
+                                applianceCount += item.quantity;
+                            }
+                        });
+                    }
+                    if (cart.lineItems.digitalItems) {
+                        cart.lineItems.digitalItems.forEach(item => {
+                            if (item.productId == 1206) {
+                                repairServiceCount += item.quantity;
+                            } else {
+                                applianceCount += item.quantity;
+                            }
+                        });
+                    }
+                }
+
+                if (applianceCount > 0 && repairServiceCount < applianceCount) {
+                    // If it's not enough quantity, or not in the cart at all.
+                    // But if we already added it previously and user manually deleted it, respect that.
+                    if (sessionStorage.getItem('free_repair_added') === 'true') {
+                        return;
+                    }
+
+                    // Also check if we already tried adding it and it failed
+                    if (sessionStorage.getItem('free_repair_declined') === 'true') {
+                        return;
+                    }
+
+                    // If not in cart/not enough and not previously removed, check if new customer
+                    let isNew = await isNewCustomer();
+                    if (isNew) {
+                        let qtyToAdd = applianceCount - repairServiceCount;
+                        if (qtyToAdd <= 0) qtyToAdd = 1;
+
+                        // Mark as attempted to prevent loops
+                        sessionStorage.setItem('free_repair_added', 'true');
+
+                        // Add repair service (product 1206) to cart
+                        let addRes = await fetch(`/api/storefront/carts/${cartId}/items`, {
+                            method: "POST",
+                            credentials: "include",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "Accept": "application/json"
+                            },
+                            body: JSON.stringify({
+                                lineItems: [
+                                    {
+                                        quantity: qtyToAdd,
+                                        productId: 1206
+                                    }
+                                ]
+                            })
+                        });
+
+                        if (addRes.ok) {
+                            await fetch(`/api/storefront/checkouts/${cartId}/coupons`, {
+                                method: "POST",
+                                credentials: "include",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                    "Accept": "application/json"
+                                },
+                                body: JSON.stringify({
+                                    couponCode: "FREEREPAIR"
+                                })
+                            });
+
+                            // Reload the page so the React checkout updates
+                            window.location.reload();
+                        } else {
+                            // If addition failed, mark as declined to avoid retrying on every load
+                            sessionStorage.setItem('free_repair_declined', 'true');
+                        }
+                    }
+                } else if (applianceCount > 0 && repairServiceCount >= applianceCount) {
+                    // Mark as added since we have enough repair services
+                    sessionStorage.setItem('free_repair_added', 'true');
+                }
+            } catch (e) {
+                console.error("Error in checkout promotion:", e);
+            }
+        }
+
+        // Run the promotion check
+        checkCheckoutPromotion();
+    });
+</script>
+
+
+
+
+<style>
+    span.cart-priceItem-postFix.optimizedCheckout-contentSecondary {
+    display: none;
+    color: red;
+    text-decoration: underline;
+}
+
+.cart-priceItem-link a {
+    color: red;
+    text-decoration: underline;
+}
+
+.swal2-modal .swal2-content {
+    color: #000;
+    font-size: 1.14286rem;
+}
+</style>
+

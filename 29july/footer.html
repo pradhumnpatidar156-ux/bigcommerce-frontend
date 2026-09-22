@@ -1,0 +1,833 @@
+{{#if banners.bottom}}
+    {{#if settings.data_tag_enabled}}
+        <div class="banners" data-banner-location="bottom">
+            {{#each (limit banners.bottom_metadata 1)}}
+                <div class="banner" data-event-type="promotion" data-entity-id="{{this.id}}" data-name="{{this.banner-name}}" data-position="{{this.location}}" data-name="{{this.banner-name}}">
+                    <div data-event-type="promotion-click">
+                        {{{this.content}}}
+                    </div>
+                </div>
+            {{/each}}
+        </div>
+    {{else}}
+        <div class="banners" data-banner-location="bottom">
+            <div class="banner">
+                {{{limit banners.bottom 1}}}
+            </div>
+        </div>
+    {{/if}}
+{{/if}}
+
+<div class="footer-newsletter">
+    <div class="container">
+        <script src="https://widget.trustmary.com/C4QNeqzqW"></script>
+        <div class="row col-md-12 review-section">
+            <div class="col-md-4">
+                <a href="https://www.google.com" target="_blank">
+                    <img src="https://cdn11.bigcommerce.com/s-5vtkmzi0yn/images/stencil/original/image-manager/google-review.jpg" alt="Google Image">
+                 </a>
+            </div>
+            <div class="col-md-4">
+                <a href="https://trustmary.com/review/undervalueappliances.ca" target="_blank">
+                    <img src="https://cdn11.bigcommerce.com/s-5vtkmzi0yn/images/stencil/original/image-manager/trustmary.png?t=1775278258" alt="Trust Image">
+                 </a>
+            </div>
+            <div class="col-md-4">
+                <a href="https://www.bbb.org/ca/on/london/profile/household-appliances/undervalue-appliancesca-0187-1074507" target="_blank">
+                    <img src="https://cdn11.bigcommerce.com/s-5vtkmzi0yn/images/stencil/original/image-manager/bbb-rating.png" alt="BBB Image">
+                 </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<!-- service box -->
+<style>
+ul.footer-info-list.service-text.categories li:nth-child(4) {
+    display: none;
+}
+.review-section {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+}
+.review-section img {
+    border-radius: 25px;
+    height: 210px;
+}
+h4.card-title {
+    line-height: 23px;
+    text-transform: capitalize !important;
+    font-size: 17px !important;
+}
+.card-body .card-text {
+    margin-top: 20px;
+    font-size: 20px;
+}
+.footer-newsletter {
+  padding: 0px 15px 40px!important;
+}
+
+.tm-title {
+    color: #ffff !important;
+}
+
+#tm-tj46b h2.go372176402 {
+     color: #ffff!important;
+}
+.row_f{
+    flex-wrap: wrap;
+}
+.container{
+    max-width: 1480px;
+}
+    .footer{
+        margin-top: 0px;
+        border-top:0px;
+        padding-bottom: 20px;
+    }
+    .services-main{
+        background-color: #1a5bd1;
+    }
+     .services {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        max-width: 1480px;
+        margin: 0px auto;
+        background-color: #1a5bd1;
+        color: white;
+        font-family: "Fira Sans", sans-serif;
+      }
+      .service-box .div-col svg {
+        width: 30px;
+        height: 30px;
+        margin-right: 10px;
+      }
+      .service-box {
+        display: flex;
+        width: 300px;
+        margin: 5px;
+        gap:15px;
+        
+      }
+      .service-box img {
+        width: 55px;
+      }
+    
+      .service-heading {
+        margin-top: 0px;
+        margin-bottom: 0px;
+        font-size: 16px;
+      }
+      .service-text {
+        margin-top: 5px;
+        font-size: 16px;
+        line-height: 1.4;
+      }
+  .footer-main{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  .footer__block_item__link{
+    max-width: 300px;
+  }
+  .footer__block_item__text{
+    flex-basis: 300px;
+  }
+  .footer-box{
+    padding: 20px 20px;
+  }
+  .footer-box ul li{
+    padding: 5px 0px;
+  }
+  .footer-box ul li a{
+    color: #fff;
+  }
+  .footer-box .service-text{
+    line-height: 1.8;
+  }
+  .powered-by{
+      color: #fff;
+  }
+   .row_f {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 20px;
+  }
+  footer .socialLinks{
+      margin-top: 10px;
+  }
+  .footer-payment-icons .footer-payment-icon{
+      margin: 5px;
+  }
+  .socialLinks .icon svg{
+      fill: black;
+  }
+  .socialLinks .socialLinks--alt{
+      display: flex;
+  }
+  .col__f p{
+      margin-bottom: 0px;
+  }
+  .social__links p{
+      text-align: center;
+  }
+  .col__f img{
+      background-color: #fff;
+      border-radius: 10px;
+  }
+  footer .socialLinks-item{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+  }
+  .bt{
+      border-top: 1px solid white;
+  }
+  ul.navPages-list.navPages-mega.navPages-mainNav li.navPages-item.categories_list:nth-child(2), ul.navPages-list.navPages-mega.navPages-mainNav li.navPages-item.categories_list:nth-child(3) {
+        display: none;
+    }
+  @media (max-width:1024px){
+  .footer__block_item__link{
+   flex-basis: 300px;   
+  }
+  .footer-main{
+      justify-content: start;
+  }
+  }
+   @media (max-width:630px){
+      
+  .footer__block_item__link,.footer__block_item__text{
+   flex-basis: unset;   
+  }
+  }
+  @media (max-width:860px){
+      .footer .container .row_f{
+          justify-content: center;
+          text-align: center;
+          gap: 30px;
+          flex-direction: column;
+      }
+  }
+  
+  @media (max-width: 768px) { 
+
+
+        #seller_product ul.productGrid > li:nth-child(-n+6), #best_value ul.productGrid > li:nth-child(-n+6) {
+
+            max-width:50% !important;
+
+        }
+    #trustpilot-widget-trustbox-1-wrapper1 {
+        bottom: 20px !important;  /* Adjust position */
+       width: 150px !important;  /* Resize for mobile */
+    }
+
+    #trustpilot-widget-trustbox-1-wrapper1 img {
+        width: 150px !important;  /* Adjust image size */
+    }
+    .productGrid .product {
+        width: 50% !important;
+    }
+}
+ @media (max-width: 480px) { 
+    .review-section { display: block;}
+    .review-section .col-md-4 { margin-bottom: 20px; }
+    .footer .container .row_f { flex-direction: row; }
+    .footer-payment-icons{ display:block !important }
+    .navUser-item svg { filter: brightness(0) invert(1); }
+    li.navUser-item.navUser-item--mobile-search { top: 0px !important; }
+}
+ @media only screen and (min-width: 1600px) and (max-width: 3000px)  {
+     .zn-slider-track-wrapper .zn-element>.zn-banner {
+        background-position: top !important;
+        height: 720px !important;
+    }
+ }
+</style>
+<div class="container services-main">
+<div class="services">
+    <div class="service-box">
+      <div class="div-col">
+        <!--<svg focusable="false" viewBox="0 0 24 24" role="presentation">-->
+        <!--  <g stroke-width="1.5" fill="none" fill-rule="evenodd">-->
+        <!--    <path d="M6.5 3.25l12 6" stroke="#aac3ef"></path>-->
+        <!--    <path stroke="#ffffff" d="M23 7l-10 5L1 6M13 12v11"></path>-->
+        <!--    <path-->
+        <!--      stroke="#ffffff"-->
+        <!--      stroke-linecap="square"-->
+        <!--      d="M23 7v10l-10 6-12-6V6l10-5z"-->
+        <!--    ></path>-->
+        <!--  </g>-->
+        <!--</svg>-->
+        <img src="https://cdn11.bigcommerce.com/s-5vtkmzi0yn/images/stencil/original/image-manager/pickup-car.png" alt="pickup-car" style="width:180px">
+      </div>
+      <div class="div-col">
+        <h2 class="service-heading">Delivery and Pick-Up Options</h2>
+        <p class="service-text">
+          Same-day appliance delivery, or curbside pick-up in Hyde Park London. Part orders shipped same-day directly to you.
+        </p>
+      </div>
+    </div>
+    <div class="service-box">
+      <div class="div-col">
+        <!--<svg focusable="false" viewBox="0 0 22 24" role="presentation">-->
+        <!--  <g stroke-width="1.5" fill="none" fill-rule="evenodd">-->
+        <!--    <path d="M11 2v20M19.904 12H2.096" stroke="#aac3ef"></path>-->
+        <!--    <path-->
+        <!--      d="M11 2C8 4 4 5 1 5c0 7 3 14 10 17 7-3 10-10 10-17-3 0-7-1-10-3z"-->
+        <!--      stroke="#ffffff"-->
+        <!--      stroke-linecap="square"-->
+        <!--    ></path>-->
+        <!--  </g>-->
+        <!--</svg>-->
+        <img src="https://cdn11.bigcommerce.com/s-5vtkmzi0yn/images/stencil/original/image-manager/shield.png" alt="shield">
+      </div>
+      <div class="div-col">
+        <h2 class="service-heading">Guaranteed Lowest Price</h2>
+        <p class="service-text">
+          Find a better price in-store or online? We'll beat it by 10%!
+        </p>
+      </div>
+    </div>
+    <div class="service-box">
+      <div class="div-col">
+        <!--<svg focusable="false" viewBox="0 0 24 24" role="presentation">-->
+        <!--  <g-->
+        <!--    stroke-width="1.5"-->
+        <!--    fill="none"-->
+        <!--    fill-rule="evenodd"-->
+        <!--    stroke-linecap="square"-->
+        <!--  >-->
+        <!--    <path-->
+        <!--      d="M10 17H4c-1.7 0-3 1.3-3 3v3h12v-3c0-1.7-1.3-3-3-3zM7 14c-1.7 0-3-1.3-3-3v-1c0-1.7 1.3-3 3-3s3 1.3 3 3v1c0 1.7-1.3 3-3 3z"-->
+        <!--      stroke="#ffffff"-->
+        <!--    ></path>-->
+        <!--    <path stroke="#aac3ef" d="M13 1v10l4-3h6V1z"></path>-->
+        <!--  </g>-->
+        <!--</svg>-->
+        <img src="https://cdn11.bigcommerce.com/s-5vtkmzi0yn/images/stencil/original/image-manager/customer-service.png" alt="customer-service">
+      </div>
+      <div class="div-col">
+        <h2 class="service-heading">7 Days a Week Support</h2>
+        <p class="service-text">
+          Get in touch with us between 8 AM - 8 PM 7 days a week.
+        </p>
+      </div>
+    </div>
+    <div class="service-box">
+      <div class="div-col">
+        <!--<svg focusable="false" viewBox="0 0 24 24" role="presentation">-->
+        <!--  <g-->
+        <!--    stroke-width="1.5"-->
+        <!--    fill="none"-->
+        <!--    fill-rule="evenodd"-->
+        <!--    stroke-linecap="square"-->
+        <!--  >-->
+        <!--    <path-->
+        <!--      d="M1 5h22M1 9h22M9 17H3c-1.105 0-2-.895-2-2V3c0-1.105.895-2 2-2h18c1.105 0 2 .895 2 2v10M5 13h5"-->
+        <!--      stroke="#ffffff"-->
+        <!--    ></path>-->
+        <!--    <path-->
+        <!--      stroke="#aac3ef"-->
+        <!--      d="M13 16h8v7h-8zM15 16v-2c0-1.1.9-2 2-2s2 .9 2 2v2M17 19v1"-->
+        <!--    ></path>-->
+        <!--  </g>-->
+        <!--</svg>-->
+        <img src="https://cdn11.bigcommerce.com/s-5vtkmzi0yn/images/stencil/original/image-manager/pay-later.png" alt="pay-later" style="width: 38px;">
+      </div>
+      <div class="div-col">
+        <h2 class="service-heading">Buy Now Pay Later</h2>
+        <p class="service-text">
+          Afterpay, HUMM available at checkout.
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="bt"></div>
+  </div>
+<!-- end -->
+                    
+<footer class="footer" role="contentinfo">
+    <h2 class="footer-title-sr-only">{{lang 'footer.title'}}</h2>
+    <div class="container">
+    <div class="footer-main">
+        <div class="footer-box footer__block_item__text">
+          
+            <h2 class="service-heading">UNDERVALUE APPLIANCES.CA</h2>
+            <p class="service-text">
+              We do not have a physical storefront to save overhead costs and
+              keep our appliances, parts, and services <b>UNDERVALUE</b>.
+            </p>
+          
+        </div>
+        <div class="footer-box footer__block_item__link">
+          
+            <h2 class="service-heading">{{lang 'footer.categories'}}</h2>
+            <ul class="footer-info-list service-text categories">
+              {{#each categories}}
+              <li>
+                <a href="{{url}}">{{name}}</a>
+              </li>
+              {{/each}} {{#if settings.gift_certificates_enabled}}
+                <li>
+                  <a href="/appliance-parts/">Appliance Parts</a>
+                </li> 
+                 <li>
+                  <a href="/repair-service/">Repair Service</a>
+                </li> 
+              <!--li>
+                <a href="{{urls.gift_certificate.purchase}}"
+                  >{{lang 'common.gift_cert'}}</a
+                >
+              </li-->
+              {{/if}}
+            </ul>
+          
+        </div>
+        
+        <div class="footer-box footer__block_item__text">
+          
+            <h2 class="service-heading">WHY BUY FROM US</h2>
+            <p class="service-text">
+              11+ years in business. Highly reviewed on Trustpilot,
+              Trustmary, The Better Business Bureau, and Google.
+              Same day delivery. Guarnteed lowest price of any retailer. Warrantied appliances, parts, and repair service. Buy now pay later.
+              
+            </p>
+          
+        </div>
+        <div class="footer-box footer__block_item__link">
+          
+            <h2 class="service-heading">{{lang 'footer.navigate'}}</h2>
+            <ul class="footer-info-list service-text">
+              <li>
+                <a href="/terms-and-conditions/">Terms and Conditions</a>
+                </li>
+               <li>
+                <a href="/privacy-policy/">Privacy Policy</a>
+                </li>
+               <li>
+                <a href="/about/">About Us</a>
+                </li>
+               <li>
+                <a href="/shipping-returns/">Refund policy</a>
+                </li>
+               <li>
+                <a href="/finance/">Financing</a>
+                </li>
+                <li>
+                <a href="/promotion/">Promotion</a>
+                </li>
+               <li>
+                <a href="/blog/">Blogs</a>
+              </li>
+            </ul>
+          
+        </div>
+        <div class="footer-box footer__block_item__text">
+          
+            <h2 class="service-heading">CONTACT US</h2>
+            <ul class="footer-info-list service-text">
+              <li><a href="tel:18338637858">1 (833) 863-7858 </a>"UNDRVLU"</li>
+              <li>
+                <a href="mailto:sales@undervalueappliances.ca">sales@undervalueappliances.ca</a>
+              </li>
+              <p>
+                We are an online appliance store
+                with same day delivery in London and surrounding areas, or curbside pickup in Hyde Park.
+              </p>
+            </ul>
+          </div>
+      
+       </div>
+  
+  <!-- end -->
+    <div class="footer-copyright">
+      <!-- {{> components/common/payment-icons}} {{#if
+      theme_settings.show_copyright_footer}} -->
+      <!--<p class="powered-by">-->
+      <!--  &copy; {{moment format="YYYY"}} {{settings.store_name}}-->
+      <!--</p>-->
+      <!--{{/if}}-->
+    </div>
+
+    {{#or theme_settings.show_powered_by theme_settings.show_built_by}}
+    <div class="footer-copyright" style="font-size: 12px">
+      {{#if theme_settings.show_powered_by}}
+      <!-- <p class="powered-by">Powered by <a href="https://www.bigcommerce.com?utm_source=merchant&amp;utm_medium=poweredbyBC" rel="nofollow">BigCommerce</a></p> -->
+      {{/if}} {{#if theme_settings.show_built_by}}
+      <!-- <p class="powered-by">Theme by <a href="https://www.weizenyoung.com/" rel="nofollow">Kreativefolks</a></p> -->
+      {{/if}}
+    </div>
+    {{/or}}
+  </div>
+  <div class="container">
+    <div class="row_f">
+        <div class="col__f">
+             <a href="https://www.bbb.org/ca/on/london/profile/household-appliances/undervalue-appliances-ca-0187-1074507/#sealclick" target="_blank" rel="nofollow"><img src="https://seal-london.bbb.org/seals/blue-seal-200-65-bbb-1074507.png" style="border: 0;" alt="Undervalue Appliances.ca BBB Business Review" />
+             </a>
+        </div>
+      <div class="col__flag">
+          <img style="width: 55px;border-radius: 4px;" src="https://cdn11.bigcommerce.com/s-5vtkmzi0yn/images/stencil/original/image-manager/flag-of-canada.png?t=1767767600" />
+        <p style="margin-top:8px">© Copyright 2026 Undervalue Appliances. All rights reserved.</p>
+      </div>
+      <div class="col__f social__links">
+        <p>Follow Us</p>
+        {{> components/common/social-links}}
+      </div>
+      <div class="col__f">
+          <p>We Accept</p>
+        {{> components/common/payment-icons}} {{#if
+        theme_settings.show_copyright_footer}}{{/if}}
+      </div>
+    </div>
+  </div>
+  {{{region name="ssl_site_seal--global"}}}
+</footer>
+
+<!--div id="trustpilot-widget-trustbox-1-wrapper1" style="position: fixed !important;z-index: 1000;bottom: 100px;">
+  <div class="footer-box footer__block_item__images">
+    <a href="https://www.trustpilot.com/review/undervalueappliances.ca" target="_blank">
+        <img src="https://cdn11.bigcommerce.com/s-5vtkmzi0yn/images/stencil/original/image-manager/group-1171276416.png?t=1754291817" alt="Image 1"></a>
+  </div></div-->
+  
+
+
+
+<!--div id="trustpilot-widget-trustbox-1-wrapper1" style="position: fixed !important;z-index: 1000;bottom: 0px;left: 0px;right: 80%;"><div class="trustpilot-widget" data-locale="en-US" data-template-id="53aa8807dec7e10d38f59f32" data-businessunit-id="60e8fd41dcef7700010b1ddb" data-style-height="150px" data-style-width="100%" data-theme="dark" position="floating" corner="bottom: #{Y}px; left: #{X}px;" id="trustpilot-widget-trustbox-1" style="z-index: 1000 !important; position: relative;"><iframe title="Customer reviews powered by Trustpilot" loading="auto" src="https://widget.trustpilot.com/trustboxes/53aa8807dec7e10d38f59f32/index.html?templateId=53aa8807dec7e10d38f59f32&amp;businessunitId=60e8fd41dcef7700010b1ddb#locale=en-US&amp;styleHeight=150px&amp;styleWidth=100%25&amp;theme=dark" style="position: relative; height: 150px; width: 100%; border-style: none; display: block; overflow: hidden;"></iframe></div></div-->
+
+<!--  <div id="trustpilot-widget-trustbox-1-wrapper1" style="position: fixed; z-index: 1000; bottom: 0px; left: 0px; right: -80%; display: block;">-->
+<!--  <div class="trustpilot-widget" data-locale="en-US" data-template-id="53aa8807dec7e10d38f59f32" data-businessunit-id="60e8fd41dcef7700010b1ddb" data-style-height="150px" data-style-width="100%" data-theme="dark" id="trustpilot-widget-trustbox-1" style="z-index: 1000 !important; position: relative;">-->
+<!--    <iframe title="Customer reviews powered by Trustpilot" loading="auto" src="https://widget.trustpilot.com/trustboxes/53aa8807dec7e10d38f59f32/index.html?templateId=53aa8807dec7e10d38f59f32&amp;businessunitId=60e8fd41dcef7700010b1ddb#locale=en-US&amp;styleHeight=150px&amp;styleWidth=100%25&amp;theme=dark" style="position: relative; height: 150px; width: 100%; border-style: none; display: block; overflow: hidden;"></iframe>-->
+<!--  </div>-->
+<!--</div>-->
+
+  <!-- TrustBox widget - Micro TrustScore -->
+<!--<div class="trustpilot-widget" data-locale="en-US" data-template-id="5419b637fa0340045cd0c936" data-businessunit-id="60e8fd41dcef7700010b1ddb" data-style-height="20px" data-style-width="100%" data-theme="dark">-->
+<!--  <a href="https://www.trustpilot.com/review/undervalueappliances.ca" target="_blank" rel="noopener">Trustpilot</a>-->
+<!--</div>-->
+<!-- End TrustBox widget -->
+<script>
+jQuery(document).ready(function($) {
+    $("#trustpilot-widget-trustbox-1-wrapper1").hide(); // Hide the widget initially
+
+    $(window).scroll(function() {
+        var scrollPosition = $(this).scrollTop(); // Get scroll position
+
+        if (scrollPosition > 300) { // Show widget after 300px of scrolling
+            $("#trustpilot-widget-trustbox-1-wrapper1").fadeIn();
+        } else {
+            $("#trustpilot-widget-trustbox-1-wrapper1").fadeOut();
+        }
+    });
+
+    // Inject crisp white Humm SVG vector logo inside the footer payment icons list
+    function injectHummLogoToFooter() {
+        var $container = $('.footer-payment-icons');
+        if ($container.length && $('#humm-footer-icon').length === 0) {
+            var logoUrl = 'https://cdn.shophumm.com/humm/uploads/humm-logo.svg';
+            var hummHtml = '';
+            if ($container.is('ul')) {
+                hummHtml = `
+                    <li class="footer-payment-icon" id="humm-footer-icon" style="display: inline-block; vertical-align: middle; margin: 4px 6px;">
+                        <img src="${logoUrl}" alt="Humm" style="height: 22px; width: auto; object-fit: contain; filter: brightness(0) invert(1); display: block;">
+                    </li>
+                `;
+            } else {
+                hummHtml = `
+                    <img id="humm-footer-icon" src="${logoUrl}" alt="Humm" style="height: 22px; width: auto; object-fit: contain; filter: brightness(0) invert(1); margin: 4px 6px; display: inline-block; background-color: transparent; vertical-align: middle;">
+                `;
+            }
+            $container.append(hummHtml);
+        }
+    }
+    injectHummLogoToFooter();
+    setInterval(injectHummLogoToFooter, 1000);
+});
+document.addEventListener("DOMContentLoaded", function () {
+
+    const url = "https://undervalueappliances.ca/best-seller/";
+
+    // Free CORS proxy
+    const proxy = "https://api.allorigins.win/raw?url=";
+
+    fetch(proxy + encodeURIComponent(url))
+        .then(res => res.text())
+        .then(html => {
+            // pura page HTML parse karo
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, "text/html");
+
+            // sirf productGrid uthao
+            const productGrid = doc.querySelector(".productGrid");
+
+            if (productGrid) {
+                document.getElementById("seller_product").innerHTML =
+                    productGrid.outerHTML;
+            } else {
+                console.log("productGrid nahi mila");
+            }
+        })
+        .catch(err => console.error(err));
+
+});
+
+
+</script>
+
+<script>
+
+// document.addEventListener("DOMContentLoaded", function () {
+    
+//     console.log('loadProductGridWithRetryaddEventListener')
+//      if (
+//         window.location.origin + window.location.pathname !== "https://undervalueappliances.ca/"
+//     ) {
+//         return; // stop script on other pages
+//     }
+//     /* ===============================
+//       FORCE CSS (SAFE)
+//     =============================== */
+//     function forceGridCSS() {
+//         if (document.getElementById("force-grid-style")) return;
+//         var style = document.createElement("style");
+//         style.id = "force-grid-style";
+//         style.innerHTML = `
+//             .brandGrid,
+//             .productGrid {
+//                 display: flex !important;
+//             }
+//         #seller_product ul.productGrid > li {
+//             display: none;
+//         }
+
+//         #seller_product ul.productGrid > li:nth-child(-n+6) {
+//             width:16.66% !important;
+//             max-width:16.66% !important;
+//             display: block;
+//         }
+
+
+//         `;
+//         document.head.appendChild(style);
+//     }
+//     forceGridCSS();
+//     /* ===============================
+//       CONFIG
+//     =============================== */
+//     var proxy = "https://api.allorigins.win/raw?url=";
+//     var RETRY_INTERVAL = 3000;
+//     var MAX_RETRIES = 50;
+//     /* ===============================
+//       CLEAN HTML (REMOVE SCRIPTS)
+//     =============================== */
+//     function removeScripts(container) {
+//         var scripts = container.querySelectorAll("script");
+//         scripts.forEach(function (s) {
+//             s.remove();
+//         });
+//     }
+//     /* ===============================
+//       FETCH WITH RETRY (SAFE)
+//     =============================== */
+//     function loadProductGridWithRetry(pageUrl, targetId, pageUrl) {
+//         console.log('loadProductGridWithRetry')
+//         var retries = 0;
+//         function tryFetch() {
+//             var target = document.getElementById(targetId);
+//             if (!target) return;
+//             fetch(proxy + encodeURIComponent(pageUrl))
+//                 .then(function (res) {
+//                     if (!res.ok) throw new Error("Network error");
+//                     return res.text();
+//                 })
+//                 .then(function (html) {
+//                     var doc = new DOMParser().parseFromString(html, "text/html");
+//                     var grid = doc.querySelector(".productGrid");
+//                     if (!grid || grid.children.length === 0) {
+//                         retry();
+//                         return;
+//                     }
+//                     // Limit to max 6 products
+//                     if (grid.children.length > 6) {
+//                         while (grid.children.length > 6) {
+//                             grid.removeChild(grid.lastChild);
+//                         }
+//                     }
+//                     // REMOVE INLINE SCRIPTS (prevents null.style crashes)
+//                     removeScripts(grid);
+//                     target.innerHTML = grid.outerHTML;
+//                     forceGridCSS();
+//                     console.log("Loaded:", pageUrl);
+//                 })
+//                 .catch(function (err) {
+//                     retry();
+//                 });
+//         }
+//         function retry() {
+//             retries++;
+//             if (retries >= MAX_RETRIES) {
+//                 console.warn("Failed after retries:", pageUrl);
+//                 return;
+//             }
+//             setTimeout(tryFetch, RETRY_INTERVAL);
+//         }
+//         tryFetch();
+//     }
+//     /* ===============================
+//       LOAD SECTIONS
+//     =============================== */
+
+//         loadProductGridWithRetry(
+//             "85",
+//             "https://undervalueappliances.ca/best-seller/",
+//             "seller_product"
+//         );
+    
+//         loadProductGridWithRetry(
+//             "84",
+//             "https://undervalueappliances.ca/best-value/",
+//             "best_value"
+//         );
+ 
+// });
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    console.log('loadProductGridWithRetry addEventListener');
+
+    if (
+        window.location.origin + window.location.pathname !== "https://undervalueappliances.ca/"
+    ) {
+        return; // stop script on other pages
+    }
+
+    /* ===============================
+       FORCE CSS (SAFE)
+    =============================== */
+    function forceGridCSS() {
+        if (document.getElementById("force-grid-style")) return;
+
+        var style = document.createElement("style");
+        style.id = "force-grid-style";
+        style.innerHTML = `
+            .brandGrid,
+            .productGrid {
+                display: flex !important;
+            }
+
+            #seller_product ul.productGrid > li,
+            #best_value ul.productGrid > li {
+                display: none;
+            }
+
+            #seller_product ul.productGrid > li:nth-child(-n+6),
+            #best_value ul.productGrid > li:nth-child(-n+6) {
+                width:16.66% !important;
+                max-width:16.66% !important;
+                display: block;
+            }
+        `;
+        document.head.appendChild(style);
+    }
+    forceGridCSS();
+
+    /* ===============================
+       CONFIG
+    =============================== */
+    var proxy = "https://api.allorigins.win/raw?url=";
+    var RETRY_INTERVAL = 3000;
+    var MAX_RETRIES = 50;
+
+    /* ===============================
+       REMOVE INLINE SCRIPTS
+    =============================== */
+    function removeScripts(container) {
+        container.querySelectorAll("script").forEach(function (s) {
+            s.remove();
+        });
+    }
+
+    /* ===============================
+       FETCH WITH RETRY (FIXED)
+    =============================== */
+    function loadProductGridWithRetry(sectionId, pageUrl, targetId) {
+        console.log('Loading section:', sectionId);
+
+        var retries = 0;
+
+        function tryFetch() {
+            var target = document.getElementById(targetId);
+            if (!target) {
+                retry();
+                return;
+            }
+
+            fetch(proxy + encodeURIComponent(pageUrl))
+                .then(function (res) {
+                    if (!res.ok) throw new Error("Network error");
+                    return res.text();
+                })
+                .then(function (html) {
+                    var doc = new DOMParser().parseFromString(html, "text/html");
+                    var grid = doc.querySelector("ul.productGrid");
+
+                    if (!grid || grid.children.length === 0) {
+                        retry();
+                        return;
+                    }
+
+                    // Keep only first 6 products
+                    while (grid.children.length > 6) {
+                        grid.removeChild(grid.lastChild);
+                    }
+
+                    removeScripts(grid);
+                    target.innerHTML = grid.outerHTML;
+                    forceGridCSS();
+
+                    console.log("Loaded OK:", sectionId, pageUrl);
+                })
+                .catch(function () {
+                    retry();
+                });
+        }
+
+        function retry() {
+            retries++;
+            if (retries >= MAX_RETRIES) {
+                console.warn("Failed after retries:", sectionId, pageUrl);
+                return;
+            }
+            setTimeout(tryFetch, RETRY_INTERVAL);
+        }
+
+        tryFetch();
+    }
+
+    /* ===============================
+       LOAD SECTIONS (BOTH WORK)
+    =============================== */
+
+    loadProductGridWithRetry(
+        "85",
+        "https://undervalueappliances.ca/best-seller/",
+        "seller_product"
+    );
+
+    loadProductGridWithRetry(
+        "84",
+        "https://undervalueappliances.ca/best-value/",
+        "best_value"
+    );
+
+});
+
+</script>

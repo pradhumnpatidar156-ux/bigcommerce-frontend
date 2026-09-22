@@ -1,0 +1,886 @@
+---
+cart: true
+---
+{{inject 'cancelButtonText' (lang 'common.cancel')}}
+{{#partial "page"}}
+{{inject 'invalidEntryMessage' (lang 'cart.invalid_entry_message')}}
+<div class="page">
+    <div class="container">
+
+        <main class="page-content" data-cart>
+            {{> components/common/breadcrumbs breadcrumbs=breadcrumbs}}
+
+            {{> components/cart/page-title}}
+
+
+            <div data-cart-status>
+
+                {{> components/cart/status-messages}}
+            </div>
+
+            {{#if cart.items.length}}
+            <div class="loadingOverlay"></div>
+
+            <div data-cart-content>
+                {{> components/cart/content}}
+
+                <div class="delivery">
+                    <div>
+                        <div class="infobox">
+
+                            <div class="delivery_info">
+                                <h5> Delivery options available at checkout:</h5>
+                                <h6>Same day (if ordered by noon)</h6>
+                                <h6>Next day</h6>
+                                <h6>Within one week</h6>
+                                <h6>Note: Delivery is calculated at checkout, based on speed selected, cart total,
+                                    promotions applied, number of pieces, and address.
+                                </h6>
+                            </div>
+
+                            <div class="pickup">
+
+
+                                <h5>Curbside pickup available at checkout.</h5>
+                                <p>Usually ready within 4 hours.</p>
+                                <p>If picking up, address and instructions sent in order ready for pickup notification
+                                    email
+                                    <br>
+                                    London ON N6H 5L4
+                                    <br>
+                                    Canada
+                                    <br>
+                                    +18338637858
+                                </p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div data-cart-totals>
+                    {{> components/cart/totals}}
+                </div>
+
+                {{#if cart.show_primary_checkout_button}}
+
+                <div class="cart-actions">
+                    <div class="cart_sum">
+                        <a class="button button--primary" href="https://undervalueappliances.ca/services/">
+                            <button class="checkoutHeader-service">
+                                Click here to add additional services ex. hookup.<br>Delivery is calculated at checkout.
+                            </button>
+                        </a>
+                        <a class="button button--primary" href="{{urls.checkout.single_address}}"
+                            title="{{lang 'cart.checkout.title'}}">{{lang 'cart.checkout.button'}}</a>
+                    </div>
+                    {{#if cart.show_multiple_address_shipping}}
+                    <a class="checkoutMultiple" href="{{urls.checkout.multiple_address}}">
+                        {{lang 'cart.preview.checkout_multiple'}}
+                    </a>
+                    {{/if}}
+                </div>
+                {{else}}
+                <div class="cart-actions">
+                    <a class="button" href="{{urls.home}}" title="{{lang 'cart.continue_shopping'}}">{{lang
+                        'cart.continue_shopping'}}</a>
+                </div>
+                {{/if}}
+
+                {{#if cart.additional_checkout_buttons}}
+                <div class="cart-additionalCheckoutButtons">
+                    {{#each cart.additional_checkout_buttons}}
+                    {{{this}}}
+                    {{/each}}
+                </div>
+                {{/if}}
+                {{else}}
+                <h3>{{lang 'cart.checkout.empty_cart'}}</h3>
+                {{/if}}
+        </main>
+    </div>
+</div>
+<style>
+  .why-buy-wrapper {
+    max-width: 1150px;
+    width: 95%;
+    margin: 20px auto;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+  }
+
+  .why-buy-header {
+    background: #1a5bd1;
+    color: #ffffff;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 700;
+    padding: 11px 16px;
+    letter-spacing: 0.3px;
+  }
+
+  .why-buy-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .why-buy-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    border-bottom: 1px solid #ececec;
+  }
+
+  .why-buy-col-1 {
+    border-right: 1px solid #ececec;
+  }
+
+  .why-buy-col-2 {
+    border-right: none;
+  }
+
+  .why-buy-icon {
+    width: 36px;
+    min-width: 36px;
+    height: 36px;
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .why-buy-icon svg {
+    width: 20px;
+    height: 20px;
+    fill: #000000 !important;
+    stroke: none !important;
+    display: block;
+  }
+
+  .why-buy-icon svg path,
+  .why-buy-icon svg circle,
+  .why-buy-icon svg rect,
+  .why-buy-icon svg polygon,
+  .why-buy-icon svg line {
+    fill: #000000 !important;
+    stroke: none !important;
+  }
+
+  .why-buy-content h3 {
+    margin: 0;
+    color: #1a5bd1;
+    font-size: 13.5px;
+    font-weight: 700;
+    line-height: 1.25;
+  }
+
+  .why-buy-content h3 a {
+    color: #1a5bd1;
+    text-decoration: underline;
+  }
+
+  .why-buy-content h3 a:hover {
+    text-decoration: none;
+  }
+
+  .why-buy-content p {
+    margin: 3px 0 0;
+    color: #555555;
+    font-size: 12px;
+    line-height: 1.35;
+  }
+
+  .why-buy-content p a {
+    color: #1a5bd1;
+    text-decoration: underline;
+  }
+
+  .why-buy-content p a:hover {
+    text-decoration: none;
+  }
+
+  .why-buy-content p strong {
+    color: #0f172a;
+    font-size: 12.5px;
+    font-weight: 700;
+  }
+
+  .highlight-row {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: #fbf6ee;
+    border-top: 1px solid #e8d9b8;
+  }
+
+  .highlight-row .why-buy-item {
+    border-bottom: none;
+  }
+
+  .highlight-row .why-buy-col-1 {
+    border-right: 1px solid #e8d9b8;
+  }
+
+  .highlight-row .why-buy-icon {
+    background: #fff3e0;
+    border-color: #e8c98a;
+  }
+
+  .best-value-badge {
+    display: inline-block;
+    margin-left: 8px;
+    background: #c70000;
+    color: #ffffff;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 700;
+    vertical-align: middle;
+    letter-spacing: 0.3px;
+  }
+
+  @media(max-width:768px) {
+    .why-buy-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .highlight-row {
+      grid-template-columns: 1fr;
+    }
+
+    .highlight-row .why-buy-col-1 {
+      border-right: none;
+      border-bottom: 1px solid #e8d9b8;
+    }
+
+    .why-buy-col-1 {
+      border-right: none;
+    }
+
+    .why-buy-header {
+      font-size: 18px;
+      padding: 10px 14px;
+    }
+
+    .why-buy-item {
+      gap: 10px;
+      padding: 9px 14px;
+    }
+  }
+
+    /* Trust Review Badges Styles */
+    .productView-trustBadges {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+        padding: 10px 12px;
+        background: #f8fafc;
+        border-top: 1px solid #ececec;
+    }
+
+    @media (max-width: 576px) {
+        .productView-trustBadges {
+            grid-template-columns: 1fr;
+            padding: 8px 10px;
+        }
+    }
+
+    .trust-badge {
+        border-radius: 10px !important;
+        padding: 10px 12px !important;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-height: 105px !important;
+        box-sizing: border-box;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+
+    .trust-badge-black {
+        background-color: #0b0c0e;
+        color: #ffffff;
+        border: 1.5px solid #1a1d24;
+    }
+
+    .trust-badge-white {
+        background-color: #ffffff;
+        color: #0b0c0e;
+        border: 1.5px solid #e2e8f0;
+    }
+
+    .trust-stars {
+        display: flex;
+        gap: 2px;
+        color: #ffb400;
+    }
+
+    /* Overrides to make badges smaller */
+    .trust-badge svg[viewBox="0 0 74 24"] {
+        width: 70px !important;
+        height: 23px !important;
+    }
+
+    .trust-stars svg {
+        width: 11px !important;
+        height: 11px !important;
+    }
+
+    .trust-badge div[style*="background: #00b67a"] {
+        width: 12px !important;
+        height: 12px !important;
+        padding: 1px !important;
+    }
+
+    .trust-badge div[style*="background: #00b67a"] svg {
+        width: 8px !important;
+        height: 8px !important;
+    }
+
+    .trust-badge svg[viewBox="0 0 100 100"] {
+        width: 18px !important;
+        height: 18px !important;
+    }
+
+    .trust-badge svg[viewBox="0 0 24 24"][width="18"] {
+        width: 14px !important;
+        height: 14px !important;
+    }
+
+    .trust-badge svg[viewBox="0 0 24 24"][fill="#00b67a"] {
+        width: 14px !important;
+        height: 14px !important;
+    }
+
+    .trust-badge div[style*="width: 36px"] {
+        width: 28px !important;
+        height: 26px !important;
+    }
+
+    .trust-badge div[style*="width: 36px"] span {
+        font-size: 14px !important;
+    }
+
+    .trust-badge span[style*="font-size: 13px"] {
+        font-size: 11px !important;
+    }
+
+    .trust-badge span[style*="font-size: 5px"] {
+        font-size: 4px !important;
+    }
+
+    .trust-badge div[style*="font-size: 14px"],
+    .trust-badge span[style*="font-size: 14px"] {
+        font-size: 12px !important;
+    }
+
+    .trust-badge span[style*="font-size: 16px"] {
+        font-size: 13px !important;
+    }
+
+    .trust-badge span[style*="font-size: 11px"] {
+        font-size: 9.5px !important;
+    }
+
+    .trust-badge div[style*="font-size: 11px"] {
+        font-size: 9.5px !important;
+    }
+
+    .trust-badge div[style*="font-size: 10px"] {
+        font-size: 8.5px !important;
+    }
+
+    .trust-badge span[style*="font-size: 12px"] {
+        font-size: 10.5px !important;
+    }
+
+    .trust-stars svg {
+        width: 11px !important;
+        height: 11px !important;
+        fill: currentColor;
+    }
+
+    .trust-info-icon {
+        display: inline-flex;
+        align-items: center;
+        opacity: 0.5;
+        color: currentColor;
+    }
+
+    .trust-info-icon svg {
+        width: 10px !important;
+        height: 10px !important;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 2;
+    }
+</style>
+
+<div class="why-buy-wrapper">
+
+  <div class="why-buy-header">
+    Why Buy From Undervalue Appliances.ca ?
+  </div>
+
+  <div class="why-buy-grid">
+
+    <!-- Row 1: Left -->
+    <div class="why-buy-item why-buy-col-1">
+      <div class="why-buy-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+      </div>
+      <div class="why-buy-content">
+        <h3><a href="https://undervalueappliances.ca/about/" target="_blank">Highly Reviewed for Over a Decade</a></h3>
+        <p>Your trusted local <a href="https://undervalueappliances.ca/appliances/" target="_blank">appliance</a> experts, rated highly across major review platforms.</p>
+      </div>
+    </div>
+
+    <!-- Row 1: Right -->
+    <div class="why-buy-item why-buy-col-2">
+      <div class="why-buy-icon">
+        <svg viewBox="0 0 24 24"><path d="M20 4v16l-7-4H8v4H6V8h7l7-4zM4 9h2v6H4V9zm16.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
+      </div>
+      <div class="why-buy-content">
+        <h3><a href="https://undervalueappliances.ca/promotion/" target="_blank">Promotions & Special Offers</a></h3>
+        <p>Explore price matching, gift cards, referral rewards & <a href="https://undervalueappliances.ca/promotion/" target="_blank">exclusive promotions</a>.</p>
+      </div>
+    </div>
+
+    <!-- Row 2: Left -->
+    <div class="why-buy-item why-buy-col-1">
+      <div class="why-buy-icon">
+        <svg viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+      </div>
+      <div class="why-buy-content">
+        <h3>In Home Delivery</h3>
+        <p>We bring your <a href="https://undervalueappliances.ca/appliances/" target="_blank">appliance</a> right to your home.</p>
+      </div>
+    </div>
+
+    <!-- Row 2: Right -->
+    <div class="why-buy-item why-buy-col-2">
+      <div class="why-buy-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>
+      </div>
+      <div class="why-buy-content">
+        <h3>Reduce Waste. Save the Planet</h3>
+        <p>Every refurbished <a href="https://undervalueappliances.ca/appliances/" target="_blank">appliance</a> helps reduce waste by giving quality appliances a second life.</p>
+      </div>
+    </div>
+
+    <!-- Row 3: Left -->
+    <div class="why-buy-item why-buy-col-1">
+      <div class="why-buy-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+      </div>
+      <div class="why-buy-content">
+        <h3>Free 60 Days Warranty</h3>
+        <p>Peace of mind with warranty coverage on every <a href="https://undervalueappliances.ca/appliances/" target="_blank">appliance</a>.</p>
+      </div>
+    </div>
+
+    <!-- Row 3: Right -->
+    <div class="why-buy-item why-buy-col-2">
+      <div class="why-buy-icon">
+        <svg viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg>
+      </div>
+      <div class="why-buy-content">
+        <h3><a href="https://undervalueappliances.ca/services/" target="_blank">Professional Installation</a></h3>
+        <p><a href="https://undervalueappliances.ca/repair-service/" target="_blank">Installation services</a> tailored to your needs.</p>
+      </div>
+    </div>
+
+    <!-- Row 4: Left -->
+    <div class="why-buy-item why-buy-col-1">
+      <div class="why-buy-icon">
+        <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+      </div>
+      <div class="why-buy-content">
+        <h3>Fast & Secure Checkout</h3>
+        <p>Enjoy <strong>secure payment options</strong>, <strong>same-day delivery</strong>, and a smooth checkout experience.</p>
+      </div>
+    </div>
+
+    <!-- Row 4: Right -->
+    <div class="why-buy-item why-buy-col-2">
+      <div class="why-buy-icon">
+        <svg viewBox="0 0 24 24"><path d="M20 4H4v2h16V4zm1 10v-2l-1-5H4l-1 5v2h1v6h10v-6h4v6h2v-6h1zm-9 4H6v-4h6v4z"/></svg>
+      </div>
+      <div class="why-buy-content">
+        <h3>One Stop Shop</h3>
+        <p><a href="https://undervalueappliances.ca/appliance-parts/" target="_blank">Parts</a>, <a href="https://undervalueappliances.ca/appliances/" target="_blank">appliances</a> and <a href="https://undervalueappliances.ca/repair-service/" target="_blank">repair service</a> all in one convenient place.</p>
+      </div>
+    </div>
+
+    <!-- Row 5: Left -->
+    <div class="why-buy-item why-buy-col-1">
+      <div class="why-buy-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+      </div>
+      <div class="why-buy-content">
+        <h3>Extended Warranty</h3>
+        <p>Protection coverage available for up to 3 years.</p>
+      </div>
+    </div>
+
+    <!-- Row 5: Right -->
+    <div class="why-buy-item why-buy-col-2">
+      <div class="why-buy-icon">
+        <svg viewBox="0 0 24 24"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/></svg>
+      </div>
+      <div class="why-buy-content">
+        <h3>Price Match & Beat Guarantee</h3>
+        <p>Shop with confidence – we guarantee the best price.</p>
+      </div>
+    </div>
+
+    <!-- Row 6: Highlight Row (Humm & Afterpay Financing + Half Price Lifetime Appliance Repair in 1 Row) -->
+    <div class="highlight-row">
+      <div class="why-buy-item why-buy-col-1">
+        <div class="why-buy-icon">
+          <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>
+        </div>
+        <div class="why-buy-content">
+          <h3><a href="https://undervalueappliances.ca/finance/" target="_blank">Humm</a> & <a href="https://undervalueappliances.ca/finance/" target="_blank">Afterpay</a> Financing</h3>
+          <p>No Fees, No Interest for 18 Months.</p>
+        </div>
+      </div>
+
+      <div class="why-buy-item why-buy-col-2">
+        <div class="why-buy-icon">
+          <svg viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg>
+        </div>
+        <div class="why-buy-content">
+          <h3>Half Price Lifetime Repair – <span id="cart-repair-price" class="cart-repair-price">$--</span><span class="best-value-badge">BEST VALUE</span></h3>
+          <p>Get 50% off all appliance repairs for life.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<style>
+    .ApplePayCheckout.RemoteCheckout.CheckoutButton {
+        display: none !important;
+    }
+
+    .apple-pay-btn.plain {
+        display: none !important;
+
+    }
+
+    .apple-pay-btn-wrapper {
+        display: none;
+    }
+
+    .swal2-modal .swal2-content {
+        color: #000;
+        font-size: 1.14286rem;
+    }
+
+    .GooglePayCheckout.RemoteCheckout.CheckoutButton {
+        display: none !important;
+    }
+
+    .cart-total-label a {
+        color: #080303;
+        text-decoration: underline;
+    }
+
+    i.fa-solid.fa-check {
+        color: #00C200;
+    }
+
+    .delivery_info h5 {
+        margin-top: 0.5rem;
+    }
+
+    .pickup h5 {
+        margin-top: 0.5rem;
+    }
+
+    .delivery_info {
+        border: 1px solid #ccc;
+        padding: 10px;
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+    }
+
+    .pickup {
+        border: 1px solid #ccc;
+        padding: 10px;
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+    }
+
+    .delivery_info h6 {
+        margin-top: 1.5rem;
+        position: relative;
+        padding-left: 20px;
+        margin-bottom: 10px;
+        font-weight: normal;
+        text-transform: none;
+        font-size: 15px;
+    }
+
+    .delivery_info h6::before {
+        content: "•";
+        position: absolute;
+        left: 0;
+        top: 0;
+        color: #fff;
+        font-size: 20px;
+        line-height: 1;
+    }
+
+    /* Phones (max-width: 767px) */
+    @media screen and (max-width: 767px) {
+        .infobox {
+            display: block !important;
+            gap: 10px;
+        }
+
+        .delivery_info {
+            margin-bottom: 10px;
+        }
+    }
+
+    /* Tablets (min-width: 768px and max-width: 1024px) */
+    @media screen and (min-width: 768px) and (max-width: 1024px) {
+
+        .infobox {
+            display: block !important;
+
+        }
+
+        .delivery_info {
+            margin-bottom: 10px;
+        }
+    }
+
+
+    .infobox {
+        display: flex;
+        gap: 10px;
+    }
+
+    .cart-totals li:nth-last-child(2) {
+        display: none !important;
+    }
+
+
+    .cart-totals li.cart-total:nth-child(2) {
+        display: none;
+    }
+
+    .FloatRight.PaypalCommerceCheckout.RemoteCheckout.CheckoutButton {
+        display: none !important;
+    }
+
+    .button-style {
+        width: 100%;
+        ;
+        background-color: #1a5bd1;
+        /* Change to your preferred color */
+        color: #ffff;
+        /* Button text color */
+        border-radius: 5px;
+        font-weight: bold;
+        font-size: 17px;
+        /* Increase font size */
+        border: none;
+        /* Remove default button border */
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .button-style:hover {
+        background-color: #0056b3;
+        /* Darken on hover */
+    }
+
+    .PaypalCommerceCheckout,
+    .PaypalCommerceContainer,
+    .PaypalCommerceInnerContainer {
+        display: none !important;
+    }
+
+    .cart_sum {
+        float: right;
+        display: flex;
+    }
+
+    @media (max-width: 768px) {
+        .cart_sum {
+            float: none;
+            display: block;
+        }
+    }
+
+    .cart-actions .button {
+        display: block;
+        margin-bottom: 11px;
+    }
+</style>
+
+
+{{/partial}}
+{{> layout/base}}
+
+<script>
+
+    $(document).ready(function () {
+
+        function changecodeText() {
+            var $codeHeader = $(".coupon-code-add");
+
+            if ($codeHeader.length) {
+                $codeHeader.filter(function () {
+                    // Check for the specific text "Shipping"
+                    return $(this).text().trim() === "Add Coupon";
+                }).text("Add code");
+            } else {
+                // Retry after 100ms if not found
+                setTimeout(changecodeText, 100);
+            }
+        }
+        // Call all functions to make the necessary text changes
+        changecodeText();
+
+    });
+
+
+</script>
+
+<script>
+    document.addEventListener('click', function (e) {
+        if (e.target.classList.contains('swal2-confirm')) {
+            const popupText = document.querySelector('.swal2-html-container')?.textContent || '';
+            if (popupText.includes('Are you sure you want to remove item from your cart?')) {
+                setTimeout(function () {
+                    location.reload();
+                }, 1500);
+            }
+        }
+    });
+
+    $(document).ready(function ($) {
+        $(".coupon-form").on("submit", function (e) {
+            console.log("Coupon form submitted...");
+            e.preventDefault();
+
+            let formData = $(this).serialize();
+
+            $.ajax({
+                type: "POST",
+                url: "https://undervalueappliances.ca/remote/v1/apply-code",
+                data: formData,
+                xhrFields: { withCredentials: true },
+                success: function (response) {
+                    console.log("API Response:", response);
+
+                    if (response.success) {
+                        // ✅ Coupon applied successfully
+                        setTimeout(function () {
+                            window.location.href = "/cart.php";
+                        }, 1500);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("Coupon apply failed:", status, error);
+                    // fallback → go to cart
+                    //window.location.href = "/cart.php";
+                }
+            });
+        });
+    });
+
+</script>
+
+<script>
+    async function getRepairServicePrice() {
+        try {
+            let res = await fetch('/lifetime-half-price-repair-service/');
+            let html = await res.text();
+            
+            let price = null;
+            let parser = new DOMParser();
+            let doc = parser.parseFromString(html, 'text/html');
+            
+            // 1. Try og:price:amount meta tag
+            let ogPriceMeta = doc.querySelector('meta[property="og:price:amount"]');
+            if (ogPriceMeta) {
+                let val = parseFloat(ogPriceMeta.getAttribute('content'));
+                if (!isNaN(val)) {
+                    price = val;
+                }
+            }
+
+            // 2. Try standard price element data attributes/classes as fallback
+            if (price === null) {
+                let priceEl = doc.querySelector('[data-product-price-without-tax]') || 
+                              doc.querySelector('[data-product-price-with-tax]') ||
+                              doc.querySelector('.price--withoutTax') ||
+                              doc.querySelector('.price--withTax') ||
+                              doc.querySelector('.productView-price .price');
+                if (priceEl) {
+                    let text = priceEl.textContent.trim();
+                    let valMatch = text.match(/[\d.,]+/);
+                    if (valMatch) {
+                        let val = parseFloat(valMatch[0].replace(/,/g, ''));
+                        if (!isNaN(val)) {
+                            price = val;
+                        }
+                    }
+                }
+            }
+
+            // 3. Try JSON-LD schema as fallback
+            if (price === null) {
+                let scripts = doc.querySelectorAll('script[type="application/ld+json"]');
+                for (let script of scripts) {
+                    try {
+                        let json = JSON.parse(script.textContent);
+                        let offers = json.offers || (json['@graph'] && json['@graph'].find(o => o.offers)?.offers);
+                        if (offers) {
+                            let val = parseFloat(offers.price || offers[0]?.price);
+                            if (!isNaN(val)) {
+                                price = val;
+                                break;
+                            }
+                        }
+                    } catch(e) {}
+                }
+            }
+
+            return price;
+        } catch (e) {
+            console.error("Failed to fetch repair service price:", e);
+        }
+        return null;
+    }
+
+    // Update cart repair price on page load
+    getRepairServicePrice().then(price => {
+        if (price === null) {
+            price = 95; // Default fallback
+        }
+        const cartRepairPriceEl = document.getElementById('cart-repair-price');
+        if (cartRepairPriceEl) {
+            cartRepairPriceEl.textContent = '$' + (price % 1 === 0 ? price : price.toFixed(2));
+        }
+    });
+</script>

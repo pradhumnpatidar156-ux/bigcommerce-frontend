@@ -1,0 +1,599 @@
+{{#partial "head"}}
+
+{{{ checkout.checkout_head }}}
+{{{ stylesheet '/assets/css/optimized-checkout.css' }}}
+{{ getFontsCollection }}
+
+<script type="text/javascript">
+    window.language = {{{langJson 'optimized_checkout'}}};
+</script>
+
+{{{head.scripts}}}
+
+{{/partial}}
+
+{{#partial "page"}}
+<header class="checkoutHeader optimizedCheckout-header">
+    <div class="checkoutHeader-content">
+        <h1 class="is-srOnly">{{lang 'checkout.title'}}</h1>
+        <h2 class="checkoutHeader-heading">
+            <a class="checkoutHeader-link" href="{{urls.home}}">
+                {{#if checkout.header_image}}
+                <img alt="{{settings.store_logo.title}}" class="checkoutHeader-logo" id="logoImage"
+                    src="{{ checkout.header_image }}" />
+                {{else}}
+                <span class="header-logo-text">{{settings.store_logo.title}}</span>
+                {{/if}}
+            </a>
+        </h2>
+    </div>
+</header>
+
+{{{ checkout.checkout_content }}}
+
+{{{ footer.scripts }}}
+
+{{/partial}}
+
+{{> layout/empty}}
+
+<style>
+    span.cart-priceItem-postFix.optimizedCheckout-contentSecondary {
+        display: none;
+    }
+
+    .cart-priceItem-link a {
+        color: red;
+        text-decoration: underline;
+    }
+
+    .swal2-modal .swal2-content {
+        color: #000;
+        font-size: 1.14286rem;
+    }
+
+    .cart-priceItem--discount33 {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 0;
+    }
+
+    .cart-priceItem--discount33 .cart-priceItem-label span {
+        color: #0f9d58;
+        font-weight: 600;
+    }
+
+    .cart-priceItem--discount33 .cart-priceItem-value span {
+        color: #0f9d58;
+        font-weight: 700;
+    }
+</style>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<script>
+jQuery(function ($) {
+    var nativeValueSetter = null;
+    try {
+        nativeValueSetter = Object.getOwnPropertyDescriptor(
+            window.HTMLInputElement.prototype, 'value'
+        ).set;
+    } catch (e) {}
+
+    function setNativeValue(el, value) {
+        if (!el) return;
+        if (nativeValueSetter) {
+            nativeValueSetter.call(el, value);
+        } else {
+            el.value = value;
+        }
+        var ev = new Event('input', { bubbles: true });
+        el.dispatchEvent(ev);
+    }
+
+    function cleanPostal(v) {
+        return (v || '').toUpperCase().replace(/^(.{3})\s+/, '$1');
+    }
+
+    $(document).on('input change blur', '#postCodeInput', function () {
+        var el = this;
+        var cleaned = cleanPostal(el.value);
+        if (el.value !== cleaned) {
+            setNativeValue(el, cleaned);
+            try {
+                el.setSelectionRange(cleaned.length, cleaned.length);
+            } catch (e) {}
+        }
+    });
+
+    var checks = 0;
+    var poll = setInterval(function () {
+        var el = document.getElementById('postCodeInput');
+        if (el) {
+            var cleaned = cleanPostal(el.value);
+            if (el.value !== cleaned) setNativeValue(el, cleaned);
+        }
+        checks++;
+        if (checks > 40) clearInterval(poll);
+    }, 250);
+
+    var observer = new MutationObserver(function () {
+        var el = document.getElementById('postCodeInput');
+        if (el) {
+            var cleaned = cleanPostal(el.value);
+            if (el.value !== cleaned) setNativeValue(el, cleaned);
+        }
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+});
+</script>
+
+<script>
+$(document).ready(function () {
+
+    function changeShippingText() {
+        var $el = $(".stepHeader-title.optimizedCheckout-headingPrimary");
+        if ($el.length) {
+            $el.filter(function () {
+                return $(this).text().trim() === "Shipping";
+            }).text("Delivery");
+        } else {
+            setTimeout(changeShippingText, 100);
+        }
+    }
+
+    function changeShippingAddressText() {
+        var $el = $("legend.form-legend.optimizedCheckout-headingSecondary[data-test='shipping-address-heading']");
+        if ($el.length) {
+            $el.filter(function () {
+                return $(this).text().trim() === "Shipping Address";
+            }).text("Delivery Address");
+        } else {
+            setTimeout(changeShippingAddressText, 100);
+        }
+    }
+
+    function changeShippingMethodText() {
+        var $el = $("legend.form-legend.optimizedCheckout-headingSecondary");
+        if ($el.length) {
+            $el.filter(function () {
+                return $(this).text().trim() === "Shipping Method";
+            }).text("Delivery Method");
+        } else {
+            setTimeout(changeShippingMethodText, 100);
+        }
+    }
+
+    function changeCheckboxLabelText() {
+        var $el = $("label.form-label.optimizedCheckout-form-label[for='sameAsBilling']");
+        if ($el.length) {
+            $el.filter(function () {
+                return $(this).text().trim() === "My billing address is the same as my shipping address.";
+            }).text("My billing address is the same as my delivery address.");
+        } else {
+            setTimeout(changeCheckboxLabelText, 100);
+        }
+    }
+
+    function changeCartShippingText() {
+        var $el = $("div[data-test='cart-shipping'] .cart-priceItem-label span[data-test='cart-price-label']");
+        if ($el.length) {
+            $el.filter(function () {
+                return $(this).text().trim() === "Shipping";
+            }).text("Delivery");
+        } else {
+            setTimeout(changeCartShippingText, 100);
+        }
+    }
+
+    changeShippingText();
+    changeShippingAddressText();
+    changeShippingMethodText();
+    changeCheckboxLabelText();
+    changeCartShippingText();
+});
+</script>
+
+<script>
+$(document).ready(function () {
+
+    function isPastSameDayCutoff() {
+        var now = new Date();
+        var hours = now.getHours();
+        var minutes = now.getMinutes();
+        return (hours > 12) || (hours === 12 && minutes > 0);
+    }
+
+    function disableSameDayDelivery() {
+        if (!isPastSameDayCutoff()) return;
+
+        var sameDayOption = $("input[type='radio']").filter(function () {
+            return $(this).next("label").find(".shippingOption-desc").text().toLowerCase().includes("same day");
+        });
+
+        if (sameDayOption.length > 0) {
+            sameDayOption.each(function () {
+                if ($(this).is(":checked")) {
+                    $(this).prop("checked", false).trigger("change");
+                    $("input[type='radio']").not(sameDayOption).first().prop("checked", true).trigger("change");
+                }
+                $(this).prop("disabled", true).closest(".form-checklist-item").css("opacity", "0.5");
+            });
+
+            if (!$("input[type='radio']").is(":checked")) {
+                $("input[type='radio']").not(sameDayOption).first().prop("checked", true).trigger("change");
+            }
+        }
+    }
+
+    function waitForShippingOptions() {
+        if ($(".form-checklist-item").length > 0) {
+            disableSameDayDelivery();
+            setInterval(disableSameDayDelivery, 2000);
+        } else {
+            setTimeout(waitForShippingOptions, 500);
+        }
+    }
+
+    waitForShippingOptions();
+
+    var targetNode = document.querySelector(".form-checklist");
+    if (targetNode) {
+        new MutationObserver(disableSameDayDelivery).observe(targetNode, {
+            childList: true,
+            subtree: true
+        });
+    }
+
+    $(document).on("change", ".form-checklist-checkbox, input[type='radio']", disableSameDayDelivery);
+
+    $(document).on("click", "#checkout-payment-continue", function (e) {
+        var selectedOption = $("input[name^='shippingOptionIds']:checked");
+        var selectedOptionText = selectedOption.closest('.form-field').find('.shippingOption-desc').text().trim();
+
+        if (selectedOptionText.includes("Delivery Same Day") && isPastSameDayCutoff()) {
+            alert("Same Day Delivery is not available after 12 PM. Please select another option.");
+            e.preventDefault();
+            return false;
+        }
+    });
+
+});
+</script>
+
+
+<script>
+$(document).ready(function () {
+
+    var SERVICE_SKUS = ['UA01092199', 'UA01092106', 'UA01092103'];
+
+    var SERVICE_NAME_PATTERNS = [
+        'stacking kit installation',
+        'installation service',
+        'delivery service',
+        'haul away',
+        'protection plan',
+        'extended warranty',
+        'removal',
+        're-install',
+        'reinstall',
+        're-installation'
+    ];
+
+    var BUNDLE_TIERS = [
+        { qty: 3, amount: 100.00, perItem: 33.33 },
+        { qty: 4, amount: 200.00, perItem: 50.00 },
+        { qty: 5, amount: 300.00, perItem: 60.00 }
+    ];
+
+    var MAX_TIER_QTY = BUNDLE_TIERS[BUNDLE_TIERS.length - 1].qty; // 5
+
+    var FREE_DELIVERY_THRESHOLD = 699;
+    var NON_LOCAL_DELIVERY_DISCOUNT = 74.95;
+    var BUNDLE_MIN_QTY = 3; // Bundle discount sirf 3+ regular items par
+
+    function isServiceItem(item) {
+        var sku = (item.sku || '').toUpperCase().trim();
+        for (var i = 0; i < SERVICE_SKUS.length; i++) {
+            if (sku === SERVICE_SKUS[i].toUpperCase()) return true;
+        }
+        var name = (item.name || '').toLowerCase();
+        for (var j = 0; j < SERVICE_NAME_PATTERNS.length; j++) {
+            if (name.indexOf(SERVICE_NAME_PATTERNS[j]) > -1) return true;
+        }
+        return false;
+    }
+
+    function isAlreadyDiscountedItem(item) {
+        var couponAmount = parseFloat(item.couponAmount || 0);
+        if (couponAmount > 0) return true;
+        return false;
+    }
+
+    function formatMoney(amount) {
+        return "$" + amount;
+    }
+
+    function getNextTierByEligibleQty(eligibleQty) {
+        for (var i = 0; i < BUNDLE_TIERS.length; i++) {
+            if (eligibleQty < BUNDLE_TIERS[i].qty) {
+                return BUNDLE_TIERS[i];
+            }
+        }
+        return null;
+    }
+
+    function getCurrentTier(regularCount) {
+        var current = null;
+        for (var i = BUNDLE_TIERS.length - 1; i >= 0; i--) {
+            if (regularCount >= BUNDLE_TIERS[i].qty) {
+                current = BUNDLE_TIERS[i];
+                break;
+            }
+        }
+        return current;
+    }
+
+    function analyzeCart(cart) {
+        var result = {
+            regularCount: 0,
+            discountedCount: 0,
+            serviceCount: 0,
+            totalDiscount: 0,
+            isBundleActive: false,
+            regularSubtotal: 0
+        };
+
+        if (!cart || !cart.lineItems || !cart.lineItems.physicalItems) {
+            return result;
+        }
+
+        cart.lineItems.physicalItems.forEach(function (item) {
+            if (isServiceItem(item)) {
+                result.serviceCount += 1;
+                return;
+            }
+            // Non-service items (regular ya already-discounted) ka amount delivery threshold mein count hota hai
+            result.regularSubtotal += parseFloat(item.extendedSalePrice || item.salePrice || 0);
+
+            if (isAlreadyDiscountedItem(item)) {
+                result.discountedCount += 1;
+                return;
+            }
+            result.regularCount += 1;
+        });
+
+        // totalDiscount sirf tab count karo jab 3+ regular items hon
+        if (result.regularCount >= BUNDLE_MIN_QTY) {
+            cart.lineItems.physicalItems.forEach(function (item) {
+                if (!isServiceItem(item) && !isAlreadyDiscountedItem(item)) {
+                    result.totalDiscount += item.discountAmount || 0;
+                }
+            });
+            result.isBundleActive = result.totalDiscount > 0;
+        }
+
+        return result;
+    }
+
+    function buildMainMessage(summary) {
+        if (!summary.isBundleActive) return '';
+
+        var currentTier = getCurrentTier(summary.regularCount);
+        var perItemText = currentTier ? ' $' + currentTier.perItem + ' off per regular item.' : '';
+        var totalSelected = summary.regularCount + summary.discountedCount;
+
+        if (summary.discountedCount > 0) {
+            return 'You selected ' + totalSelected + ' items, but only ' +
+                summary.regularCount + ' regular item' +
+                (summary.regularCount > 1 ? 's are' : ' is') +
+                ' eligible for bundle discount.' +
+                perItemText + ' ' +
+                formatMoney(summary.totalDiscount) + ' off applies to regular items only.';
+        }
+
+        return 'You selected ' + summary.regularCount + ' item' +
+            (summary.regularCount > 1 ? 's' : '') + '.' +
+            perItemText + ' ' +
+            formatMoney(summary.totalDiscount) + ' off applied.';
+    }
+
+    function buildNextOfferMessage(summary) {
+        var nextTier = getNextTierByEligibleQty(summary.regularCount);
+        if (!nextTier) return '';
+
+        var itemsNeeded = nextTier.qty - summary.regularCount;
+        if (itemsNeeded <= 0) return '';
+
+        return 'Add ' + itemsNeeded + ' more item' +
+            (itemsNeeded > 1 ? 's' : '') +
+            ' to unlock ' + formatMoney(nextTier.perItem) +
+            ' off per regular item.';
+    }
+
+    function buildDeliveryMessage(subtotal) {
+        if (subtotal >= FREE_DELIVERY_THRESHOLD) {
+            return ' You qualify for Free Delivery! You saved ' +
+                formatMoney(NON_LOCAL_DELIVERY_DISCOUNT) +
+                ' on delivery because your order is over ' +
+                formatMoney(FREE_DELIVERY_THRESHOLD) + ' (pre-tax).';
+        } else {
+            var remaining = (FREE_DELIVERY_THRESHOLD - subtotal).toFixed(2);
+            return ' Spend ' + formatMoney(remaining) +
+                ' more (pre-tax) on appliances to qualify for Free Delivery. ' +
+                'Non-local orders (25km+ away) receive ' +
+                formatMoney(NON_LOCAL_DELIVERY_DISCOUNT) + ' delivery discount.';
+        }
+    }
+
+    // Progress bar HTML banata hai (0,3,4,5 markers ke beech regularCount ki exact position dikhata hai)
+    function getProgressPercent(regularCount) {
+        // Marker positions on the bar (equally spaced visually): 0 -> 0%, 3 -> 33%, 4 -> 66%, 5 -> 100%
+        var markers = [0, 3, 4, 5];
+        var stops = [0, 33.33, 66.66, 100];
+
+        if (regularCount <= markers[0]) return 0;
+        if (regularCount >= markers[markers.length - 1]) return 100;
+
+        for (var i = 0; i < markers.length - 1; i++) {
+            if (regularCount >= markers[i] && regularCount <= markers[i + 1]) {
+                var rangeQty = markers[i + 1] - markers[i];
+                var rangeStop = stops[i + 1] - stops[i];
+                var within = regularCount - markers[i];
+                return stops[i] + (within / rangeQty) * rangeStop;
+            }
+        }
+        return 0;
+    }
+
+    function buildProgressBarHtml(summary) {
+        var pct = getProgressPercent(summary.regularCount);
+        var barColor = summary.isBundleActive ? '#0f9d58' : '#0f3f91';
+        var nextOfferMessage = buildNextOfferMessage(summary);
+        var html = '';
+
+        html += '<div data-custom-promo-row="true" style="margin-top:8px;">';
+        html +=   '<div style="background:#f5f5f5; border-radius:10px; padding:10px 14px;">';
+        html +=     '<div style="display:flex; justify-content:space-between; font-size:11px; color:#888; margin-bottom:6px;">';
+        html +=       '<span>0</span><span>3</span><span>4</span><span>5</span>';
+        html +=     '</div>';
+        html +=     '<div style="position:relative; height:8px; background:#ddd; border-radius:999px; overflow:hidden;">';
+        html +=       '<div style="position:absolute; left:0; top:0; height:100%; width:' + pct + '%; background:' + barColor + '; border-radius:999px;"></div>';
+        html +=     '</div>';
+
+        if (nextOfferMessage) {
+            html += '<p style="font-size:13px;color:#0f3f91;line-height:1.5;margin:8px 0 0;">' + nextOfferMessage + '</p>';
+        } else if (summary.regularCount >= MAX_TIER_QTY) {
+            html += '<p style="font-size:13px;color:#0f9d58;line-height:1.5;margin:8px 0 0;font-weight:600;">Max discount tier unlocked!</p>';
+        }
+
+        html +=   '</div>';
+        html += '</div>';
+
+        return html;
+    }
+
+    // Delivery progress bar HTML banata hai ($0 se $699 tak simple bar) - sirf non-service products ke amount par
+    function buildDeliveryProgressBarHtml(summary) {
+        var subtotal = summary.regularSubtotal;
+        var pct = Math.min(100, (subtotal / FREE_DELIVERY_THRESHOLD) * 100);
+        var qualified = subtotal >= FREE_DELIVERY_THRESHOLD;
+        var barColor = qualified ? '#0f9d58' : '#0f3f91';
+        var deliveryMessage = buildDeliveryMessage(subtotal);
+        var html = '';
+
+        html += '<div data-custom-promo-row="true" style="margin-top:8px;">';
+        html +=   '<div style="background:#f5f5f5; border-radius:10px; padding:10px 14px;">';
+        html +=     '<div style="display:flex; justify-content:space-between; font-size:11px; color:#888; margin-bottom:6px;">';
+        html +=       '<span>$0</span><span>' + formatMoney(FREE_DELIVERY_THRESHOLD) + '</span>';
+        html +=     '</div>';
+        html +=     '<div style="position:relative; height:8px; background:#ddd; border-radius:999px; overflow:hidden;">';
+        html +=       '<div style="position:absolute; left:0; top:0; height:100%; width:' + pct + '%; background:' + barColor + '; border-radius:999px;"></div>';
+        html +=     '</div>';
+
+        if (deliveryMessage) {
+            html += '<p style="font-size:13px;color:' + (qualified ? '#0f9d58' : '#0f3f91') + ';line-height:1.5;margin:8px 0 0;">' + deliveryMessage + '</p>';
+        }
+
+        html +=   '</div>';
+        html += '</div>';
+
+        return html;
+    }
+
+    function renderPromoRows(cartData) {
+        var cart = Array.isArray(cartData) ? cartData[0] : cartData;
+        if (!cart) return;
+
+        var summary = analyzeCart(cart);
+
+        $('[data-custom-promo-row="true"]').remove();
+
+        var $target = $('section.cart-section > div[data-test="cart-subtotal"]');
+        if (!$target.length) return;
+
+        var html = '';
+        var mainMessage = buildMainMessage(summary);
+
+        // 1. Bundle message — sirf 3+ regular items par, jab discount apply hua ho
+        if (summary.isBundleActive) {
+            html +=
+                '<div data-test="cart-discount" data-custom-promo-row="true">' +
+                    '<div aria-live="polite" class="cart-priceItem optimizedCheckout-contentPrimary cart-priceItem--discount33">' +
+                        '<span class="cart-priceItem-label" style="max-width:78%; line-height:1.5;">' +
+                            '<span data-test="cart-price-label">' + mainMessage + '</span>' +
+                        '</span>' +
+                        '<span class="cart-priceItem-value">' +
+                            '<span data-test="cart-price-value">-' + formatMoney(summary.totalDiscount) + '</span>' +
+                        '</span>' +
+                    '</div>' +
+                '</div>';
+        }
+
+        // 2. Bundle progress bar — sirf jab regular items hon
+        if (summary.regularCount > 0) {
+            html += buildProgressBarHtml(summary);
+        }
+
+        // 3. Delivery progress bar — sirf tab dikhao jab bundle active NA ho (non-service product amount par)
+        if (!summary.isBundleActive) {
+            html += buildDeliveryProgressBarHtml(summary);
+        }
+
+        $target.after(html);
+    }
+
+    function fetchCartAndRenderPromo() {
+        $.ajax({
+            url: '/api/storefront/carts?include=lineItems.physicalItems.options',
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            },
+            success: function (data) {
+                renderPromoRows(data);
+            },
+            error: function (err) {
+                console.log('Cart API error:', err.status, err.responseText);
+            }
+        });
+    }
+
+    function waitForCartSection() {
+        if ($('section.cart-section > div[data-test="cart-subtotal"]').length > 0) {
+            fetchCartAndRenderPromo();
+        } else {
+            setTimeout(waitForCartSection, 500);
+        }
+    }
+
+    waitForCartSection();
+});
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    function replaceAfterpayText() {
+        var afterpayLabel = document.querySelector(
+            'label[for="radio-afterpay-pay_by_installment"] .paymentProviderHeader-name'
+        );
+
+        if (afterpayLabel && afterpayLabel.textContent.trim() === "Pay over time") {
+            afterpayLabel.innerHTML =
+                '<span>Multiple financing structures - <a href="https://www.afterpay.com/en-CA/how-it-works" target="_blank" style="text-decoration: underline; color: #0070ba;">how it works</a></span>';
+            return true;
+        }
+        return false;
+    }
+
+    if (!replaceAfterpayText()) {
+        var interval = setInterval(function () {
+            if (replaceAfterpayText()) {
+                clearInterval(interval);
+            }
+        }, 500);
+    }
+});
+</script>

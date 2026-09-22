@@ -1,0 +1,174 @@
+---
+category:
+    shop_by_price: true
+    products:
+        limit: {{theme_settings.categorypage_products_per_page}}
+---
+{{inject "categoryProductsPerPage" theme_settings.categorypage_products_per_page}}
+{{inject "categoryId" category.id}}
+{{#partial "head"}}
+    {{#if pagination.category.previous}}
+        <link rel="prev" href="{{pagination.category.previous}}">
+    {{/if}}
+    {{#if pagination.category.next}}
+        <link rel="next" href="{{pagination.category.next}}">
+    {{/if}}
+{{/partial}}
+
+{{#partial "page"}}
+
+<style>
+    .humm-ticker-banner {
+        width: 100%;
+        background: #ffffff !important; /* White background */
+        overflow: hidden;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+        border-bottom: 2px solid #ff822e !important; /* Humm orange border */
+        padding: 8px 0;
+        position: relative;
+    }
+
+    .humm-ticker-inner {
+        display: flex;
+        width: max-content;
+        align-items: center;
+    }
+
+    .humm-ticker-group {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        min-width: 100%;
+        animation: humm-marquee-scroll 35s linear infinite;
+    }
+
+    .humm-ticker-banner:hover .humm-ticker-group {
+        animation-play-state: paused;
+    }
+
+    .humm-ticker-item {
+        display: flex;
+        align-items: center;
+        padding: 0 40px;
+        white-space: nowrap;
+    }
+
+    .humm-ticker-item img {
+        height: 26px; /* Optimized height for vector SVG */
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    .humm-ticker-item span {
+        color: #ff822e !important; /* Humm orange text */
+        font-family: inherit;
+        font-size: 15px;
+        font-weight: 800;
+        margin-left: 20px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        display: inline-block;
+    }
+
+    @keyframes humm-marquee-scroll {
+        0% {
+            transform: translateX(0);
+        }
+        100% {
+            transform: translateX(-100%);
+        }
+    }
+</style>
+
+<a href="https://humm-canada-prod-web-app.herokuapp.com/application?retailerId=001OO00000i5J8mYAE" target="_blank" style="text-decoration: none; display: block;">
+    <div class="humm-ticker-banner">
+        <div class="humm-ticker-inner">
+            <div class="humm-ticker-group">
+                <div class="humm-ticker-item">
+                    <img src="https://cdn.shophumm.com/humm/uploads/humm-logo.svg" alt="humm Logo">
+                    <span>No Fees, No Interest For 5 Years &nbsp;&bull;&nbsp; Up To $30,000 In Less Than 7 Minutes &nbsp;&bull;&nbsp; Click to Apply Now!</span>
+                </div>
+                <div class="humm-ticker-item">
+                    <img src="https://cdn.shophumm.com/humm/uploads/humm-logo.svg" alt="humm Logo">
+                    <span>No Fees, No Interest For 5 Years &nbsp;&bull;&nbsp; Up To $30,000 In Less Than 7 Minutes &nbsp;&bull;&nbsp; Click to Apply Now!</span>
+                </div>
+            </div>
+            <div class="humm-ticker-group" aria-hidden="true">
+                <div class="humm-ticker-item">
+                    <img src="https://cdn.shophumm.com/humm/uploads/humm-logo.svg" alt="humm Logo">
+                    <span>No Fees, No Interest For 5 Years &nbsp;&bull;&nbsp; Up To $30,000 In Less Than 7 Minutes &nbsp;&bull;&nbsp; Click to Apply Now!</span>
+                </div>
+                <div class="humm-ticker-item">
+                    <img src="https://cdn.shophumm.com/humm/uploads/humm-logo.svg" alt="humm Logo">
+                    <span>No Fees, No Interest For 5 Years &nbsp;&bull;&nbsp; Up To $30,000 In Less Than 7 Minutes &nbsp;&bull;&nbsp; Click to Apply Now!</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<div class="page page--category">
+    <section class="page-content container">
+        {{> components/common/breadcrumbs breadcrumbs=breadcrumbs}}
+        {{#unless theme_settings.hide_category_page_heading }}
+            <h1 class="page-heading">{{category.name}}</h1>
+        {{/unless}}
+        {{{region name="category_below_header"}}}
+        {{{category.description}}}
+        {{#if theme_settings.show_subcategories}}
+            {{#if category.subcategories}}
+                <div class="sidebarBlock page-content-subcategories">
+                    <h5 class="sidebarBlock-heading">Subcategories:</h5>
+                    <ul class="navList">
+                        {{#each category.subcategories}}
+                        <li class="navList-item">
+                            <a class="navList-action" href="{{url}}" alt="{{name}}" title="{{name}}">
+                                <div class="image-wrap{{#unless image}} image-placeholder{{/unless}}">
+                                {{#if image}}
+                                    <img class="lazyload" data-sizes="auto" src="{{cdn 'img/loading.svg'}}" data-src="{{getImage image}}" alt="{{image.alt}}" title="{{image.alt}}">
+                                {{else}}
+                                    <img class="lazyload" data-sizes="auto" src="{{cdn 'img/loading.svg'}}" data-src="{{cdn 'assets/img/BrandDefault.gif'}}" alt="{{image.alt}}" title="{{image.alt}}">
+                                {{/if}}
+                                </div>
+                                <span>{{name}}</span>
+                            </a>
+                        </li>
+                        {{/each}}
+                    </ul>
+                </div>
+            {{/if}}
+        {{/if}}
+    </section>
+    
+    <div class="main full grid-bg">
+        <div class="container">
+            {{#if category.faceted_search_enabled}}
+                <aside class="page-sidebar" id="faceted-search-container">
+                    {{> components/category/sidebar}}
+                </aside>
+            {{else}}
+                {{#all category.subcategories theme_settings.subcategories_left_column}}
+                    <aside class="page-sidebar" id="faceted-search-container">
+                        {{> components/category/sidebar}}
+                    </aside>
+                {{else all category.shop_by_price theme_settings.shop_by_price_visibility}}
+                    <aside class="page-sidebar" id="faceted-search-container">
+                        {{> components/category/sidebar}}
+                    </aside>
+                {{/all}}
+            {{/if}}
+        
+            <main class="page-content" id="product-listing-container">
+                {{#if category.products}}
+                    {{> components/category/product-listing}}
+                {{else}}
+                    <p>{{lang 'categories.no_products'}}</p>
+                {{/if}}
+                {{{region name="category_below_content"}}}
+            </main>
+        </div>
+    </div>
+</div>
+
+{{/partial}}
+{{> layout/base}}

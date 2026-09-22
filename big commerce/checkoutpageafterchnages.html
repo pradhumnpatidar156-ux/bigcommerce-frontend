@@ -1,0 +1,966 @@
+{{#partial "head"}}
+
+{{{ checkout.checkout_head }}}
+{{{ stylesheet '/assets/css/optimized-checkout.css' }}}
+{{ getFontsCollection }}
+
+<script type="text/javascript">
+    window.language = {
+        {
+            {
+                langJson 'optimized_checkout'
+            }
+        }
+    };
+</script>
+
+{{{head.scripts}}}
+
+{{/partial}}
+
+{{#partial "page"}}
+<header class="checkoutHeader optimizedCheckout-header">
+    <div class="checkoutHeader-content">
+        <h1 class="is-srOnly">{{lang 'checkout.title'}}</h1>
+        <h2 class="checkoutHeader-heading">
+            <a class="checkoutHeader-link" href="{{urls.home}}">
+                {{#if checkout.header_image}}
+                <img alt="{{settings.store_logo.title}}" class="checkoutHeader-logo" id="logoImage"
+                    src="{{ checkout.header_image }}" />
+                {{ else }}
+                <span class="header-logo-text">{{settings.store_logo.title}}</span>
+                {{/if}}
+            </a>
+        </h2>
+    </div>
+</header>
+
+
+{{{ checkout.checkout_content }}}
+<!-- ===== SAVINGS & REWARDS SECTION ===== -->
+<div id="savings-rewards-section" style="display:none;">
+    <!-- Applied Discounts Card -->
+    <div class="sr-card" id="sr-applied-card" style="display:none;">
+        <div class="sr-card-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1a5bd1" stroke-width="2.5">
+                <polyline points="20 6 9 17 4 12" />
+            </svg>
+            Your Applied Savings
+        </div>
+        <div id="sr-discount-list"></div>
+        <div class="sr-total-row">
+            <span class="sr-total-label">Total Savings</span>
+            <span class="sr-total-amount" id="sr-total-saved">$0.00</span>
+        </div>
+    </div>
+
+    <!-- Unlock More Savings Card -->
+    <div class="sr-card">
+        <div class="sr-card-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1a5bd1" stroke-width="2.5">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14 2 9.27l6.91-1.01L12 2z" />
+            </svg>
+            Unlock More Savings
+        </div>
+        <div id="sr-progress-list"></div>
+    </div>
+
+    <!-- Referral Card -->
+    <div class="sr-card">
+        <div class="sr-card-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1a5bd1" stroke-width="2.5">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+            </svg>
+            Referral Bonus
+        </div>
+        <div class="sr-referral-box">
+            <div class="sr-referral-icon">🎁</div>
+            <div class="sr-referral-text">
+                <strong>Earn a $100 Gift Card</strong>
+                Refer a friend and earn $100 for every appliance purchased on their first order. Referrals and word of
+                mouth are the backbone of our business — thank you!
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ===== END SAVINGS & REWARDS ===== -->
+
+{{{ footer.scripts }}}
+
+{{/partial}}
+
+{{> layout/empty}}
+
+
+
+
+
+<!-- custom script for postal code  -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+
+<script>
+    // new format postal code jQuery
+    jQuery(function ($) {
+        // Try to grab native setter for input.value (best for React-controlled inputs)
+        var nativeValueSetter = null;
+        try {
+            nativeValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
+        } catch (e) {}
+
+        function setNativeValue(el, value) {
+            if (!el) return;
+            if (nativeValueSetter) {
+                nativeValueSetter.call(el, value);
+            } else {
+                el.value = value;
+            }
+            // Notify frameworks (React) that value changed
+            var ev = new Event('input', {
+                bubbles: true
+            });
+            el.dispatchEvent(ev);
+        }
+
+        function cleanPostal(v) {
+            return (v || '').toUpperCase().replace(/^(.{3})\s+/,
+            '$1'); // remove space after first 3 chars + uppercase
+        }
+
+        // Delegated handler: works even if element is injected later
+        $(document).on('input change blur', '#postCodeInput', function () {
+            var el = this;
+            var cleaned = cleanPostal(el.value);
+            if (el.value !== cleaned) {
+                setNativeValue(el, cleaned);
+                try {
+                    el.setSelectionRange(cleaned.length, cleaned.length);
+                } catch (e) {}
+            }
+        });
+
+        // Small polling window to catch autofill that doesn't trigger events (10s)
+        var checks = 0;
+        var poll = setInterval(function () {
+            var el = document.getElementById('postCodeInput');
+            if (el) {
+                var cleaned = cleanPostal(el.value);
+                if (el.value !== cleaned) setNativeValue(el, cleaned);
+            }
+            checks++;
+            if (checks > 40) clearInterval(poll); // 40 * 250ms = 10s
+        }, 250);
+
+        // MutationObserver to handle cases where the input node is replaced
+        var observer = new MutationObserver(function () {
+            var el = document.getElementById('postCodeInput');
+            if (el) {
+                var cleaned = cleanPostal(el.value);
+                if (el.value !== cleaned) setNativeValue(el, cleaned);
+            }
+        });
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+    });
+
+    $(document).ready(function () {
+        function changeShippingText() {
+
+            var $shippingHeader = $(".stepHeader-title.optimizedCheckout-headingPrimary");
+
+            if ($shippingHeader.length) {
+                $shippingHeader.filter(function () {
+                    // Check for the specific text "Shipping"
+                    return $(this).text().trim() === "Shipping";
+                }).text("Delivery");
+            } else {
+                // Retry after 100ms if not found
+                setTimeout(changeShippingText, 100);
+            }
+        }
+
+        // Function to change the "Shipping Address" legend text to "Delivery Address"
+        function changeShippingAddressText() {
+            var $shippingLegend = $(
+                "legend.form-legend.optimizedCheckout-headingSecondary[data-test='shipping-address-heading']"
+                );
+
+            if ($shippingLegend.length) {
+                $shippingLegend.filter(function () {
+                    // Check for the specific text "Shipping Address"
+                    return $(this).text().trim() === "Shipping Address";
+                }).text("Delivery Address");
+            } else {
+                // Retry after 100ms if not found
+                setTimeout(changeShippingAddressText, 100);
+            }
+        }
+
+        // Function to change the "Shipping Method" legend text to "Delivery Method"
+        function changeShippingMethodText() {
+            var $shippingMethodLegend = $("legend.form-legend.optimizedCheckout-headingSecondary");
+
+            if ($shippingMethodLegend.length) {
+                $shippingMethodLegend.filter(function () {
+                    // Check for the specific text "Shipping Method"
+                    return $(this).text().trim() === "Shipping Method";
+                }).text("Delivery Method");
+            } else {
+                // Retry after 100ms if not found
+                setTimeout(changeShippingMethodText, 100);
+            }
+        }
+
+        // Function to change the checkbox label text
+        function changeCheckboxLabelText() {
+            var $checkboxLabel = $("label.form-label.optimizedCheckout-form-label[for='sameAsBilling']");
+
+            if ($checkboxLabel.length) {
+                $checkboxLabel.filter(function () {
+                    // Check for the specific text in the checkbox label
+                    return $(this).text().trim() ===
+                        "My billing address is the same as my shipping address.";
+                }).text("My billing address is the same as my delivery address.");
+            } else {
+                // Retry after 100ms if not found
+                setTimeout(changeCheckboxLabelText, 100);
+            }
+        }
+
+        // Function to change the cart shipping text to delivery
+        function changeCartShippingText() {
+            var $cartShippingLabel = $(
+                "div[data-test='cart-shipping'] .cart-priceItem-label span[data-test='cart-price-label']");
+
+            if ($cartShippingLabel.length) {
+                $cartShippingLabel.filter(function () {
+                    // Check for the specific text "Shipping"
+                    return $(this).text().trim() === "Shipping";
+                }).text("Delivery");
+            } else {
+                // Retry after 100ms if not found
+                setTimeout(changeCartShippingText, 100);
+            }
+        }
+
+        // Call all functions to make the necessary text changes
+        changeShippingText();
+        changeShippingAddressText();
+        changeShippingMethodText();
+        changeCheckboxLabelText();
+        changeCartShippingText();
+    });
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+        function isPastSameDayCutoff() {
+            var now = new Date();
+            var hours = now.getHours();
+            var minutes = now.getMinutes();
+            // console.log("Current Time:", hours + ":" + minutes);
+            return (hours > 12) || (hours === 12 && minutes > 0);
+        }
+
+        function disableSameDayDelivery() {
+            if (!isPastSameDayCutoff()) return;
+
+            var sameDayOption = $("input[type='radio']").filter(function () {
+                return $(this)
+                    .next("label")
+                    .find(".shippingOption-desc")
+                    .text()
+                    .toLowerCase()
+                    .includes("same day");
+            });
+
+            if (sameDayOption.length > 0) {
+                console.log("Same-day delivery option found.");
+
+                sameDayOption.each(function () {
+                    if ($(this).is(":checked")) {
+                        // Deselect same-day and select another available option
+                        $(this).prop("checked", false).trigger("change");
+                        $("input[type='radio']").not(sameDayOption).first().prop("checked", true)
+                            .trigger("change");
+                        // console.log("Same-day delivery deselected.");
+                    }
+
+                    $(this).prop("disabled", true).closest(".form-checklist-item").css("opacity",
+                    "0.5");
+                    // console.log("Same-day delivery disabled.");
+                });
+
+                // ✅ If nothing else is selected, force select first available
+                if (!$("input[type='radio']").is(":checked")) {
+                    var firstAvailable = $("input[type='radio']").not(sameDayOption).first();
+                    firstAvailable.prop("checked", true).trigger("change");
+                    // console.log("First available shipping option selected.");
+                }
+
+            } else {
+                // console.log("Same-day option not found.");
+            }
+        }
+
+        function waitForShippingOptions() {
+            if ($(".form-checklist-item").length > 0) {
+                // console.log("Shipping options loaded.");
+                disableSameDayDelivery();
+                // ✅ run every 2 sec properly
+                setInterval(disableSameDayDelivery, 2000);
+            } else {
+                // console.log("Waiting for shipping options...");
+                // ✅ just re-check until loaded
+                setTimeout(waitForShippingOptions, 500);
+            }
+        }
+
+        waitForShippingOptions();
+
+        // Re-check if shipping options change dynamically
+        var targetNode = document.querySelector(".form-checklist");
+        if (targetNode) {
+            new MutationObserver(disableSameDayDelivery).observe(targetNode, {
+                childList: true,
+                subtree: true
+            });
+        }
+
+        // Re-check on any manual change
+        $(document).on("change", ".form-checklist-checkbox, input[type='radio']", disableSameDayDelivery);
+
+        // Final safeguard on checkout button
+        // $(document).on("click", "#checkout-payment-continue", function (e) {
+        //     if (isPastSameDayCutoff()) {
+        //         alert("Same Day Delivery is not available after 12 PM. Please select another option.");
+        //         e.preventDefault();
+        //         return false;
+        //     }
+        // });
+
+        $(document).on("click", "#checkout-payment-continue", function (e) {
+            // Find the checked shipping radio
+            var selectedOption = $("input[name^='shippingOptionIds']:checked");
+
+            // Find its description span
+            var selectedOptionText = selectedOption
+                .closest('.form-field')
+                .find('.shippingOption-desc')
+                .text()
+                .trim();
+
+            //alert(selectedOptionText);
+
+            // Check both conditions
+            if (selectedOptionText.includes("Delivery Same Day") && isPastSameDayCutoff()) {
+                alert("Same Day Delivery is not available after 12 PM. Please select another option.");
+                e.preventDefault();
+                return false;
+            }
+
+        });
+
+
+
+    });
+
+
+    $(document).ready(function () {
+
+        let totalMailPrice2 = 0;
+        let totalDisPrice2 = 0;
+
+        setTimeout(() => {
+            $('li.productList-item').each(function () {
+                let totalPriceText = $(this).find(
+                    'div.product div.product-actions .product-price').first().text();
+                let unitPriceText = $(this).find(
+                        'div.product div.product-actions .product-price--beforeDiscount').last()
+                    .text() || totalPriceText;
+                let unitPrice = parseFloat(unitPriceText.replace('$', '').replace(',', '')
+                .trim()) || 0;
+                let totalPrice = parseFloat(totalPriceText.replace('$', '').replace(',', '')
+                    .trim()) || 0;
+                totalMailPrice2 += unitPrice;
+                totalDisPrice2 += totalPrice;
+            });
+            dfsdf = parseFloat(totalMailPrice2) - parseFloat(totalDisPrice2)
+            console.log('dfsdf', dfsdf)
+            let formatteddfsdf = dfsdf.toLocaleString('en-US', {
+                style: 'currency',
+                currency: 'USD'
+            });
+            $('section.cart-section > div[data-test="cart-subtotal"]').after(
+                `<div data-test="cart-discount"><div aria-live="polite" class="cart-priceItem optimizedCheckout-contentPrimary cart-priceItem--discount33"><span class="cart-priceItem-label"><span data-test="cart-price-label">Discount  </span></span><span class="cart-priceItem-value"><span data-test="cart-price-value">${formatteddfsdf}</span></span></div></div>`
+                )
+            console.log('Total of Unit Prices:', totalMailPrice2.toFixed(2));
+            console.log('Total of Total Prices:', totalDisPrice2.toFixed(2));
+        }, 5000)
+
+    });
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+        function replaceAfterpayText() {
+            // Select the Afterpay "Pay over time" text only
+            const afterpayLabel = document.querySelector(
+                'label[for="radio-afterpay-pay_by_installment"] .paymentProviderHeader-name'
+            );
+
+            if (afterpayLabel && afterpayLabel.textContent.trim() === "Pay over time") {
+                afterpayLabel.innerHTML =
+                    '<span>Multiple financing structures - <a href="https://www.afterpay.com/en-CA/how-it-works" target="_blank" style="text-decoration: underline; color: #0070ba;">how it works</a></span>';
+                return true;
+            }
+            return false;
+        }
+
+        // Try immediately
+        if (!replaceAfterpayText()) {
+            // Keep trying every 500ms until it appears
+            const interval = setInterval(() => {
+                if (replaceAfterpayText()) {
+                    clearInterval(interval);
+                }
+            }, 500);
+        }
+    });
+</script>
+
+<script>
+    (function () {
+        "use strict";
+
+        // ── PROMOTION THRESHOLDS ────────────────────────────────
+        var FREE_DELIVERY_THRESHOLD = 699;
+        var FREE_DELIVERY_LABEL = "Free Local Delivery";
+        var DELIVERY_DISCOUNT_NONLOCAL = 74.95;
+
+        var BUNDLE_TIERS = [{
+                qty: 3,
+                save: 100,
+                label: "Buy 3 Appliances"
+            },
+            {
+                qty: 4,
+                save: 200,
+                label: "Buy 4 Appliances"
+            },
+            {
+                qty: 5,
+                save: 300,
+                label: "Buy 5 Appliances"
+            },
+        ];
+
+        // ── HELPERS ─────────────────────────────────────────────
+        function fmt(n) {
+            return "$" + Math.abs(n).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        function clamp(v, min, max) {
+            return Math.min(Math.max(v, min), max);
+        }
+
+        function getFloat(selector, attr) {
+            var el = document.querySelector(selector);
+            if (!el) return 0;
+            var txt = attr ? el.getAttribute(attr) : el.textContent;
+            return parseFloat((txt || "0").replace(/[^0-9.-]/g, "")) || 0;
+        }
+
+        // ── CART DATA READERS ────────────────────────────────────
+        function getSubtotal() {
+            // Try data attribute first, then text
+            var v = getFloat('[data-test="cart-subtotal"] [data-test="cart-price-value"]');
+            if (!v) v = getFloat('.cart-priceItem--subtotal .cart-priceItem-value span');
+            return v;
+        }
+
+        function getItemCount() {
+            // Count product list items
+            var items = document.querySelectorAll('li.productList-item');
+            return items.length;
+        }
+
+        function getAppliedDiscounts() {
+            var discounts = [];
+
+            // 1. coupon / promo discount rows from checkout cart
+            document.querySelectorAll('[data-test="cart-discount"] .cart-priceItem, .cart-priceItem--discount33')
+                .forEach(function (row) {
+                    var labelEl = row.querySelector('[data-test="cart-price-label"]');
+                    var valEl = row.querySelector('[data-test="cart-price-value"]');
+                    if (!labelEl || !valEl) return;
+                    var label = labelEl.textContent.trim();
+                    var amount = parseFloat((valEl.textContent || "0").replace(/[^0-9.-]/g, "")) || 0;
+                    if (amount !== 0 && label) {
+                        discounts.push({
+                            label: label,
+                            amount: Math.abs(amount),
+                            badge: "Promotion"
+                        });
+                    }
+                });
+
+            // 2. Coupon codes row
+            document.querySelectorAll('[data-test="cart-coupon"] .cart-priceItem').forEach(function (row) {
+                var labelEl = row.querySelector('[data-test="cart-price-label"]');
+                var valEl = row.querySelector('[data-test="cart-price-value"]');
+                if (!labelEl || !valEl) return;
+                var label = labelEl.textContent.trim() || "Coupon";
+                var amount = parseFloat((valEl.textContent || "0").replace(/[^0-9.-]/g, "")) || 0;
+                if (amount !== 0) {
+                    discounts.push({
+                        label: label,
+                        amount: Math.abs(amount),
+                        badge: "Coupon"
+                    });
+                }
+            });
+
+            // 3. Reuse totalMailPrice2 / totalDisPrice2 from existing script
+            if (window.__srBundleSaving && window.__srBundleSaving > 0) {
+                discounts.push({
+                    label: "Buy More Save More Bundle Discount",
+                    amount: window.__srBundleSaving,
+                    badge: "Bundle Discount"
+                });
+            }
+
+            // 4. Free delivery promo (if shipping = $0 and subtotal >= threshold)
+            var subtotal = getSubtotal();
+            var shippingEl = document.querySelector('[data-test="cart-shipping"] [data-test="cart-price-value"]');
+            if (shippingEl) {
+                var shippingAmt = parseFloat((shippingEl.textContent || "0").replace(/[^0-9.-]/g, "")) || 0;
+                if (shippingAmt === 0 && subtotal >= FREE_DELIVERY_THRESHOLD) {
+                    discounts.push({
+                        label: FREE_DELIVERY_LABEL,
+                        amount: 0,
+                        badge: "Promo",
+                        note: "Free!"
+                    });
+                }
+            }
+
+            return discounts;
+        }
+
+        // ── RENDER ───────────────────────────────────────────────
+        function renderApplied(discounts) {
+            var card = document.getElementById("sr-applied-card");
+            var list = document.getElementById("sr-discount-list");
+            var totalEl = document.getElementById("sr-total-saved");
+            if (!card || !list || !totalEl) return;
+
+            if (!discounts.length) {
+                card.style.display = "none";
+                return;
+            }
+
+            card.style.display = "";
+            var total = 0;
+            var html = "";
+
+            discounts.forEach(function (d) {
+                total += d.amount;
+                html += '<div class="sr-discount-row">' +
+                    '<span class="sr-discount-label">' +
+                    '<span class="sr-check">' +
+                    '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>' +
+                    '</span>' +
+                    d.label +
+                    '</span>' +
+                    '<span class="sr-badge">' + d.badge + '</span>' +
+                    '<span class="sr-amount">' + (d.note ? d.note : (d.amount > 0 ? "-" + fmt(d.amount) :
+                        "")) + '</span>' +
+                    '</div>';
+            });
+
+            list.innerHTML = html;
+            totalEl.textContent = total > 0 ? "-" + fmt(total) : "Applied ✓";
+        }
+
+        function renderProgress(subtotal, itemCount) {
+            var list = document.getElementById("sr-progress-list");
+            if (!list) return;
+            var html = "";
+
+            // ── 1. Free delivery progress ──
+            var deliveryPct = clamp((subtotal / FREE_DELIVERY_THRESHOLD) * 100, 0, 100);
+            var deliveryUnlocked = subtotal >= FREE_DELIVERY_THRESHOLD;
+            var deliveryNeed = Math.max(0, FREE_DELIVERY_THRESHOLD - subtotal);
+            html += progressItem({
+                label: FREE_DELIVERY_LABEL + " (orders $699+ pre-tax)",
+                pct: deliveryPct,
+                unlocked: deliveryUnlocked,
+                hint: deliveryUnlocked ?
+                    "🎉 Unlocked! Free local delivery applied." :
+                    "Spend " + fmt(deliveryNeed) + " more to unlock free local delivery."
+            });
+
+            // ── 2. Bundle tier progress (by item count) ──
+            var maxTier = null;
+            var nextTier = null;
+
+            BUNDLE_TIERS.forEach(function (t) {
+                if (itemCount >= t.qty) maxTier = t;
+                else if (!nextTier) nextTier = t;
+            });
+
+            if (maxTier) {
+                html += progressItem({
+                    label: maxTier.label + " — Save " + fmt(maxTier.save),
+                    pct: 100,
+                    unlocked: true,
+                    hint: "🎉 Bundle discount applied!"
+                });
+            }
+
+            if (nextTier) {
+                var tierPct = clamp((itemCount / nextTier.qty) * 100, 0, 100);
+                var need = nextTier.qty - itemCount;
+                html += progressItem({
+                    label: nextTier.label + " — Save " + fmt(nextTier.save),
+                    pct: tierPct,
+                    unlocked: false,
+                    hint: "Add " + need + " more appliance" + (need > 1 ? "s" : "") + " to save " + fmt(
+                        nextTier.save) + "."
+                });
+            }
+
+            // ── 3. If at max tier, show maxed message ──
+            if (itemCount >= 5 && !nextTier) {
+                html += '<div class="sr-unlock-item"><div class="sr-unlock-header">' +
+                    '<span class="sr-unlock-label">🏆 Maximum Bundle Savings Unlocked — Save $300!</span></div></div>';
+            }
+
+            list.innerHTML = html || '<p class="sr-empty">Add items to see available promotions.</p>';
+        }
+
+        function progressItem(opts) {
+            return '<div class="sr-unlock-item">' +
+                '<div class="sr-unlock-header">' +
+                '<span class="sr-unlock-label">' + opts.label + '</span>' +
+                '<span class="sr-unlock-status ' + (opts.unlocked ? "unlocked" : "locked") + '">' +
+                (opts.unlocked ? "✓ Unlocked" : Math.round(opts.pct) + "%") +
+                '</span>' +
+                '</div>' +
+                '<div class="sr-progress-bar-bg">' +
+                '<div class="sr-progress-bar-fill ' + (opts.unlocked ? "full" : "") + '" style="width:' + opts.pct +
+                '%"></div>' +
+                '</div>' +
+                '<div class="sr-unlock-hint">' + opts.hint + '</div>' +
+                '</div>';
+        }
+
+        // ── MAIN ─────────────────────────────────────────────────
+        function buildSection() {
+            var subtotal = getSubtotal();
+            var itemCount = getItemCount();
+
+            // Expose bundle saving for discount row detection
+            if (window.totalMailPrice2 !== undefined && window.totalDisPrice2 !== undefined) {
+                window.__srBundleSaving = Math.max(0, parseFloat(window.totalMailPrice2) - parseFloat(window
+                    .totalDisPrice2));
+            }
+
+            var discounts = getAppliedDiscounts();
+            var section = document.getElementById("savings-rewards-section");
+
+            if (!section) return;
+
+            // Only show if there's something to display (always show unlock section)
+            section.style.display = "";
+
+            renderApplied(discounts);
+            renderProgress(subtotal, itemCount);
+        }
+
+        // ── INJECT INTO CHECKOUT ORDER SUMMARY ───────────────────
+        function injectSection() {
+            var section = document.getElementById("savings-rewards-section");
+            if (!section) return false;
+
+            // Best placement: after order summary subtotal area
+            var anchor = document.querySelector('[data-test="cart-subtotal"]') ||
+                document.querySelector('.cart-section') ||
+                document.querySelector('.optimizedCheckout-orderSummary');
+
+            if (!anchor) return false;
+
+            // Insert after anchor's parent section or after element itself
+            var parent = anchor.closest('section') || anchor.parentNode;
+            if (parent && parent.parentNode) {
+                parent.parentNode.insertBefore(section, parent.nextSibling);
+                section.style.padding = "0 16px";
+                return true;
+            }
+            return false;
+        }
+
+        // ── INIT WITH RETRY ──────────────────────────────────────
+        var initCount = 0;
+
+        function init() {
+            if (injectSection()) {
+                buildSection();
+                // Re-run on cart changes (address, coupon, etc.)
+                setInterval(buildSection, 3000);
+            } else {
+                initCount++;
+                if (initCount < 30) setTimeout(init, 600);
+            }
+        }
+
+        if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", init);
+        } else {
+            setTimeout(init, 800);
+        }
+    })();
+</script>
+<style>
+    span.cart-priceItem-postFix.optimizedCheckout-contentSecondary {
+        display: none;
+        color: red;
+        text-decoration: underline;
+    }
+
+    .cart-priceItem-link a {
+        color: red;
+        text-decoration: underline;
+    }
+
+    .swal2-modal .swal2-content {
+        color: #000;
+        font-size: 1.14286rem;
+    }
+
+    /* ===== SAVINGS & REWARDS SECTION ===== */
+    #savings-rewards-section {
+        margin: 16px 0 20px;
+        font-family: inherit;
+    }
+
+    .sr-card {
+        background: #fff;
+        border: 1px solid #d6e4ff;
+        border-radius: 10px;
+        padding: 16px 18px;
+        margin-bottom: 14px;
+        box-shadow: 0 2px 8px rgba(0, 80, 200, 0.06);
+    }
+
+    .sr-card-title {
+        font-size: 14px;
+        font-weight: 700;
+        color: #1a5bd1;
+        margin: 0 0 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .sr-card-title svg {
+        flex-shrink: 0;
+    }
+
+    .sr-discount-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 8px 0;
+        border-bottom: 1px solid #eef3ff;
+        font-size: 13px;
+        gap: 8px;
+    }
+
+    .sr-discount-row:last-child {
+        border-bottom: none;
+    }
+
+    .sr-discount-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #333;
+        flex: 1;
+    }
+
+    .sr-check {
+        width: 18px;
+        height: 18px;
+        background: #e8f5e9;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .sr-check svg {
+        color: #2e7d32;
+    }
+
+    .sr-badge {
+        font-size: 11px;
+        font-weight: 600;
+        padding: 2px 8px;
+        border-radius: 20px;
+        background: #e8f0fe;
+        color: #1a5bd1;
+        white-space: nowrap;
+    }
+
+    .sr-amount {
+        font-weight: 700;
+        color: #2e7d32;
+        font-size: 13px;
+        white-space: nowrap;
+    }
+
+    .sr-total-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 2px solid #1a5bd1;
+    }
+
+    .sr-total-label {
+        font-size: 14px;
+        font-weight: 700;
+        color: #1a5bd1;
+    }
+
+    .sr-total-amount {
+        font-size: 16px;
+        font-weight: 800;
+        color: #2e7d32;
+    }
+
+    /* Progress / Unlock section */
+    .sr-unlock-item {
+        margin-bottom: 14px;
+    }
+
+    .sr-unlock-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .sr-unlock-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 6px;
+        font-size: 13px;
+    }
+
+    .sr-unlock-label {
+        color: #333;
+        font-weight: 500;
+        flex: 1;
+    }
+
+    .sr-unlock-status {
+        font-weight: 700;
+        font-size: 12px;
+        white-space: nowrap;
+        margin-left: 8px;
+    }
+
+    .sr-unlock-status.unlocked {
+        color: #2e7d32;
+    }
+
+    .sr-unlock-status.locked {
+        color: #e65100;
+    }
+
+    .sr-progress-bar-bg {
+        height: 8px;
+        background: #e3eaff;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .sr-progress-bar-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #1a5bd1, #42a5f5);
+        border-radius: 8px;
+        transition: width 0.6s ease;
+        min-width: 4px;
+    }
+
+    .sr-progress-bar-fill.full {
+        background: linear-gradient(90deg, #2e7d32, #66bb6a);
+    }
+
+    .sr-unlock-hint {
+        font-size: 11px;
+        color: #888;
+        margin-top: 4px;
+    }
+
+    /* Referral card */
+    .sr-referral-box {
+        background: #f0f7ff;
+        border: 1px dashed #1a5bd1;
+        border-radius: 8px;
+        padding: 12px 14px;
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+    }
+
+    .sr-referral-icon {
+        font-size: 22px;
+        line-height: 1;
+        flex-shrink: 0;
+    }
+
+    .sr-referral-text {
+        font-size: 12px;
+        color: #333;
+        line-height: 1.5;
+    }
+
+    .sr-referral-text strong {
+        color: #1a5bd1;
+        display: block;
+        margin-bottom: 2px;
+        font-size: 13px;
+    }
+
+    .sr-empty {
+        text-align: center;
+        color: #999;
+        font-size: 13px;
+        padding: 8px 0;
+    }
+
+    @media (max-width: 600px) {
+        .sr-card {
+            padding: 14px;
+        }
+
+        .sr-discount-row {
+            flex-wrap: wrap;
+        }
+    }
+
+    /* ===== END SAVINGS & REWARDS ===== */
+</style>

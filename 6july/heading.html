@@ -1,0 +1,19 @@
+<!--h1 class="page-heading">
+    {{#if forms.search.search_error}}
+        {{lang 'search.errorMessage'}}
+    {{else}}
+        {{{lang 'search.results.count' count=products.length search_query=(sanitize forms.search.query) }}}
+    {{/if}}
+</h1-->
+<h1 class="page-heading">
+{{#if forms.search.query}}
+    {{assignVar "productCount" pagination.product_results.total}}
+    {{assignVar "categoryCount" categories.length}}
+    {{getVar "productCount"}} Results
+    {{#if categoryCount}}
+        + {{getVar "categoryCount"}} Categories
+    {{/if}}
+
+     for "{{forms.search.query}}"
+{{/if}}
+</h1>

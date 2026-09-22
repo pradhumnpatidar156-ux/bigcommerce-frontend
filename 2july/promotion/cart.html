@@ -1,0 +1,844 @@
+<table class="cart" data-cart-quantity="{{cart.quantity}}">
+    <thead class="cart-header">
+        <tr>
+            <th class="cart-header-item" colspan="2">{{lang 'cart.checkout.item'}}</th>
+            <th class="cart-header-item">{{lang 'cart.checkout.price'}}</th>
+            <th class="cart-header-item cart-header-quantity">{{lang 'cart.checkout.quantity'}}</th>
+            <th class="cart-header-item">{{lang 'cart.checkout.total'}}</th>
+        </tr>
+    </thead>
+    <tbody class="cart-list">
+        {{#each cart.items}}
+        <tr class="cart-item" data-item-row>
+            <td class="cart-item-block cart-item-figure">
+                {{#if type '==' 'GiftCertificate'}}
+                <img class="cart-item-fixed-image" src="{{cdn ../theme_settings.default_image_gift_certificate}}"
+                    alt="{{lang 'cart.gift_certificates.gift_certificate'}}"
+                    title="{{lang 'cart.gift_certificates.gift_certificate'}}">
+                {{else}}
+                {{> components/common/responsive-img
+                image=image
+                class="cart-item-image"
+                fallback_size=../theme_settings.productthumb_size
+                lazyload="lazyload"
+                default_image=../theme_settings.default_image_product
+                }}
+                {{/if}}
+            </td>
+            <td class="cart-item-block cart-item-title">
+                {{#if brand.name}}
+                <p class="cart-item-brand">{{brand.name}}</p>
+                {{/if}}
+                <h2 class="cart-item-name">
+                    <a class="cart-item-name__label" href="{{url}}">{{name}}</a>
+                </h2>
+                {{#if release_date}}
+                <p>({{release_date}})</p>
+                {{/if}}
+
+                {{#if options}}
+                <dl class="definitionList">
+                    {{#each options}}
+                    <dt class="definitionList-key">{{name}}:</dt>
+                    <dd class="definitionList-value">
+                        {{#if is_file}}
+                        <a href="/viewfile.php?attributeId={{id}}&cartitem={{../id}}">{{value}}</a>
+                        {{else}}
+                        {{> components/common/product-options}}
+                        {{/if}}
+                    </dd>
+                    {{/each}}
+                </dl>
+
+                <a href="{{url}}" class="change-warranty" data-item-id="{{id}}" data-product-url="{{url}}">
+                    {{lang 'common.change'}}
+                </a>
+                {{/if}}
+
+                {{#if type '==' 'GiftCertificate'}}
+                <a href="{{edit_url}}"
+                    aria-label="{{lang 'cart.gift_certificates.change_gift_certificate' certificate_name=name}}">
+                    {{lang 'common.change'}}
+                </a>
+                {{/if}}
+                {{> components/cart/item-giftwrap this}}
+                {{#if event_date}}
+                <dl class="cart-item-options">
+                    <dt class="cart-item-option-title">{{event_date.name}}</dt>
+                    <dd class="cart-item-option-description">{{event_date.date}}</dd>
+                </dl>
+                {{/if}}
+            </td>
+
+            <td class="cart-item-block cart-item-info">
+                <span class="cart-item-label">{{lang 'cart.checkout.price'}}</span>
+                {{#or ../customer (if ../theme_settings.restrict_to_login '!==' true)}}
+                <span
+                    class="cart-item-value {{#if price_discounted}}price--discounted{{/if}}">{{price.formatted}}</span>
+                {{#if price_discounted}}
+                <span class="cart-item-value">{{price_discounted.formatted}}</span>
+                {{/if}}
+                {{else}}
+                {{> components/common/login-for-pricing}}
+                {{/or}}
+            </td>
+
+            <td class="cart-item-block cart-item-info cart-item-quantity">
+                <label class="form-label cart-item-label" for="qty-{{id}}">{{lang 'products.quantity'}}</label>
+                <div class="form-increment">
+                    {{#if can_modify}}
+                    <button class="button button--icon" data-cart-update data-cart-itemid="{{id}}" data-action="dec">
+                        <span class="is-srOnly">{{lang 'products.quantity_decrease' name=name}}</span>
+                        <i class="icon" aria-hidden="true"><svg>
+                                <use xlink:href="#icon-keyboard-arrow-down" />
+                            </svg></i>
+                    </button>
+                    {{/if}}
+                    <input class="form-input form-input--incrementTotal cart-item-qty-input" id="qty-{{id}}"
+                        name="qty-{{id}}" type="tel" value="{{quantity}}" data-quantity-min="{{min_purchase_quantity}}"
+                        data-quantity-max="{{max_purchase_quantity}}"
+                        data-quantity-min-error="{{lang 'products.quantity_min' quantity=min_purchase_quantity}}"
+                        data-quantity-max-error="{{lang 'products.quantity_max' quantity=max_purchase_quantity}}"
+                        min="1" pattern="[0-9]*" data-cart-itemid="{{id}}" data-action="manualQtyChange"
+                        aria-label="{{name}}" aria-live="polite" {{#unless can_modify}} disabled{{/unless}}>
+                    {{#if can_modify}}
+                    <button class="button button--icon" data-cart-update data-cart-itemid="{{id}}" data-action="inc">
+                        <span class="is-srOnly">{{lang 'products.quantity_increase' name=name}}</span>
+                        <i class="icon" aria-hidden="true"><svg>
+                                <use xlink:href="#icon-keyboard-arrow-up" />
+                            </svg></i>
+                    </button>
+                    {{/if}}
+                </div>
+            </td>
+
+            <td class="cart-item-block cart-item-info">
+                <span class="cart-item-label">{{lang 'cart.checkout.total'}}</span>
+                {{#or ../customer (if ../theme_settings.restrict_to_login '!==' true)}}
+                <strong
+                    class="cart-item-value {{#if total_discounted}}price--discounted{{/if}}">{{total.formatted}}</strong>
+                {{#if total_discounted}}
+                <strong class="cart-item-value">{{total_discounted.formatted}}</strong>
+                {{/if}}
+                {{else}}
+                {{> components/common/login-for-pricing}}
+                {{/or}}
+                {{#or can_modify (if type '==' 'GiftCertificate')}}
+                <button class="cart-remove icon" data-cart-itemid="{{id}}"
+                    data-confirm-delete="{{lang 'cart.confirm_delete'}}"
+                    aria-label="{{lang 'cart.remove_item' name=name}}">
+                    <svg>
+                        <use xlink:href="#icon-close"></use>
+                    </svg>
+                </button>
+                {{/or}}
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+<div class="repair-service-upsell" id="cart-repair-service-promo" style="display: none;">
+    <div class="repair-title">
+        Add Lifetime Half-Price Repair Service
+        <span class="repair-badge">Only $45</span>
+    </div>
+    <p class="repair-description">
+        Get 50% OFF all future appliance repairs for the lifetime of your appliance.
+    </p>
+    <label class="repair-checkbox-label">
+        <input
+            type="checkbox"
+            id="add-repair-service-cart-checkbox"
+        >
+        <span>Yes, protect my appliance</span>
+    </label>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+
+    // ─── Change Warranty Button ───────────────────────────────────────────────────
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".change-warranty").forEach(button => {
+            button.addEventListener("click", async function (event) {
+                event.preventDefault();
+                let cartItemId = this.dataset.itemId;
+                let productUrl = this.dataset.productUrl;
+
+                if (!productUrl) {
+                    alert("Error: Product URL is missing!");
+                    return;
+                }
+
+                try {
+                    let response = await fetch("/api/storefront/carts", {
+                        headers: { "Accept": "application/json" }
+                    });
+                    let cartData = await response.json();
+
+                    if (cartData.length > 0) {
+                        let cartId = cartData[0].id;
+                        await fetch(`/api/storefront/carts/${cartId}/items/${cartItemId}`, {
+                            method: "DELETE",
+                            headers: { "Accept": "application/json" }
+                        });
+                        window.location.assign(productUrl);
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
+                }
+            });
+        });
+    });
+
+    // ─── Discount Row — har baar re-inject karo ──────────────────────────────────
+    function injectDiscountRow() {
+        // Pehle purani discount row hato (duplicate na bane)
+        $('li.cart-total--discount-custom').remove();
+
+        let totalUnit = 0;
+        let totalFinal = 0;
+
+        $('tr.cart-item').each(function () {
+            let nameText = $(this).find('.cart-item-name').text().toLowerCase();
+            if (nameText.includes('lifetime half-price repair') || nameText.includes('repair service')) {
+                return; // Skip repair service row
+            }
+            let unitPriceText = $(this).find('td.cart-item-info .cart-item-value').first().text();
+            let totalPriceText = $(this).find('td.cart-item-info .cart-item-value').last().text();
+            let unitPrice = parseFloat(unitPriceText.replace(/\$/g, '').replace(/,/g, '').trim()) || 0;
+            let totalPrice = parseFloat(totalPriceText.replace(/\$/g, '').replace(/,/g, '').trim()) || 0;
+            totalUnit += unitPrice;
+            totalFinal += totalPrice;
+        });
+
+        let discountAmount = totalUnit - totalFinal;
+        if (discountAmount <= 0) return;
+
+        let formattedDiscount = discountAmount.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+
+        $('ul.cart-totals li.cart-total:nth-child(2)').after(
+            `<li class="cart-total cart-total--discount-custom">
+            <div class="cart-total-label"><strong>Discount:</strong></div>
+            <div class="cart-total-value"><span>${formattedDiscount}</span></div>
+        </li>`
+        );
+    }
+
+    function formatRepairServiceCartRow() {
+        let bodyText = $('body').text();
+        let hasRepair45 = bodyText.includes('REPAIR45');
+        let hasFreeRepair = bodyText.includes('FREEREPAIR');
+
+        $('tr.cart-item').each(function () {
+            let $row = $(this);
+            let nameText = $row.find('.cart-item-name').text().toLowerCase();
+
+            if (nameText.includes('lifetime half-price repair') || nameText.includes('repair service')) {
+                let qtyInput = $row.find('.cart-input form-input, .cart-item-qty-input');
+                let qty = parseInt(qtyInput.val()) || 1;
+
+                let originalPriceVal = 75;
+                let discountedPriceVal = 75;
+
+                if (hasRepair45) {
+                    discountedPriceVal = 45;
+                } else if (hasFreeRepair) {
+                    discountedPriceVal = 0;
+                }
+
+                if (discountedPriceVal < 75) {
+                    // Update Unit Price column (usually index 0 of td.cart-item-info)
+                    let unitPriceTd = $row.find('td.cart-item-info').eq(0);
+                    let formattedUnitOriginal = `$${originalPriceVal.toFixed(2)}`;
+                    let formattedUnitDiscounted = discountedPriceVal === 0 ? "FREE" : `$${discountedPriceVal.toFixed(2)}`;
+                    
+                    unitPriceTd.find('.cart-item-value').html(
+                        `<span style="text-decoration: line-through; color: #8c8c8c; font-size: 13px; margin-right: 5px;">${formattedUnitOriginal}</span>` +
+                        `<span style="color: #e53935; font-weight: bold;">${formattedUnitDiscounted}</span>`
+                    );
+
+                    // Update Total Price column (usually index 2 of td.cart-item-info)
+                    let totalOriginal = originalPriceVal * qty;
+                    let totalDiscounted = discountedPriceVal * qty;
+                    let formattedTotalOriginal = `$${totalOriginal.toFixed(2)}`;
+                    let formattedTotalDiscounted = totalDiscounted === 0 ? "FREE" : `$${totalDiscounted.toFixed(2)}`;
+                    
+                    let totalTd = $row.find('td.cart-item-info').eq(2);
+                    totalTd.find('.cart-item-value, strong').html(
+                        `<span style="text-decoration: line-through; color: #8c8c8c; font-size: 13px; margin-right: 5px;">${formattedTotalOriginal}</span>` +
+                        `<span style="color: #e53935; font-weight: bold;">${formattedTotalDiscounted}</span>`
+                    );
+                }
+            }
+        });
+    }
+
+    // Page load pe pehli baar
+    setTimeout(function() {
+        injectDiscountRow();
+        formatRepairServiceCartRow();
+    }, 2000);
+
+    // ─── Tier Progress ────────────────────────────────────────────────────────────
+    let lastValidSubtotal = -1; // -1 matlab abhi koi data nahi aaya
+    let currentCartId = null;
+    let repairCartItemId = null;
+
+    function updateTierProgress() {
+        fetch('/api/storefront/carts', {
+            credentials: 'include',
+            headers: { 'Accept': 'application/json' }
+        })
+            .then(res => res.json())
+            .then(data => {
+                // Valid data check
+                if (!data || !Array.isArray(data) || data.length === 0) {
+                    $('#cart-repair-service-promo').hide();
+                    return;
+                }
+
+                let cart = data[0];
+                currentCartId = cart.id;
+
+                // Check if repair service (ID 1206) is in cart
+                let applianceCount = 0;
+                let repairServiceCount = 0;
+                repairCartItemId = null;
+
+                if (cart.lineItems) {
+                    if (cart.lineItems.physicalItems) {
+                        cart.lineItems.physicalItems.forEach(item => {
+                            if (item.productId == 1206) {
+                                repairServiceCount += item.quantity;
+                                repairCartItemId = item.id;
+                            } else {
+                                applianceCount += item.quantity;
+                            }
+                        });
+                    }
+                    if (cart.lineItems.digitalItems) {
+                        cart.lineItems.digitalItems.forEach(item => {
+                            if (item.productId == 1206) {
+                                repairServiceCount += item.quantity;
+                                repairCartItemId = item.id;
+                            } else {
+                                applianceCount += item.quantity;
+                            }
+                        });
+                    }
+                }
+
+                // Show the upsell box ONLY if there are appliances and fewer repair services than appliances
+                if (applianceCount > 0 && repairServiceCount < applianceCount) {
+                    $('#cart-repair-service-promo').show();
+                    $('#add-repair-service-cart-checkbox').prop('checked', false);
+                } else {
+                    $('#cart-repair-service-promo').hide();
+                }
+
+                let subtotal = parseFloat(cart.baseAmount);
+
+                // NaN ya negative aaye toh purana dikhao
+                if (isNaN(subtotal) || subtotal < 0) return;
+
+                // 0 bhi valid hai (empty cart) — sirf pehli baar 0 allow karo
+                // Agar pehle se valid data tha aur ab 0 aa raha hai — BC mid-update hai, skip karo
+                if (subtotal === 0 && lastValidSubtotal > 0) return;
+
+                lastValidSubtotal = subtotal;
+                renderTierProgress(subtotal);
+
+                // Discount row aur row formatting refresh karo
+                setTimeout(function() {
+                    injectDiscountRow();
+                    formatRepairServiceCartRow();
+                }, 300);
+            })
+            .catch(() => {
+                // Error pe kuch mat karo — purana UI rakho
+            });
+    }
+
+    function renderTierProgress(subtotal) {
+        let message = '';
+        let progress = 0;
+        let remaining = 0;
+
+        if (subtotal < 100) {
+            remaining = (100 - subtotal).toFixed(2);
+            progress = (subtotal / 100) * 33.33;
+            message = `Spend <b>$${remaining}</b> more to unlock <b>5% OFF</b>`;
+
+        } else if (subtotal < 250) {
+            remaining = (250 - subtotal).toFixed(2);
+            progress = 33.33 + ((subtotal - 100) / 150) * 33.33;
+            message = `✅ 5% OFF unlocked<br>Spend <b>$${remaining}</b> more to unlock <b>10% OFF</b>`;
+
+        } else if (subtotal < 500) {
+            remaining = (500 - subtotal).toFixed(2);
+            progress = 66.66 + ((subtotal - 250) / 250) * 33.34;
+            message = `✅ 5% OFF unlocked<br>✅ 10% OFF unlocked<br>Spend <b>$${remaining}</b> more to unlock <b>15% OFF</b>`;
+
+        } else {
+            progress = 100;
+            message = `🎉 Maximum <b>15% OFF</b> unlocked`;
+        }
+
+        $('#tier-message').html(message);
+        $('#tier-progress-fill').css('width', progress + '%');
+    }
+
+    // ─── Event Delegation ─────────────────────────────────────────────────────────
+    document.addEventListener('click', function (e) {
+        if (e.target.closest('[data-cart-update]')) {
+            clearTimeout(window.tierRefresh);
+            window.tierRefresh = setTimeout(updateTierProgress, 1500);
+        }
+    });
+
+    document.addEventListener('change', function (e) {
+        if (e.target.closest('[data-action="manualQtyChange"]')) {
+            clearTimeout(window.tierRefresh);
+            window.tierRefresh = setTimeout(updateTierProgress, 1500);
+        }
+    });
+
+    // ─── Add/Remove Repair Service from Cart Checkbox ─────────────────────────────
+    $(document).on('change', '#add-repair-service-cart-checkbox', async function (e) {
+        if (!currentCartId) {
+            alert("Error: Cart not loaded yet. Please wait a moment.");
+            $(this).prop('checked', !$(this).is(':checked'));
+            return;
+        }
+
+        let isChecked = $(this).is(':checked');
+        let $checkbox = $(this);
+        $checkbox.prop('disabled', true);
+
+        if (isChecked) {
+            // Add repair service and apply REPAIR45 coupon
+            try {
+                // First get the current cart to determine the qty difference
+                let cartRes = await fetch('/api/storefront/carts', {
+                    credentials: 'include',
+                    headers: { 'Accept': 'application/json' }
+                });
+                let cartData = await cartRes.json();
+                let applianceCount = 0;
+                let repairServiceCount = 0;
+                
+                if (cartData && cartData.length > 0) {
+                    let cart = cartData[0];
+                    if (cart.lineItems) {
+                        if (cart.lineItems.physicalItems) {
+                            cart.lineItems.physicalItems.forEach(item => {
+                                if (item.productId == 1206) {
+                                    repairServiceCount += item.quantity;
+                                } else {
+                                    applianceCount += item.quantity;
+                                }
+                            });
+                        }
+                        if (cart.lineItems.digitalItems) {
+                            cart.lineItems.digitalItems.forEach(item => {
+                                if (item.productId == 1206) {
+                                    repairServiceCount += item.quantity;
+                                } else {
+                                    applianceCount += item.quantity;
+                                }
+                            });
+                        }
+                    }
+                }
+
+                let qtyToAdd = applianceCount - repairServiceCount;
+                if (qtyToAdd <= 0) qtyToAdd = 1;
+
+                let addResponse = await fetch(`/api/storefront/carts/${currentCartId}/items`, {
+                    method: "POST",
+                    credentials: "include",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json"
+                    },
+                    body: JSON.stringify({
+                        lineItems: [
+                            {
+                                quantity: qtyToAdd,
+                                productId: 1206
+                            }
+                        ]
+                    })
+                });
+
+                if (!addResponse.ok) {
+                    throw new Error("Failed to add repair service to cart");
+                }
+
+                try {
+                    // Try checkout coupons API first
+                    let couponRes = await fetch(`/api/storefront/checkouts/${currentCartId}/coupons`, {
+                        method: "POST",
+                        credentials: "include",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Accept": "application/json"
+                        },
+                        body: JSON.stringify({
+                            couponCode: "REPAIR45"
+                        })
+                    });
+
+                    if (!couponRes.ok) {
+                        // Fallback to traditional POST to cart.php
+                        let formData = new FormData();
+                        formData.append('action', 'applycoupon');
+                        formData.append('couponcode', 'REPAIR45');
+                        await fetch('/cart.php', {
+                            method: 'POST',
+                            body: formData,
+                            credentials: 'same-origin'
+                        });
+                    }
+                } catch (couponErr) {
+                    console.warn("Checkout coupon API failed, trying fallback:", couponErr);
+                    let formData = new FormData();
+                    formData.append('action', 'applycoupon');
+                    formData.append('couponcode', 'REPAIR45');
+                    await fetch('/cart.php', {
+                        method: 'POST',
+                        body: formData,
+                        credentials: 'same-origin'
+                    });
+                }
+
+                window.location.reload();
+            } catch (err) {
+                console.error(err);
+                alert("Error adding repair service.");
+                $checkbox.prop('checked', false).prop('disabled', false);
+            }
+        } else {
+            // Remove repair service
+            if (!repairCartItemId) {
+                $checkbox.prop('disabled', false);
+                return;
+            }
+
+            try {
+                let removeResponse = await fetch(`/api/storefront/carts/${currentCartId}/items/${repairCartItemId}`, {
+                    method: "DELETE",
+                    credentials: "include",
+                    headers: { "Accept": "application/json" }
+                });
+
+                if (!removeResponse.ok) {
+                    throw new Error("Failed to remove repair service from cart");
+                }
+
+                window.location.reload();
+            } catch (err) {
+                console.error(err);
+                alert("Error removing repair service.");
+                $checkbox.prop('checked', true).prop('disabled', false);
+            }
+        }
+    });
+
+    // Page load
+    updateTierProgress();
+
+</script>
+
+<style>
+    /* Cart loading overlay — white background hatao, sirf spinner dikhao */
+    .loadingOverlay,
+    .loading-overlay,
+    [data-cart-status] .loadingOverlay,
+    .cart .loadingOverlay,
+    .cart-item .loadingOverlay {
+        background: transparent !important;
+        background-color: transparent !important;
+    }
+
+    .loadingOverlay:after,
+    .loading-overlay:after {
+        background: transparent !important;
+    }
+
+    /* Stencil aria-busy override */
+    [aria-busy="true"]::before,
+    [aria-busy="true"]::after {
+        background: transparent !important;
+    }
+
+    .price--retail {
+        color: #888;
+        text-decoration: line-through;
+        margin-right: 4px;
+    }
+
+    .price--sale {
+        color: #d00;
+        font-weight: bold;
+    }
+
+    .cart-item-savings {
+        display: block;
+        font-size: 0.9em;
+        color: green;
+        margin-top: 4px;
+    }
+
+    /* Responsive Cart Styling */
+    .cart-item-label {
+        display: none;
+    }
+
+    @media (max-width: 800px) {
+
+        /* Hide the table header */
+        .cart-header {
+            display: none !important;
+        }
+
+        /* Make table, tbody, tr display as block/flex cards */
+        .cart,
+        .cart-list,
+        .cart-item {
+            display: block !important;
+            width: 100% !important;
+        }
+
+        .cart-item {
+            border: 1px solid #ececec !important;
+            border-radius: 8px !important;
+            padding: 15px !important;
+            margin-bottom: 15px !important;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02) !important;
+            overflow: hidden !important;
+        }
+
+        /* Align image and title side-by-side */
+        .cart-item-figure {
+            float: left !important;
+            width: 80px !important;
+            padding: 0 !important;
+            margin: 0 15px 15px 0 !important;
+            border: none !important;
+            text-align: center !important;
+        }
+
+        .cart-item-figure img {
+            max-width: 100% !important;
+            height: auto !important;
+        }
+
+        .cart-item-title {
+            float: left !important;
+            width: calc(100% - 95px) !important;
+            padding: 0 !important;
+            border: none !important;
+            text-align: left !important;
+        }
+
+        .cart-item-name {
+            font-size: 14px !important;
+            margin: 0 0 8px 0 !important;
+            line-height: 1.4 !important;
+        }
+
+        .cart-item-name__label,
+        .cart-item-name a {
+            color: #1a5bd1 !important;
+            text-decoration: none !important;
+        }
+
+        .cart-item-name__label:hover,
+        .cart-item-name a:hover {
+            color: #0056b3 !important;
+            text-decoration: underline !important;
+        }
+
+        .cart-item-brand {
+            font-size: 11px !important;
+            text-transform: uppercase !important;
+            margin-bottom: 2px !important;
+
+        }
+
+        .definitionList-key {
+            color: #555555 !important;
+        }
+
+        .definitionList-value {
+            color: #222222 !important;
+        }
+
+        .change-warranty,
+        .cart-item-block a {
+            color: white !important;
+        }
+
+        .change-warranty:hover,
+        .cart-item-block a:hover {
+            color: #0056b3 !important;
+        }
+
+        /* Layout for Price, Qty, Total rows */
+        .cart-item-block {
+            border: none !important;
+        }
+
+        .cart-item-info {
+            clear: both !important;
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            width: 100% !important;
+            padding: 10px 0 !important;
+            border: none !important;
+            border-top: 1px dashed #f0f0f0 !important;
+            text-align: right !important;
+        }
+
+        .cart-item-label {
+            display: inline-block !important;
+            font-weight: 600 !important;
+            font-size: 13px !important;
+            margin: 0 !important;
+        }
+
+        .cart-item-value {
+            font-size: 14px !important;
+        }
+
+        /* Quantity increment wrapper align to right */
+        .cart-item-quantity {
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            padding: 10px 0 !important;
+            border-top: 1px dashed #f0f0f0 !important;
+        }
+
+        .cart-item-quantity .form-increment {
+            display: inline-flex !important;
+            align-items: center !important;
+            border: 1px solid #ddd !important;
+            border-radius: 4px !important;
+            padding: 2px !important;
+            background: #fdfdfd !important;
+            margin: 0 !important;
+        }
+
+        .cart-item-quantity .form-input--incrementTotal {
+            width: 32px !important;
+            height: 28px !important;
+            padding: 0 !important;
+            border: none !important;
+            background: transparent !important;
+            text-align: center !important;
+            font-size: 13px !important;
+        }
+
+        .cart-item-quantity .button--icon {
+            width: 24px !important;
+            height: 24px !important;
+            padding: 0 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            background: transparent !important;
+            border: none !important;
+        }
+
+        .cart-item-quantity .button--icon svg {
+            width: 14px !important;
+            height: 14px !important;
+            fill: #666 !important;
+        }
+
+        /* Remove button layout */
+        .cart-remove {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: 28px !important;
+            height: 28px !important;
+            border: 1px solid #ffd1d1 !important;
+            border-radius: 4px !important;
+            background: #fff5f5 !important;
+            color: #ff3b30 !important;
+            padding: 0 !important;
+            margin-left: 10px !important;
+            cursor: pointer !important;
+            position: static !important;
+        }
+
+        .cart-remove svg {
+            width: 12px !important;
+            height: 12px !important;
+            fill: currentColor !important;
+        }
+
+        /* Volume discount/tier box spacing for mobile */
+        #tier-progress-box {
+            padding: 15px !important;
+            margin: 15px 0 !important;
+        }
+    }
+
+    /* Cart Repair Promotion Styles (Matching Product Page Style) */
+    .repair-service-upsell {
+        margin: 20px 0;
+        padding: 18px;
+        border: 2px solid #1a56c4;
+        border-radius: 10px;
+        background: #f8fbff !important;
+        color: #222222 !important;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        font-family: inherit;
+    }
+    .repair-title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        font-size: 18px;
+        font-weight: 700;
+        color: #1a56c4 !important;
+        margin-bottom: 10px;
+    }
+    .repair-badge {
+        background: #e53935;
+        color: #fff;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+    .repair-description {
+        margin: 0 0 15px;
+        color: #555 !important;
+        font-size: 14px;
+        line-height: 1.5;
+    }
+    .repair-checkbox-label {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        font-size: 15px;
+        font-weight: 600;
+        color: #222 !important;
+    }
+    .repair-checkbox-label input {
+        width: 18px;
+        height: 18px;
+        margin: 0;
+    }
+</style>

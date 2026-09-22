@@ -1,0 +1,152 @@
+<!-- ========================================================================= -->
+<!-- UNDERVALUE APPLIANCES - HERO BANNER SECTION FOR ZENO PAGE BUILDER          -->
+<!-- Copy and paste this entire code block into a Zeno Custom Code / HTML block -->
+<!-- ========================================================================= -->
+
+<style>
+  /* Unique parent scope to prevent conflict with BigCommerce / Zeno Theme styles */
+  #uv-hero-banner-section {
+    width: 100%;
+    margin: 10px auto;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  }
+
+  #uv-hero-banner-section .uv-hero-container {
+    position: relative;
+    width: 100%;
+    max-width: 1200px; /* Clean container width */
+    margin: 0 auto;
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  }
+
+  #uv-hero-banner-section .uv-hero-image {
+    display: block;
+    width: 100%;
+    height: auto; /* Ensures full complete image is displayed without any clipping */
+    border: 0;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Responsive Clickable CTA Button Overlay */
+  #uv-hero-banner-section .uv-hero-cta {
+    position: absolute;
+    left: 4.56%;
+    top: 52.34%;
+    width: 26.5%;
+    height: 6.54%;
+    background-color: #517c27;
+    color: #ffffff;
+    font-weight: 700;
+    font-size: clamp(5px, 1.15vw, 15px);
+    letter-spacing: 0.2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    transition: background-color 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease;
+    cursor: pointer;
+    box-sizing: border-box;
+    z-index: 10;
+    padding: 0 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    line-height: 1;
+  }
+
+  /* Hover & Active Effects for Interactivity */
+  #uv-hero-banner-section .uv-hero-cta:hover {
+    background-color: #61952e;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+    transform: translateY(-2px);
+    color: #ffffff;
+    text-decoration: none;
+  }
+
+  #uv-hero-banner-section .uv-hero-cta:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Visually Hidden SEO & Accessibility Text (Structured for Search Engines) */
+  #uv-hero-banner-section .uv-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* Responsive Adjustments for Mobile & Tablet Screens */
+  @media (max-width: 768px) {
+    #uv-hero-banner-section .uv-hero-cta {
+      font-size: clamp(4.5px, 1.12vw, 10px);
+      letter-spacing: 0;
+      border-radius: 4px;
+      padding: 0 1px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    #uv-hero-banner-section .uv-hero-cta {
+      font-size: clamp(4px, 1.1vw, 8px);
+      border-radius: 3px;
+    }
+  }
+</style>
+
+<div id="uv-hero-banner-section">
+  <div class="uv-hero-container">
+    
+    <!-- Hero Banner Image (100% Uncropped Full Image) -->
+    <img 
+      src="https://cdn.crucials.io/upload/5vtkmzi0yn/undervaleimage-54069130.png" 
+      alt="Undervalue Appliances - Smart shopping for your wallet. And your planet." 
+      class="uv-hero-image"
+    />
+
+    <!-- Main Clickable Call To Action (CTA) Button -->
+    <!-- Replace SHOP_REFURBISHED_URL with your actual category / landing page link -->
+    <a 
+      href="/appliances" 
+      class="uv-hero-cta" 
+      title="SHOP REFURBISHED APPLIANCES"
+    >
+      SHOP REFURBISHED APPLIANCES
+    </a>
+
+    <!-- Structured SEO & Accessibility Content -->
+    <div class="uv-sr-only">
+      <h1>Smart shopping for your wallet. And your planet.</h1>
+      <h2>SHOP REFURBISHED APPLIANCES</h2>
+      
+      <section>
+        <h3>REDUCE WASTE</h3>
+        <p>Keep appliances out of landfills and reduce environmental impact.</p>
+      </section>
+
+      <section>
+        <h3>SAVE MONEY</h3>
+        <p>Top-quality appliances for less with our best price guarantee.</p>
+      </section>
+
+      <section>
+        <h3>SUPPORT LOCAL</h3>
+        <p>Shop local and support a more sustainable community.</p>
+      </section>
+    </div>
+
+  </div>
+</div>

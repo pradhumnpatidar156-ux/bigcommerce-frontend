@@ -1,0 +1,342 @@
+---
+cart: true
+---
+{{inject 'cancelButtonText' (lang 'common.cancel')}}
+{{#partial "page"}}
+{{inject 'invalidEntryMessage' (lang 'cart.invalid_entry_message')}}
+<div class="page">
+    <div class="container">
+
+        <main class="page-content" data-cart>
+            {{> components/common/breadcrumbs breadcrumbs=breadcrumbs}}
+
+            {{> components/cart/page-title}}
+
+
+            <div data-cart-status>
+
+                {{> components/cart/status-messages}}
+            </div>
+
+            {{#if cart.items.length}}
+            <div class="loadingOverlay"></div>
+
+            <div data-cart-content>
+                {{> components/cart/content}}
+
+                <div class="delivery">
+                    <div>
+                        <div class="infobox">
+
+                            <div class="delivery_info">
+                                <h5> Delivery options available at checkout:</h5>
+                                <h6>Same day (if ordered by noon)</h6>
+                                <h6>Next day</h6>
+                                <h6>Within one week</h6>
+                                <h6>Note: Delivery is calculated at checkout, based on speed selected, cart total,
+                                    promotions applied, number of pieces, and address.
+                                </h6>
+                            </div>
+
+                            <div class="pickup">
+
+
+                                <h5>Curbside pickup available at checkout.</h5>
+                                <p>Usually ready within 4 hours.</p>
+                                <p>If picking up, address and instructions sent in order ready for pickup notification
+                                    email
+                                    <br>
+                                    London ON N6H 5L4
+                                    <br>
+                                    Canada
+                                    <br>
+                                    +18338637858
+                                </p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div data-cart-totals>
+                    {{> components/cart/totals}}
+                </div>
+
+                {{#if cart.show_primary_checkout_button}}
+
+                <div class="cart-actions">
+                    <div class="cart_sum">
+                        <a class="button button--primary" href="https://undervalueappliances.ca/services/">
+                            <button class="checkoutHeader-service">
+                                Click here to add additional services ex. hookup.<br>Delivery is calculated at checkout.
+                            </button>
+                        </a>
+                        <a class="button button--primary" href="{{urls.checkout.single_address}}"
+                            title="{{lang 'cart.checkout.title'}}">{{lang 'cart.checkout.button'}}</a>
+                    </div>
+                    {{#if cart.show_multiple_address_shipping}}
+                    <a class="checkoutMultiple" href="{{urls.checkout.multiple_address}}">
+                        {{lang 'cart.preview.checkout_multiple'}}
+                    </a>
+                    {{/if}}
+                </div>
+                {{else}}
+                <div class="cart-actions">
+                    <a class="button" href="{{urls.home}}" title="{{lang 'cart.continue_shopping'}}">{{lang
+                        'cart.continue_shopping'}}</a>
+                </div>
+                {{/if}}
+
+                {{#if cart.additional_checkout_buttons}}
+                <div class="cart-additionalCheckoutButtons">
+                    {{#each cart.additional_checkout_buttons}}
+                    {{{this}}}
+                    {{/each}}
+                </div>
+                {{/if}}
+                {{else}}
+                <h3>{{lang 'cart.checkout.empty_cart'}}</h3>
+                {{/if}}
+        </main>
+    </div>
+</div>
+
+<style>
+    .ApplePayCheckout.RemoteCheckout.CheckoutButton {
+        display: none !important;
+    }
+
+    .apple-pay-btn.plain {
+        display: none !important;
+
+    }
+
+    .apple-pay-btn-wrapper {
+        display: none;
+    }
+
+    .swal2-modal .swal2-content {
+        color: #000;
+        font-size: 1.14286rem;
+    }
+
+    .GooglePayCheckout.RemoteCheckout.CheckoutButton {
+        display: none !important;
+    }
+
+    .cart-total-label a {
+        color: #080303;
+        text-decoration: underline;
+    }
+
+    i.fa-solid.fa-check {
+        color: #00C200;
+    }
+
+    .delivery_info h5 {
+        margin-top: 0.5rem;
+    }
+
+    .pickup h5 {
+        margin-top: 0.5rem;
+    }
+
+    .delivery_info {
+        border: 1px solid #ccc;
+        padding: 10px;
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+    }
+
+    .pickup {
+        border: 1px solid #ccc;
+        padding: 10px;
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+    }
+
+    .delivery_info h6 {
+        margin-top: 1.5rem;
+        position: relative;
+        padding-left: 20px;
+        margin-bottom: 10px;
+        font-weight: normal;
+        text-transform: none;
+        font-size: 15px;
+    }
+
+    .delivery_info h6::before {
+        content: "•";
+        position: absolute;
+        left: 0;
+        top: 0;
+        color: #fff;
+        font-size: 20px;
+        line-height: 1;
+    }
+
+    /* Phones (max-width: 767px) */
+    @media screen and (max-width: 767px) {
+        .infobox {
+            display: block !important;
+            gap: 10px;
+        }
+
+        .delivery_info {
+            margin-bottom: 10px;
+        }
+    }
+
+    /* Tablets (min-width: 768px and max-width: 1024px) */
+    @media screen and (min-width: 768px) and (max-width: 1024px) {
+
+        .infobox {
+            display: block !important;
+
+        }
+
+        .delivery_info {
+            margin-bottom: 10px;
+        }
+    }
+
+
+    .infobox {
+        display: flex;
+        gap: 10px;
+    }
+
+    .cart-totals li:nth-last-child(2) {
+        display: none !important;
+    }
+
+
+    .cart-totals li.cart-total:nth-child(2) {
+        display: none;
+    }
+
+    .FloatRight.PaypalCommerceCheckout.RemoteCheckout.CheckoutButton {
+        display: none !important;
+    }
+
+    .button-style {
+        width: 100%;
+        ;
+        background-color: #1a5bd1;
+        /* Change to your preferred color */
+        color: #ffff;
+        /* Button text color */
+        border-radius: 5px;
+        font-weight: bold;
+        font-size: 17px;
+        /* Increase font size */
+        border: none;
+        /* Remove default button border */
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .button-style:hover {
+        background-color: #0056b3;
+        /* Darken on hover */
+    }
+
+    .PaypalCommerceCheckout,
+    .PaypalCommerceContainer,
+    .PaypalCommerceInnerContainer {
+        display: none !important;
+    }
+
+    .cart_sum {
+        float: right;
+        display: flex;
+    }
+
+    @media (max-width: 768px) {
+        .cart_sum {
+            float: none;
+            display: block;
+        }
+    }
+
+    .cart-actions .button {
+        display: block;
+        margin-bottom: 11px;
+    }
+</style>
+
+
+{{/partial}}
+{{> layout/base}}
+
+<script>
+
+    $(document).ready(function () {
+
+        function changecodeText() {
+            var $codeHeader = $(".coupon-code-add");
+
+            if ($codeHeader.length) {
+                $codeHeader.filter(function () {
+                    // Check for the specific text "Shipping"
+                    return $(this).text().trim() === "Add Coupon";
+                }).text("Add code");
+            } else {
+                // Retry after 100ms if not found
+                setTimeout(changecodeText, 100);
+            }
+        }
+        // Call all functions to make the necessary text changes
+        changecodeText();
+
+    });
+
+
+</script>
+
+<script>
+    document.addEventListener('click', function (e) {
+        if (e.target.classList.contains('swal2-confirm')) {
+            const popupText = document.querySelector('.swal2-html-container')?.textContent || '';
+            if (popupText.includes('Are you sure you want to remove item from your cart?')) {
+                setTimeout(function () {
+                    location.reload();
+                }, 1500);
+            }
+        }
+    });
+
+    $(document).ready(function ($) {
+        $(".coupon-form").on("submit", function (e) {
+            console.log("Coupon form submitted...");
+            e.preventDefault();
+
+            let formData = $(this).serialize();
+
+            $.ajax({
+                type: "POST",
+                url: "https://undervalueappliances.ca/remote/v1/apply-code",
+                data: formData,
+                xhrFields: { withCredentials: true },
+                success: function (response) {
+                    console.log("API Response:", response);
+
+                    if (response.success) {
+                        // ✅ Coupon applied successfully
+                        setTimeout(function () {
+                            window.location.href = "/cart.php";
+                        }, 1500);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("Coupon apply failed:", status, error);
+                    // fallback → go to cart
+                    //window.location.href = "/cart.php";
+                }
+            });
+        });
+    });
+
+</script>

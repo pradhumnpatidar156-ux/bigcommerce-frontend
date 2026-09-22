@@ -1,0 +1,169 @@
+<link
+      rel="stylesheet"
+      href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css"
+    />
+    <link rel="stylesheet" href="/resources/demos/style.css" />
+<style type="text/css">
+      body {
+        background-color: #1a5bd1;
+      }
+  .container-faq {
+        max-width:960px;
+        margin:0px auto;    
+  }
+      .ui-state-active,
+      .ui-widget-content .ui-state-active,
+      .ui-widget-header .ui-state-active,
+      a.ui-button:active,
+      .ui-button:active,
+      .ui-button.ui-state-active:hover {
+        border-color: #fff;
+      }
+      .ui-accordion .ui-accordion-content {
+        padding: 0px 30px 20px 30px;
+      }
+      .ui-accordion .ui-accordion-content p {
+        margin: 0px;
+        font-size: 18px;
+      }
+      .ui-widget-content {
+        background-color: #1a5bd1;
+        color: #fff;
+      }
+      .defaultIcon {
+        background-image: url("https://cdn11.bigcommerce.com/s-5vtkmzi0yn/images/stencil/original/image-manager/plus.png?t=1715643915") !important;
+        width: 16px;
+        height: 16px;
+        background-size: contain;
+        transition: all 0.4s;
+      }
+      .ui-state-active .ui-icon,
+      .ui-button:active .ui-icon {
+        background-image: url("https://cdn11.bigcommerce.com/s-5vtkmzi0yn/images/stencil/original/image-manager/minus.png?t=1715643914") !important;
+        width: 16px;
+        height: 16px;
+        background-size: contain;
+        transition: all 0.4s;
+      }
+      .ui-accordion .ui-accordion-header {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #fff;
+        background-color: #1a5bd1;
+        color: #fff;
+        margin-top: 0px;
+        font-size: 18px;
+        font-weight: 700;
+        padding: 20px 30px;
+      }
+      .ui-state-active,
+      .ui-widget-content .ui-state-active,
+      .ui-widget-header .ui-state-active,
+      a.ui-button:active,
+      .ui-button:active,
+      .ui-button.ui-state-active:hover {
+        border-bottom: none !important;
+      }
+
+     .faq_items {
+            border: 1px solid #ddd;
+            margin-bottom: 10px; /* Space between questions */
+            background: #1a5bd1;
+        }
+        .faq_items h3 {
+            padding: 15px;
+            margin: 0;
+            cursor: pointer;
+            background: #1a5bd1;
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .faq_items .faq_answer {
+            display: none;
+            padding: 15px;
+            background: #1a5bd1 /* Light blue background */ 
+            color: #fff;
+            font-size: 18px;
+        }
+        .faq_items.active h3 {
+            background: #4a90e2; /* Lighter blue when active */
+        }
+        .faq_items.active .faq_answer {
+            display: block;
+        }
+
+  .faq_items h3::after {
+    content: " >";
+    float:right;
+    font-weight: bold;
+    color: #fff; /* Adjust color if needed */
+}
+
+    </style>
+<div class="container-faq">
+    <div class="faq_items">
+        <h3>Where are you located?</h3>
+     <div class="faq_answer">
+            <p>Undervalue Appliances.ca is an online appliance store with curbside pickup in Hyde Park London or same-day delivery within an hour of London.</p>
+        </div>
+    </div>
+
+    <div class="faq_items">
+        <h3>What days/hours do you answer phones?</h3>
+        <div class="faq_answer">
+            <p>We answer phones between 8AM-8PM, 7 days a week.</p>
+        </div>
+    </div>
+
+    <div class="faq_items">
+        <h3>Are the appliances new or used?</h3>
+        <div class="faq_answer">
+            <p>Undervalue Appliances.ca stocks and sells used refurbished appliances.</p>
+        </div>
+    </div>
+
+    <div class="faq_items">
+        <h3>How do I place an order?</h3>
+        <div class="faq_answer">
+            <p>Visit our website for self-checkout.</p>
+          </div>
+    </div>
+
+    <div class="faq_items">
+        <h3>Do you sell new appliance parts?</h3>
+        <div class="faq_answer">
+            <p>Yes, call us to order. We have over 3 million parts and ship same day. We stock and can order parts from all manufacturers and brands.</p>
+        </div>
+    </div>
+<div class="faq_items">
+        <h3>Do you offer appliance repair service?</h3>
+        <div class="faq_answer">
+            <p>Yes, call, email, or fill out of online booking form. We have same day service availble with upfront pricing. Parts and labour guaranteed for 60 days.</p>
+        </div>
+    </div>
+
+    <div class="faq_items">
+        <h3>What Services Do You Offer?</h3>
+        <div class="faq_answer">
+            <p>Dishwasher installation service, washer and dryer stacking service, and many other services offered under the services tab/page.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll(".faq_items h3").forEach((question) => {
+        question.addEventListener("click", function () {
+            const parent = this.parentElement;
+            const isActive = parent.classList.contains("active");
+
+            document.querySelectorAll(".faq_items").forEach((item) => item.classList.remove("active"));
+
+            if (!isActive) {
+                parent.classList.add("active");
+            }
+        });
+    });
+</script>

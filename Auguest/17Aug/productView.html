@@ -1,0 +1,2169 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+/*productView-images*/
+.productView{
+    align-items: flex-start;
+}
+@media (min-width:800px){
+.productView-images{
+    position: sticky;
+    top: 150px;
+}
+}
+/*end productView-images*/
+/*Apply finance*/
+    .sd-button-7b9b17bd-1b0d-4954-a916-5cf886775fb2 {
+        display: flex;
+        align-items: center;
+            justify-content: flex-start;
+    }
+
+    .sd-button-7b9b17bd-1b0d-4954-a916-5cf886775fb2 .buttonLink > a {
+        text-decoration: none;
+        background-color: rgba(255,255,255,1);
+        border: 1px solid rgba(255,255,255,1);
+        border-radius: 4px;
+        color: rgba(26,91,209,1);
+        font-size: 16px;
+        font-family: inherit;
+        font-weight: 400;
+        padding-top: 8px;
+        padding-right: 24px;
+        padding-bottom: 8px;
+        padding-left: 24px;
+        margin-top: 20px;
+        margin-right: 0px;
+        margin-bottom: 20px;
+        margin-left: 0px;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    .sd-button-7b9b17bd-1b0d-4954-a916-5cf886775fb2 .buttonLink > a:hover {
+        background-color: rgba(156,219,255,1);
+        border-color: rgba(156,219,255,1);
+        color: #FFFFFF;
+    }
+
+    @media only screen and (max-width: 700px) {
+        .sd-button-7b9b17bd-1b0d-4954-a916-5cf886775fb2 { }
+    }
+
+    #sd-simple-button-editable-7b9b17bd-1b0d-4954-a916-5cf886775fb2 {
+        min-width: 14px;
+        line-height: 1.5;
+        display: inline-block;
+    }
+
+    #sd-simple-button-editable-7b9b17bd-1b0d-4954-a916-5cf886775fb2 * {
+        margin: 0;
+        padding: 0;
+    }
+
+    #sd-simple-button-editable-7b9b17bd-1b0d-4954-a916-5cf886775fb2[data-edit-mode="true"]:hover,
+    #sd-simple-button-editable-7b9b17bd-1b0d-4954-a916-5cf886775fb2[data-edit-mode="true"]:active,
+    #sd-simple-button-editable-7b9b17bd-1b0d-4954-a916-5cf886775fb2[data-edit-mode="true"]:focus {
+        outline: 1px dashed #3C64F4;
+    }
+
+    #sd-simple-button-editable-7b9b17bd-1b0d-4954-a916-5cf886775fb2 strong,
+    #sd-simple-button-editable-7b9b17bd-1b0d-4954-a916-5cf886775fb2 strong * {
+        font-weight: bold;
+    }
+/*end apply finance*/
+
+        /* The Modal (background) */
+        .modal__cus__pr {
+            display: none; 
+            position: fixed; 
+            z-index: 9999; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgb(0,0,0); 
+            background-color: rgba(0,0,0,0.4); 
+        }
+
+        /* Modal Content */
+        .modal-content {
+            background-color: #007aff;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 100%;
+            max-width: 800px;
+            color:#fff;
+        }
+
+        /* Close Button */
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 24px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: #45a049;
+        }
+        .vsi__modal__box{
+            display: flex;
+            gap:10px;
+            margin: 20px 0px;
+        }
+        .vsi__modal__box h5{
+            margin-top: 0px !important;
+        }
+        .vsi__modal__box i, .modal__cus__pr i{
+        color: #00C200 ;
+        }
+        .vsi__modal__box a{
+            color: #aac3ef !important;
+            text-decoration: underline;
+        }
+        .modal__cus__pr h2{
+            font-size: 24px;
+        }
+        .productView-options .form-action{
+            float: none !important;
+        }
+        
+        
+        .add-to-cart-wrapper label{
+    color:white !important;
+  }
+  .productView-options .socialLinks .icon svg{
+    fill:white !important;
+  }
+  .productView-images, .productView-details{
+    border:1px solid #6698f1;
+    padding:20px;
+    margin-bottom:3rem;
+  }
+  .productView{
+    gap:20px;
+  }
+  .container:has(.accordion-block) {
+    border:1px solid #6698f1;
+  }
+  .productView-rating{
+    display:none;
+  }
+  .body{
+    border-top:1px solid #6698f1;
+    padding-top:0px;
+  }
+  #form-action-addToCart{
+    background-color:white;
+    color:#6698f1;
+  }
+  .form-increment .button{
+    background:transparent;
+  }
+  .form-increment .button svg{
+    fill:white;
+  }
+  input.form-input--incrementTotal{
+    border: 1px solid white;
+    color: white;
+    background:transparent;
+    
+  }
+  .productView-title{
+    font-family:"Fira Sans", sans-serif !important;
+    font-weight:500;
+  }
+  .accordion-indicator{
+   fill:white; 
+  }
+  .form-field label.form-label{
+    color:white !important;
+    font-size:16px;
+  }
+  .productView-price{
+    font-size:26px !important;
+    margin:20px 0px;
+  }
+  .form-field--stock dt{
+    color:#fff !important;
+  }
+  .price--non-sale{
+      margin-right: 20px;
+  }
+  .productView .sale-flag-side{
+      margin-bottom: 10px;
+  }
+  
+  /*save sale price*/
+  .productView-price .price-section--saving:before{
+    content: 'Save';
+    }
+    .productView-price .price-section--saving span:nth-of-type(1), .productView-price .price-section--saving span:nth-of-type(2) {
+    display: none;
+    }
+    .productView-price .price-section--saving span:nth-of-type(3){
+        margin-left: 5px;
+    }
+    .rrp-price--withoutTax{
+        display: none;
+    }
+    .price-section--saving{
+        background: #f54a3a;
+        display: inline-block;
+        padding: 5px 20px;
+    }
+    .productGrid .card .price-section .price--rrp{
+        display: none;
+    }
+    .price--discounted, .price--rrp{
+        display: none;
+    }
+    
+    .cus__price_section{
+        background: #f54a3a;
+    display: inline-block;
+    padding: 5px 20px;
+    }
+    .cus__price_section {
+        font-size: 15px;
+    }
+    .productView-price .price-section--saving, .price--non-sale{
+        display: none !important;
+    }
+    #non__sale__price__dis{
+            text-decoration: line-through;
+            margin-right: 10px;
+    }
+    
+    .delivery_info {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  
+    }
+    
+    .pickup {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  
+    }
+
+  .delivery_info h6 {
+    margin-top: 1.5rem;
+    position: relative;
+    padding-left: 20px;
+    margin-bottom: 10px;
+    font-weight: normal;
+    text-transform: none;
+    font-size:15px;
+    
+}
+
+.delivery_info h6::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #fff;
+  font-size: 20px;
+  line-height: 1;
+}
+
+/* Phones (max-width: 767px) */
+@media screen and (max-width: 767px) {
+  .vsi__modal__box {
+    display: block;
+  }
+   .delivery_info{
+    margin-bottom: 10px;
+   }
+}
+
+/* Tablets (min-width: 768px and max-width: 1024px) */
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  .vsi__modal__box {
+    display: block;
+  }
+   .delivery_info{
+    margin-bottom: 10px;
+   }
+}
+
+
+  /*end save sale price*/
+.product-promo-warranty-wrap {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  margin: 18px 0 20px;
+}
+
+.humm-inline-promo {
+    background: transparent !important;
+    border: 1px solid #6698f1 !important;
+    border-radius: 10px !important;
+    padding: 24px !important;
+    box-sizing: border-box !important;
+    color: #ffffff !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    margin-bottom: 20px !important;
+    text-align: left !important;
+    flex: none !important;
+    width: 100% !important;
+}
+
+.humm-option-row {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 8px 10px !important;
+    background: rgba(255, 255, 255, 0.04) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 6px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+.humm-option-row:hover {
+    background: rgba(255, 255, 255, 0.08) !important;
+}
+.humm-option-row.active {
+    background: rgba(56, 189, 248, 0.15) !important;
+    border: 1px solid rgba(56, 189, 248, 0.4) !important;
+}
+.humm-option-row .opt-label {
+    font-weight: 600 !important;
+    color: rgba(255, 255, 255, 0.75) !important;
+    font-size: 12px !important;
+}
+.humm-option-row.active .opt-label {
+    color: #38bdf8 !important;
+    font-weight: 700 !important;
+}
+.humm-option-row .opt-val {
+    font-weight: 700 !important;
+    color: #ffffff !important;
+    font-size: 13px !important;
+}
+.humm-option-row.active .opt-val {
+    font-weight: 800 !important;
+    font-size: 13.5px !important;
+}
+
+/* Accordion Collapsible Box */
+.humm-accordion {
+    margin-bottom: 16px !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 8px !important;
+    background: rgba(255, 255, 255, 0.02) !important;
+    overflow: hidden !important;
+    width: 100% !important;
+}
+.humm-accordion-trigger {
+    width: 100% !important;
+    background: transparent !important;
+    border: none !important;
+    padding: 10px 14px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    font-size: 13px !important;
+    cursor: pointer !important;
+    text-align: left !important;
+    outline: none !important;
+    transition: background 0.2s ease !important;
+}
+.humm-accordion-trigger:hover {
+    background: rgba(255, 255, 255, 0.05) !important;
+}
+.humm-accordion-icon {
+    transition: transform 300ms ease !important;
+    display: block !important;
+    fill: currentColor !important;
+}
+.humm-accordion.open .humm-accordion-icon {
+    transform: rotate(180deg) !important;
+}
+.humm-accordion-content {
+    max-height: 0;
+    overflow: hidden !important;
+    transition: max-height 300ms ease-out !important;
+}
+.humm-options-wrapper {
+    padding: 4px 12px 12px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+}
+
+.repair-service-upsell {
+    margin: 25px 0;
+    padding: 20px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    background: #f8fafc;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+.repair-service-upsell.error-highlight {
+    border-color: #ef4444;
+    background: #fef2f2;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+}
+.repair-title-wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+.repair-title {
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+    font-weight: 700;
+    color: #1e3a8a;
+}
+.repair-title i {
+    color: #1e3a8a;
+    margin-right: 8px;
+    font-size: 18px;
+}
+.repair-badge {
+    background: #ef4444;
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 15px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+.repair-description {
+    margin: 0 0 15px;
+    color: #64748b;
+    font-size: 13px;
+    line-height: 1.4;
+}
+.repair-selection-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.repair-card-option {
+    display: block;
+    position: relative;
+    cursor: pointer;
+}
+.repair-card-option input[type="radio"] {
+    display: none; /* Hide default radio */
+}
+.repair-card-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    background: #ffffff;
+    transition: all 0.2s ease;
+}
+.repair-card-content:hover {
+    border-color: #cbd5e1;
+    background: #f8fafc;
+}
+.repair-card-left {
+    display: flex;
+    align-items: center;
+}
+.repair-card-option input[type="radio"]:checked + .repair-card-content {
+    border-color: #1e3a8a;
+    background: #eff6ff;
+    box-shadow: 0 2px 4px rgba(30, 58, 138, 0.05);
+}
+.repair-card-bullet {
+    width: 18px;
+    height: 18px;
+    border: 2px solid #cbd5e1;
+    border-radius: 50%;
+    margin-right: 12px;
+    position: relative;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+}
+.repair-card-option input[type="radio"]:checked + .repair-card-content .repair-card-bullet {
+    border-color: #1e3a8a;
+    background: #1e3a8a;
+}
+.repair-card-option input[type="radio"]:checked + .repair-card-content .repair-card-bullet::after {
+    content: "";
+    width: 6px;
+    height: 6px;
+    background: #ffffff;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.repair-card-text {
+    display: flex;
+    flex-direction: column;
+}
+.repair-card-title-text {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: #334155;
+    font-weight: 600;
+    flex-wrap: wrap;
+}
+.repair-popular-tag {
+    background: #dcfce7;
+    color: #166534;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.repair-card-price {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1e3a8a;
+    flex-shrink: 0;
+    margin-left: 15px;
+}
+.repair-card-price.dec-price {
+    color: #64748b;
+    font-weight: 500;
+}
+.repair-card-option input[type="radio"]:checked + .repair-card-content .repair-card-title-text {
+    color: #1e3a8a;
+}
+.repair-card-desc {
+    font-size: 11px;
+    color: #64748b;
+    margin-top: 2px;
+}
+.repair-validation-error {
+    margin-top: 12px;
+    padding: 10px 14px;
+    border-radius: 6px;
+    background: #fee2e2;
+    color: #dc2626;
+    font-size: 12px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+@media (max-width: 768px) {
+    .repair-title-wrap {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+}
+
+  .why-buy-wrapper {
+    max-width: 1000px;
+    margin: 30px auto;
+    background: #fff;
+    border: 1px solid #e2e2e2;
+    border-radius: 14px;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+  }
+
+  .why-buy-header {
+    background: #1a5bd1;
+    color: #fff;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 700;
+    padding: 14px 16px;
+    letter-spacing: 0.3px;
+  }
+
+  .why-buy-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .why-buy-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    border-bottom: 1px solid #ececec;
+  }
+
+  .why-buy-col-1 {
+    border-right: 1px solid #ececec;
+  }
+
+  .why-buy-col-2 {
+    border-right: none;
+    padding-top: 28px;
+  }
+
+  .why-buy-empty {
+    min-height: 74px;
+  }
+
+  .why-buy-icon {
+    width: 44px;
+    min-width: 44px;
+    height: 44px;
+    background: #f0f5f1;
+    border: 1px solid #d8e3da;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .why-buy-icon img,
+  .why-buy-icon svg {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+  }
+
+  .why-buy-content h3 {
+    margin: 0;
+    color: #1a5bd1;
+    font-size: 14.5px;
+    font-weight: 700;
+    line-height: 1.25;
+  }
+
+  .why-buy-content p {
+    margin: 3px 0 0;
+    color: #555;
+    font-size: 12.5px;
+    line-height: 1.35;
+  }
+
+  .why-buy-content a {
+    color: #1a5bd1;
+    text-decoration: underline;
+  }
+
+  .why-buy-content a:hover {
+    text-decoration: none;
+  }
+
+  .why-buy-content p strong {
+    color: #0f172a;
+    font-size: 13.5px;
+    font-weight: 700;
+  }
+
+  .highlight-box {
+    background: #fbf6ee;
+    border-top: 1px solid #e8d9b8;
+    border-bottom: 1px solid #e8d9b8;
+    grid-column: 1 / -1;
+  }
+
+  .highlight-box .why-buy-icon {
+    background: #fff3e0;
+    border-color: #e8c98a;
+  }
+
+  .best-value-badge {
+    display: inline-block;
+    margin-left: 8px;
+    background: #c70000;
+    color: #fff;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-size: 10.5px;
+    font-weight: 700;
+    vertical-align: middle;
+    letter-spacing: 0.3px;
+  }
+
+  @media(max-width:768px) {
+
+    .why-buy-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .why-buy-item {
+      border-right: none;
+    }
+
+    .why-buy-empty {
+      display: none;
+    }
+
+    .why-buy-header {
+      font-size: 19px;
+      padding: 12px 14px;
+    }
+
+    .why-buy-item {
+      gap: 12px;
+      padding: 13px 16px;
+    }
+
+    .why-buy-icon {
+      width: 38px;
+      min-width: 38px;
+      height: 38px;
+    }
+
+    .why-buy-icon img,
+    .why-buy-icon svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .why-buy-content h3 {
+      font-size: 14px;
+    }
+
+    .why-buy-content p {
+      font-size: 12px;
+    }
+
+    .best-value-badge {
+      display: inline-block;
+      margin-left: 6px;
+    }
+  }
+</style>
+
+{{#each product.reviews.messages}}
+    {{#if error}}
+        {{> components/common/alert/alert-error error}}
+    {{/if}}
+    {{#if success}}
+        {{> components/common/alert/alert-success success}}
+    {{/if}}
+{{/each}}
+
+<div class="productView" {{#if settings.data_tag_enabled}} data-event-type="product"
+data-entity-id="{{product.id}}" data-name="{{product.title}}" data-product-category="{{#each product.category}}{{#if @last}}{{this}}{{else}}{{this}}, {{/if}}{{/each}}"
+data-product-brand="{{product.brand.name}}" data-product-price="{{#or customer (unless theme_settings.restrict_to_login)}}{{#if product.price.with_tax}}{{product.price.with_tax.value}}{{else}}{{product.price.without_tax.value}}{{/if}}{{else}}{{lang 'common.login_for_pricing'}}{{/or}}"
+data-product-variant="single-product-option" {{/if}}>
+  <section class="productView-images" data-image-gallery>
+    {{!-- Note that these image sizes are coupled to image sizes used in /assets/js/theme/common/product-details.js
+    for variant/rule image replacement --}} {{#if product.images.length '>'
+    1 }} {{> components/carousel-content-announcement}} {{/if}}
+    <figure class="productView-image" data-image-gallery-main {{#if product.main_image}}
+    data-zoom-image="{{getImageSrcset product.main_image (cdn theme_settings.default_image_product) 1x=theme_settings.zoom_size }}"
+    {{/if}}>
+      <div class="productView-img-container">
+        {{!-- Remove the surrounding a-element if there is no main image. --}}
+        {{#if product.main_image}}
+        <a href="{{getImageSrcset product.main_image (cdn theme_settings.default_image_product) 1x=theme_settings.zoom_size}}"
+        target="_blank">
+          {{/if}} {{> components/common/responsive-img image=product.main_image
+          class="productView-image--default" fallback_size=theme_settings.product_size
+          lazyload=theme_settings.lazyload_mode default_image=theme_settings.default_image_product
+          otherAttributes="data-main-image" }} {{!-- Remove the surrounding a-element
+          if there is no main image. --}} {{#if product.main_image}}
+        </a>
+        {{/if}}
+      </div>
+    </figure>
+    <ul class="productView-thumbnails" {{#gt product.images.length 7}} data-slick='{ "infinite": false, "mobileFirst": true, "dots": false, "accessibility": false, "slidesToShow": 7, "slidesToScroll": 1 }'
+    data-arrow-label="{{lang 'carousel.arrowAriaLabel'}} {{product.images.length}}"
+    {{/gt}}>
+      {{#each product.images}}
+      <li class="productView-thumbnail">
+        <a class="productView-thumbnail-link" href="{{getImageSrcset this (cdn ../theme_settings.default_image_product) 1x=../theme_settings.zoom_size}}"
+        data-image-gallery-item data-image-gallery-new-image-url="{{getImageSrcset this (cdn ../theme_settings.default_image_product) 1x=../theme_settings.product_size}}"
+        data-image-gallery-new-image-srcset="{{getImageSrcset this use_default_sizes=true}}"
+        data-image-gallery-zoom-image-url="{{getImageSrcset this (cdn ../theme_settings.default_image_product) 1x=../theme_settings.zoom_size}}">
+          <img class="lazyload" data-sizes="auto" src="{{cdn 'img/loading.svg'}}"
+          data-src="{{getImage this 'productview_thumb_size' (cdn ../theme_settings.default_image_product)}}"
+          alt="{{this.alt}}" title="{{this.alt}}">
+        </a>
+      </li>
+      {{/each}}
+    </ul>
+  </section>
+  <section class="productView-details product-data">
+    <div class="productView-product">
+      {{#if page_type '===' 'product'}} {{#or product.price.non_sale_price_with_tax
+      product.price.non_sale_price_without_tax}}
+      <div class="sale-flag-side">
+        <span class="sale-text">
+          Sale
+        </span>
+      </div>
+      {{/or}} {{/if}}
+      <h1 class="productView-title main-heading">
+        {{product.title}}
+      </h1>
+      {{#if product.brand}}
+      <span class="productView-brand">
+        <a href="{{product.brand.url}}">
+          <span>
+            <strong>
+              {{product.brand.name}}
+            </strong>
+          </span>
+        </a>
+      </span>
+      {{/if}}
+      <div class="productSKU">
+        <dt class="productView-info-name sku-label" {{#unless product.sku}} style="display: none;"
+        {{/unless}}>
+          {{lang 'products.sku'}}
+        </dt>
+        <dd class="productView-info-value" data-product-sku{{#if schema}} itemprop="sku"
+        {{/if}}>
+          {{product.sku}}
+        </dd>
+      </div>
+      {{#and product.sku product.upc}}
+      <span style="position:relative; padding: 0 3px; top: -1px;">
+        |
+      </span>
+      {{/and}} {{#if product.upc}}
+      <div class="productUPC">
+        <dt class="productView-info-name upc-label">
+          {{lang 'products.upc'}}
+        </dt>
+        <dd class="productView-info-value" data-product-upc>
+          {{product.upc}}
+        </dd>
+      </div>
+      {{/if}} {{#if product.availability}}
+      <div>
+        <dt class="productView-info-name">
+          {{lang 'products.availability'}}
+        </dt>
+        <dd class="productView-info-value">
+          {{product.availability}}
+        </dd>
+      </div>
+      {{/if}} {{#if product.call_for_price}}
+      <p class="productView-price">
+        <span>
+          {{product.call_for_price}}
+        </span>
+      </p>
+      {{/if}}
+      <div class="productView-price sadsad">
+        {{#or customer (if theme_settings.restrict_to_login '!==' true)}} {{>
+        components/products/price price=product.price}} {{else}} {{> components/common/login-for-pricing}}
+        {{/or}}
+      </div>
+      <!--<div class="humm-finance-wrap">-->
+      <!-- <div class="humm-inline-promo">-->
+      <!-- <p>-->
+      <!-- <span><strong>Buy now with HUMM Canada</strong></span>-->
+      <!-- <span>— no fees, no interest</span>-->
+      <!-- <span>for 12 months.</span>-->
+      <!-- </p>-->
+      <!-- <div class="humm-inline-promo__btn-wrap">-->
+      <!-- <a href="/finance" target="_top" class="humm-inline-promo__btn">-->
+      <!-- Apply for Financing-->
+      <!-- </a>-->
+      <!-- </div>-->
+      <!-- </div>-->
+      <!--</div>-->
+      <!--end apply finance button-->
+      {{#and settings.bulk_discount_enabled product.bulk_discount_rates.length}}
+      <div class="productView-info-bulkPricing">
+        {{> components/products/bulk-discount-rates bulk_discount_rates=product.bulk_discount_rates}}
+      </div>
+      {{/and}} {{{region name="product_below_price"}}}
+      <div class="productView-rating">
+        {{#if settings.show_product_rating}} {{> components/products/ratings rating=product.rating}}
+        {{#if product.num_reviews '>' 0}}
+        <a href="{{product.url}}{{#if is_ajax}}#product-reviews{{/if}}" id="productReview_link">
+          {{lang 'products.reviews.link_to_review' total=product.num_reviews}}
+        </a>
+        {{else}}
+        <span>
+          {{lang 'products.reviews.link_to_review' total=product.num_reviews}}
+        </span>
+        {{/if}} {{/if}} {{#if settings.show_product_reviews}}
+        <button class="productView-reviewLink productView-reviewLink--new">
+          <a href="{{product.url}}{{#if is_ajax}}#write_review{{/if}}" {{#unless
+          is_ajax}}data-reveal-id="modal-review-form" {{/unless}} role="button">
+            <i class="icon" aria-hidden="true" style="position: relative; top: -1px;">
+              <svg>
+                <use xlink:href="#icon-plus" />
+              </svg>
+            </i>
+            <strong style="text-decoration: underline;">
+              {{lang 'products.reviews.new'}}
+            </strong>
+          </a>
+        </button>
+        {{> components/products/modals/writeReview}} {{/if}}
+      </div>
+      <div class="productView-specs">
+        {{#all product.weight theme_settings.show_product_weight}}
+        <div class="productView-info">
+          <dt class="productView-info-name">
+            {{lang 'products.weight'}}
+          </dt>
+          <dd class="productView-info-value" data-product-weight>
+            {{product.weight}}
+          </dd>
+        </div>
+        {{/all}} {{#all product.width product.height product.depth theme_settings.show_product_dimensions}}
+        <div>
+          <dt class="productView-info-name">
+            {{lang 'products.width'}}
+          </dt>
+          <dd class="productView-info-value" data-product-width>
+            {{product.width}} {{#if settings.measurements.length '==' 'Centimeters'}}
+            ({{lang 'products.measurement.metric'}}) {{else}} ({{lang 'products.measurement.imperial'}})
+            {{/if}}
+          </dd>
+        </div>
+        <div>
+          <dt class="productView-info-name">
+            {{lang 'products.height'}}
+          </dt>
+          <dd class="productView-info-value" data-product-height>
+            {{product.height}} {{#if settings.measurements.length '==' 'Centimeters'}}
+            ({{lang 'products.measurement.metric'}}) {{else}} ({{lang 'products.measurement.imperial'}})
+            {{/if}}
+          </dd>
+        </div>
+        <div>
+          <dt class="productView-info-name">
+            {{lang 'products.depth'}}
+          </dt>
+          <dd class="productView-info-value" data-product-depth>
+            {{product.depth}} {{#if settings.measurements.length '==' 'Centimeters'}}
+            ({{lang 'products.measurement.metric'}}) {{else}} ({{lang 'products.measurement.imperial'}})
+            {{/if}}
+          </dd>
+        </div>
+        {{/all}} {{#if product.condition}}
+        <div>
+          <dt class="productView-info-name">
+            {{lang 'products.condition'}}
+          </dt>
+          <dd class="productView-info-value">
+            {{product.condition}}
+          </dd>
+        </div>
+        {{/if}}
+      </div>
+      {{product.detail_messages}}
+    </div>
+    {{#and product.warranty theme_settings.show_short_desc}}
+    <div class="productView-warranty">
+      {{{product.warranty}}}
+    </div>
+    {{/and}}
+    <div class="product-promo-warranty-wrap">
+      <div class="productView-options">
+        <form class="form" method="post" action="{{product.cart_url}}" enctype="multipart/form-data"
+        data-cart-item-add>
+          <input type="hidden" name="action" value="add" />
+          <input type="hidden" name="product_id" value="{{product.id}}" />
+          <div class="productView-options-wrap" data-product-option-change style="display:none;">
+            {{inject 'showSwatchNames' theme_settings.show_product_swatch_names}}
+            {{#if product.options}}
+            <div class="productView-options-inner">
+              {{#each product.options}} {{{dynamicComponent 'components/products/options'}}}
+              {{/each}}
+            </div>
+            {{/if}}
+          </div>
+          <div class="shipping-giftWrap-stock">
+            {{#if product.shipping}} {{#unless product.shipping.calculated}} {{#if
+            product.shipping.price.value '===' 0}}
+            <div class="productView-shipping productView-shipping--free">
+              <dt class="productView-info-name hide-label">
+                {{lang 'products.shipping'}}
+              </dt>
+              <dd class="productView-info-value uppercase">
+                <strong>
+                  {{lang 'products.shipping_free'}}
+                </strong>
+              </dd>
+            </div>
+            {{else}}
+            <div class="productView-shipping">
+              <dt class="productView-info-name">
+                Fixed Shipping Cost:
+              </dt>
+              <dd class="productView-info-value">
+                {{product.shipping.price.formatted}}
+              </dd>
+            </div>
+            {{/if}} {{/unless}} {{/if}} {{#if product.gift_wrapping_available}}
+            <div class="productView-giftWrap">
+              <dt class="productView-info-name">
+                {{lang 'products.gift_wrapping'}}
+              </dt>
+              <dd class="productView-info-value">
+                {{lang 'products.gift_wrapping_available'}}
+              </dd>
+            </div>
+            {{/if}}
+            <div class="form-field--stock{{#unless product.stock_level}} u-hiddenVisually{{/unless}}">
+              <dt class="productView-info-name">
+                {{lang 'products.current_stock'}}
+              </dt>
+              <dd class="productView-info-value">
+                <span data-product-stock>
+                  {{product.stock_level}}
+                </span>
+              </dd>
+            </div>
+          </div>
+    <div class="repair-service-upsell">
+        <div class="repair-title-wrap">
+            <div class="repair-title">
+                <i class="fa-solid fa-shield-halved"></i> Add Lifetime Half-Price Appliance Repair Service
+            </div>
+            <span class="repair-badge" id="repair-badge-price">Only $--</span>
+        </div>
+        <p class="repair-description">
+            Get 50% OFF all future appliance repairs for the lifetime of your appliance.
+        </p>
+
+        <div class="repair-selection-cards">
+            <!-- Yes Option Card -->
+            <label class="repair-card-option" for="repair-service-yes">
+                <input
+                    type="radio"
+                    id="repair-service-yes"
+                    name="repair_service_option"
+                    value="yes"
+                >
+                <div class="repair-card-content">
+                    <div class="repair-card-left">
+                        <span class="repair-card-bullet"></span>
+                        <div class="repair-card-text">
+                            <strong class="repair-card-title-text">Yes, protect my appliance <span class="repair-popular-tag">Recommended</span></strong>
+                            <span class="repair-card-desc">Lifetime 50% repair discount coverage</span>
+                        </div>
+                    </div>
+                    <div class="repair-card-price" id="repair-yes-price">$--</div>
+                </div>
+            </label>
+
+            <!-- No Option Card -->
+            <label class="repair-card-option" for="repair-service-no">
+                <input
+                    type="radio"
+                    id="repair-service-no"
+                    name="repair_service_option"
+                    value="no"
+                >
+                <div class="repair-card-content">
+                    <div class="repair-card-left">
+                        <span class="repair-card-bullet"></span>
+                        <div class="repair-card-text">
+                            <strong class="repair-card-title-text">No thanks, I'll decline protection</strong>
+                            <span class="repair-card-desc">I will pay full price for future repairs</span>
+                        </div>
+                    </div>
+                    <div class="repair-card-price dec-price">$0.00</div>
+                </div>
+            </label>
+        </div>
+        
+        <!-- Validation Error Message -->
+        <div class="repair-validation-error" style="display: none;">
+            <i class="fa-solid fa-circle-exclamation"></i> Please select a protection option before adding to cart.
+        </div>
+    </div>
+          <div class="humm-inline-promo">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px;">
+                  <div style="display: flex; align-items: center;">
+                      <img src="https://cdn.shophumm.com/humm/uploads/humm-logo.svg" alt="humm" style="height: 36px; vertical-align: middle; filter: drop-shadow(0 0 8px rgba(255, 130, 46, 0.45));">
+                      <span style="color: #ffffff; font-weight: 800; font-size: 18px; text-transform: uppercase; letter-spacing: 1px; border-left: 2px solid rgba(255, 255, 255, 0.25); padding-left: 12px; margin-left: 12px; display: inline-block; vertical-align: middle; line-height: 1;">Financing</span>
+                  </div>
+              </div>
+              <div style="color: #ffffff; font-size: 14.5px; text-align: left;">
+                  Calculating payment plans...
+              </div>
+          </div>
+          {{> components/products/add-to-cart}} {{#if product.out_of_stock}} {{#if
+          product.out_of_stock_message}} {{> components/common/alert/alert-error
+          product.out_of_stock_message}} {{else}} {{> components/common/alert/alert-error
+          (lang 'products.sold_out')}} {{/if}}
+          <span class="button button--primary button--out-of-stock">
+            Out of Stock
+          </span>
+          {{/if}}
+        </form>
+      </div>
+
+     
+
+         
+
+        </div> 
+      <!--<div class="humm-inline-promo">-->
+      <!-- <p>-->
+      <!-- <span><strong>Buy now with HUMM Canada</strong></span>-->
+      <!-- <span>— no fees, no interest</span>-->
+      <!-- <span>for 12 months.</span>-->
+      <!-- </p>-->
+      <!-- <div class="humm-inline-promo__btn-wrap">-->
+      <!-- <a href="/finance" target="_top" class="humm-inline-promo__btn">-->
+      <!-- Apply for Financing-->
+      <!-- </a>-->
+      <!-- </div>-->
+      <!--</div>-->
+      <!--<div class="humm-inline-promo">-->
+      <!--  <p>-->
+      <!--    <span>-->
+      <!--      <strong>-->
+      <!--        Get Financing Up to $30,000 with HUMM Canada-->
+      <!--      </strong>-->
+      <!--    </span>-->
+      <!--    <span>-->
+      <!--      — 0% interest for 12 months,-->
+      <!--    </span>-->
+      <!--    <span>-->
+      <!--      $0 down and no monthly fees on eligible plans.-->
+      <!--    </span>-->
+      <!--  </p>-->
+      <!--  <div class="humm-inline-promo__btn-wrap">-->
+      <!--    <a href="/finance" target="_top" class="humm-inline-promo__btn">-->
+      <!--      Apply for Financing-->
+      <!--    </a>-->
+      <!--  </div>-->
+      <!--</div>-->
+    </div>
+    <div id="previewModal" class="modal modal--large" data-reveal>
+      {{> components/common/modal/modal-close-btn }}
+      <div class="modal-content">
+      </div>
+      <div class="loadingOverlay">
+      </div>
+    </div>
+    <script>
+    // Humm Financing Calculator Logic
+    function calculateMonthlyPayment(principal, annualRate, months) {
+        if (annualRate === 0) {
+            return principal / months;
+        }
+        let monthlyRate = (annualRate / 100) / 12;
+        return (monthlyRate * principal) / (1 - Math.pow(1 + monthlyRate, -months));
+    }
+
+    function getProductPriceFromDOM() {
+        let priceText = '';
+        let activePriceEl = $('.productView-price [data-product-price-without-tax], .productView-price [data-product-price-with-tax]');
+        if (activePriceEl.length > 0) {
+            priceText = activePriceEl.first().text();
+        }
+        if (!priceText) {
+            priceText = $('.productView-price .price--withoutTax').first().text() || 
+                        $('.productView-price .price--withTax').first().text() ||
+                        $('.productView-price .price').first().text() ||
+                        $('.productView-price').text();
+        }
+        let cleaned = priceText.replace(/\$/g, '').replace(/,/g, '').trim();
+        let price = parseFloat(cleaned);
+        return isNaN(price) ? 0 : price;
+    }
+
+    function updateHummProductWidget() {
+        let serverPrice = parseFloat("{{#if product.price.with_tax}}{{product.price.with_tax.value}}{{else}}{{product.price.without_tax.value}}{{/if}}") || 0;
+        let price = getProductPriceFromDOM() || serverPrice;
+        if (price <= 0) return;
+
+        // Capture previous state
+        let isAccordionOpen = $('.humm-accordion').hasClass('open');
+        let previouslyActiveLabel = $('.humm-option-row.active').find('.opt-label').text().trim() || '';
+
+        let plan12 = (price / 12).toFixed(2);
+        let plan18 = (price / 18).toFixed(2); // Promoted: No fees, no interest (0% APR)
+        let plan24 = calculateMonthlyPayment(price, 9.99, 24).toFixed(2);
+        let plan36 = calculateMonthlyPayment(price, 9.99, 36).toFixed(2);
+        let plan48 = calculateMonthlyPayment(price, 15.99, 48).toFixed(2);
+        let plan60 = calculateMonthlyPayment(price, 15.99, 60).toFixed(2);
+
+        let repay12 = (plan12 * 12).toFixed(2);
+        let repay18 = (plan18 * 18).toFixed(2);
+        let repay24 = (plan24 * 24).toFixed(2);
+        let repay36 = (plan36 * 36).toFixed(2);
+        let repay48 = (plan48 * 48).toFixed(2);
+        let repay60 = (plan60 * 60).toFixed(2);
+
+        let desc12 = `
+            <div style="font-size: 18px; font-weight: bold; color: #ff822e; margin-bottom: 4px;">From $${plan12}/month</div>
+            <div style="font-size: 13.5px; line-height: 1.4;">
+                12 monthly payments (first payment of <strong style="color: #ff822e;">$${plan12} today</strong> + 11 monthly installments of <strong style="color: #ffffff;">$${plan12}</strong> at 0% APR).
+            </div>
+            <div style="font-size: 12.5px; color: rgba(255,255,255,0.7); margin-top: 6px;">Total repayment: <strong>$${repay12}</strong></div>
+            <div style="font-size: 11px; color: rgba(255, 255, 255, 0.45); margin-top: 6px; font-style: italic;">*Subject to Humm approval.</div>
+        `;
+        let desc18 = `
+            <div style="font-size: 18px; font-weight: bold; color: #ff822e; margin-bottom: 4px;">From $${plan18}/month</div>
+            <div style="font-size: 13.5px; line-height: 1.4;">
+                18 monthly payments (first payment of <strong style="color: #ff822e;">$${plan18} today</strong> + 17 monthly installments of <strong style="color: #ffffff;">$${plan18}</strong> at 0% APR).
+            </div>
+            <div style="font-size: 12.5px; color: rgba(255,255,255,0.7); margin-top: 6px;">Total repayment: <strong>$${repay18}</strong></div>
+            <div style="font-size: 11px; color: rgba(255, 255, 255, 0.45); margin-top: 6px; font-style: italic;">*Subject to Humm approval.</div>
+        `;
+        let desc24 = `
+            <div style="font-size: 18px; font-weight: bold; color: #ff822e; margin-bottom: 4px;">From $${plan24}/month</div>
+            <div style="font-size: 13.5px; line-height: 1.4;">
+                24 monthly payments (first payment of <strong style="color: #ff822e;">$${plan24} today</strong> + 23 monthly installments of <strong style="color: #ffffff;">$${plan24}</strong> at 9.99% APR).
+            </div>
+            <div style="font-size: 12.5px; color: rgba(255,255,255,0.7); margin-top: 6px;">Total repayment: <strong>$${repay24}</strong></div>
+            <div style="font-size: 11px; color: rgba(255, 255, 255, 0.45); margin-top: 6px; font-style: italic;">*Subject to Humm approval.</div>
+        `;
+        let desc36 = `
+            <div style="font-size: 18px; font-weight: bold; color: #ff822e; margin-bottom: 4px;">From $${plan36}/month</div>
+            <div style="font-size: 13.5px; line-height: 1.4;">
+                36 monthly payments (first payment of <strong style="color: #ff822e;">$${plan36} today</strong> + 35 monthly installments of <strong style="color: #ffffff;">$${plan36}</strong> at 9.99% APR).
+            </div>
+            <div style="font-size: 12.5px; color: rgba(255,255,255,0.7); margin-top: 6px;">Total repayment: <strong>$${repay36}</strong></div>
+            <div style="font-size: 11px; color: rgba(255, 255, 255, 0.45); margin-top: 6px; font-style: italic;">*Subject to Humm approval.</div>
+        `;
+        let desc48 = `
+            <div style="font-size: 18px; font-weight: bold; color: #ff822e; margin-bottom: 4px;">From $${plan48}/month</div>
+            <div style="font-size: 13.5px; line-height: 1.4;">
+                48 monthly payments (first payment of <strong style="color: #ff822e;">$${plan48} today</strong> + 47 monthly installments of <strong style="color: #ffffff;">$${plan48}</strong> at 15.99% APR).
+            </div>
+            <div style="font-size: 12.5px; color: rgba(255,255,255,0.7); margin-top: 6px;">Total repayment: <strong>$${repay48}</strong></div>
+            <div style="font-size: 11px; color: rgba(255, 255, 255, 0.45); margin-top: 6px; font-style: italic;">*Subject to Humm approval.</div>
+        `;
+        let desc60 = `
+            <div style="font-size: 18px; font-weight: bold; color: #ff822e; margin-bottom: 4px;">From $${plan60}/month</div>
+            <div style="font-size: 13.5px; line-height: 1.4;">
+                60 monthly payments (first payment of <strong style="color: #ff822e;">$${plan60} today</strong> + 59 monthly installments of <strong style="color: #ffffff;">$${plan60}</strong> at 15.99% APR).
+            </div>
+            <div style="font-size: 12.5px; color: rgba(255,255,255,0.7); margin-top: 6px;">Total repayment: <strong>$${repay60}</strong></div>
+            <div style="font-size: 11px; color: rgba(255, 255, 255, 0.45); margin-top: 6px; font-style: italic;">*Subject to Humm approval.</div>
+        `;
+
+        let optionRowsHtml = '';
+        let defaultDesc = '';
+
+        let activeLabel = previouslyActiveLabel;
+        if (!activeLabel) {
+            activeLabel = (price < 500) ? '6 Bi-Weekly Payments' : '18 Months (0% APR / No Fees, No Interest)';
+        }
+
+        if (price < 500) {
+            let biWeekly = (price / 6).toFixed(2);
+            let repayBiWeekly = (biWeekly * 6).toFixed(2);
+            let descBiWeekly = `
+                <div style="font-size: 18px; font-weight: bold; color: #ff822e; margin-bottom: 4px;">From $${biWeekly}/fortnight</div>
+                <div style="font-size: 13.5px; line-height: 1.4;">
+                    6 bi-weekly payments (first payment of <strong style="color: #ff822e;">$${biWeekly} today</strong> + 5 bi-weekly installments of <strong style="color: #ffffff;">$${biWeekly}</strong> at 0% APR).
+                </div>
+                <div style="font-size: 12.5px; color: rgba(255,255,255,0.7); margin-top: 6px;">Total repayment: <strong>$${repayBiWeekly}</strong></div>
+                <div style="font-size: 11px; color: rgba(255, 255, 255, 0.45); margin-top: 6px; font-style: italic;">*Subject to Humm approval.</div>
+            `;
+            
+            if (activeLabel.includes('Bi-Weekly')) {
+                defaultDesc = descBiWeekly;
+            } else if (activeLabel.includes('12 Months')) {
+                defaultDesc = desc12;
+            } else if (activeLabel.includes('18 Months')) {
+                defaultDesc = desc18;
+            } else if (activeLabel.includes('24 Months')) {
+                defaultDesc = desc24;
+            } else if (activeLabel.includes('36 Months')) {
+                defaultDesc = desc36;
+            } else if (activeLabel.includes('48 Months')) {
+                defaultDesc = desc48;
+            } else if (activeLabel.includes('60 Months')) {
+                defaultDesc = desc60;
+            } else {
+                defaultDesc = descBiWeekly;
+                activeLabel = '6 Bi-Weekly Payments';
+            }
+
+            optionRowsHtml = `
+                <div class="humm-option-row ${activeLabel.includes('Bi-Weekly') ? 'active' : ''}" data-desc="${descBiWeekly.replace(/"/g, '&quot;')}">
+                    <span class="opt-label">6 Bi-Weekly Payments</span>
+                    <span class="opt-val">$${biWeekly}/fortnight (0% APR)</span>
+                </div>
+                <div class="humm-option-row ${activeLabel.includes('12 Months') ? 'active' : ''}" data-desc="${desc12.replace(/"/g, '&quot;')}">
+                    <span class="opt-label">12 Months</span>
+                    <span class="opt-val">$${plan12}/mo (0% APR)</span>
+                </div>
+                <div class="humm-option-row ${activeLabel.includes('18 Months') ? 'active' : ''}" data-desc="${desc18.replace(/"/g, '&quot;')}">
+                    <span class="opt-label">18 Months (0% APR / No Fees, No Interest)</span>
+                    <span class="opt-val">$${plan18}/mo (0% APR)</span>
+                </div>
+                <div class="humm-option-row ${activeLabel.includes('24 Months') ? 'active' : ''}" data-desc="${desc24.replace(/"/g, '&quot;')}">
+                    <span class="opt-label">24 Months</span>
+                    <span class="opt-val">$${plan24}/mo (9.99% APR)</span>
+                </div>
+                <div class="humm-option-row ${activeLabel.includes('36 Months') ? 'active' : ''}" data-desc="${desc36.replace(/"/g, '&quot;')}">
+                    <span class="opt-label">36 Months</span>
+                    <span class="opt-val">$${plan36}/mo (9.99% APR)</span>
+                </div>
+                <div class="humm-option-row ${activeLabel.includes('48 Months') ? 'active' : ''}" data-desc="${desc48.replace(/"/g, '&quot;')}">
+                    <span class="opt-label">48 Months</span>
+                    <span class="opt-val">$${plan48}/mo (15.99% APR)</span>
+                </div>
+                <div class="humm-option-row ${activeLabel.includes('60 Months') ? 'active' : ''}" data-desc="${desc60.replace(/"/g, '&quot;')}">
+                    <span class="opt-label">60 Months</span>
+                    <span class="opt-val">$${plan60}/mo (15.99% APR)</span>
+                </div>
+            `;
+        } else {
+            if (activeLabel.includes('12 Months')) {
+                defaultDesc = desc12;
+            } else if (activeLabel.includes('18 Months')) {
+                defaultDesc = desc18;
+            } else if (activeLabel.includes('24 Months')) {
+                defaultDesc = desc24;
+            } else if (activeLabel.includes('36 Months')) {
+                defaultDesc = desc36;
+            } else if (activeLabel.includes('48 Months')) {
+                defaultDesc = desc48;
+            } else if (activeLabel.includes('60 Months')) {
+                defaultDesc = desc60;
+            } else {
+                defaultDesc = desc18;
+                activeLabel = '18 Months (0% APR / No Fees, No Interest)';
+            }
+
+            optionRowsHtml = `
+                <div class="humm-option-row ${activeLabel.includes('12 Months') ? 'active' : ''}" data-desc="${desc12.replace(/"/g, '&quot;')}">
+                    <span class="opt-label">12 Months</span>
+                    <span class="opt-val">$${plan12}/mo (0% APR)</span>
+                </div>
+                <div class="humm-option-row ${activeLabel.includes('18 Months') ? 'active' : ''}" data-desc="${desc18.replace(/"/g, '&quot;')}">
+                    <span class="opt-label">18 Months (0% APR / No Fees, No Interest)</span>
+                    <span class="opt-val">$${plan18}/mo (0% APR)</span>
+                </div>
+                <div class="humm-option-row ${activeLabel.includes('24 Months') ? 'active' : ''}" data-desc="${desc24.replace(/"/g, '&quot;')}">
+                    <span class="opt-label">24 Months</span>
+                    <span class="opt-val">$${plan24}/mo (9.99% APR)</span>
+                </div>
+                <div class="humm-option-row ${activeLabel.includes('36 Months') ? 'active' : ''}" data-desc="${desc36.replace(/"/g, '&quot;')}">
+                    <span class="opt-label">36 Months</span>
+                    <span class="opt-val">$${plan36}/mo (9.99% APR)</span>
+                </div>
+                <div class="humm-option-row ${activeLabel.includes('48 Months') ? 'active' : ''}" data-desc="${desc48.replace(/"/g, '&quot;')}">
+                    <span class="opt-label">48 Months</span>
+                    <span class="opt-val">$${plan48}/mo (15.99% APR)</span>
+                </div>
+                <div class="humm-option-row ${activeLabel.includes('60 Months') ? 'active' : ''}" data-desc="${desc60.replace(/"/g, '&quot;')}">
+                    <span class="opt-label">60 Months</span>
+                    <span class="opt-val">$${plan60}/mo (15.99% APR)</span>
+                </div>
+            `;
+        }
+
+        let hummHtml = `
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px;">
+                <div style="display: flex; align-items: center;">
+                    <img src="https://cdn.shophumm.com/humm/uploads/humm-logo.svg" alt="humm" style="height: 36px; vertical-align: middle; filter: drop-shadow(0 0 8px rgba(255, 130, 46, 0.45));">
+                    <span style="color: #ffffff; font-weight: 800; font-size: 18px; text-transform: uppercase; letter-spacing: 1px; border-left: 2px solid rgba(255, 255, 255, 0.25); padding-left: 12px; margin-left: 12px; display: inline-block; vertical-align: middle; line-height: 1;">Financing</span>
+                </div>
+            </div>
+            
+            <div id="humm-main-recommendation-text" style="font-size: 14.5px; line-height: 1.5; margin-bottom: 12px; border-bottom: 1px solid rgba(255, 255, 255, 0.15); padding-bottom: 12px; text-align: left; color: #ffffff; min-height: 48px;">
+                ${defaultDesc}
+            </div>
+
+            <div class="humm-accordion">
+                <div class="humm-accordion-trigger">
+                    <span>View All Financing Options</span>
+                    <svg class="humm-accordion-icon" viewBox="0 0 24 24" width="18" height="18">
+                        <path d="M7 10l5 5 5-5H7z" fill="currentColor"></path>
+                    </svg>
+                </div>
+                <div class="humm-accordion-content">
+                    <div class="humm-options-wrapper">
+                        ${optionRowsHtml}
+                    </div>
+                </div>
+            </div>
+
+            <div style="background: rgba(255, 255, 255, 0.04); border-radius: 8px; padding: 12px; font-size: 12px; color: rgba(255, 255, 255, 0.85); border-left: 4px solid #ff822e; text-align: left; line-height: 1.4;">
+                Take 7 minutes to apply for HUMM Canada financing <a href="https://humm-canada-prod-web-app.herokuapp.com/application?retailerId=001OO00000i5J8mYAE" target="_blank" style="color: #ff822e; font-weight: bold; text-decoration: underline;">here</a> then select HUMM at checkout.
+            </div>
+        `;
+
+        $('.humm-inline-promo').html(hummHtml);
+
+        // Restore accordion state if previously open
+        if (isAccordionOpen) {
+            let $acc = $('.humm-accordion');
+            $acc.addClass('open');
+            let $content = $acc.find('.humm-accordion-content');
+            $content.css('max-height', $content[0].scrollHeight + 'px');
+        }
+    }
+
+    function initHummProductWidget() {
+        let $priceContainer = $('.productView-price');
+        if ($priceContainer.length === 0) return;
+
+        updateHummProductWidget();
+
+        let observer = new MutationObserver(function() {
+            updateHummProductWidget();
+        });
+        observer.observe($priceContainer[0], {
+            childList: true,
+            subtree: true,
+            characterData: true
+        });
+
+        // Click handler for option rows (Vanilla capture phase)
+        document.addEventListener('click', function(e) {
+            let optionRow = e.target.closest('.humm-option-row');
+            if (optionRow) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                // Remove active class from sibling rows
+                let parent = optionRow.parentElement;
+                let rows = parent.querySelectorAll('.humm-option-row');
+                rows.forEach(r => r.classList.remove('active'));
+                
+                optionRow.classList.add('active');
+                let descText = optionRow.getAttribute('data-desc');
+                let targetTextEl = document.getElementById('humm-main-recommendation-text');
+                if (targetTextEl) {
+                    targetTextEl.innerHTML = descText;
+                }
+            }
+        }, true);
+
+        // Collapsible Accordion logic (Vanilla capture phase)
+        document.addEventListener('click', function(e) {
+            let trigger = e.target.closest('.humm-accordion-trigger');
+            if (trigger) {
+                e.preventDefault();
+                e.stopPropagation();
+                let accordion = trigger.closest('.humm-accordion');
+                let content = accordion.querySelector('.humm-accordion-content');
+                
+                accordion.classList.toggle('open');
+                if (accordion.classList.contains('open')) {
+                    content.style.maxHeight = content.scrollHeight + 'px';
+                } else {
+                    content.style.maxHeight = '0px';
+                }
+            }
+        }, true);
+    }
+
+    let repairOptionId = null;
+    async function getRepairServiceDetails() {
+        try {
+            let res = await fetch('/lifetime-half-price-repair-service/');
+            let html = await res.text();
+            
+            let optionId = null;
+            let match = html.match(/name=["']attribute\[(\d+)\]["']/i);
+            if (match) {
+                optionId = parseInt(match[1]);
+            }
+
+            let price = null;
+            let parser = new DOMParser();
+            let doc = parser.parseFromString(html, 'text/html');
+            
+            // 1. Try og:price:amount meta tag
+            let ogPriceMeta = doc.querySelector('meta[property="og:price:amount"]');
+            if (ogPriceMeta) {
+                let val = parseFloat(ogPriceMeta.getAttribute('content'));
+                if (!isNaN(val)) {
+                    price = val;
+                }
+            }
+
+            // 2. Try standard price element data attributes/classes as fallback
+            if (price === null) {
+                let priceEl = doc.querySelector('[data-product-price-without-tax]') || 
+                              doc.querySelector('[data-product-price-with-tax]') ||
+                              doc.querySelector('.price--withoutTax') ||
+                              doc.querySelector('.price--withTax') ||
+                              doc.querySelector('.productView-price .price');
+                if (priceEl) {
+                    let text = priceEl.textContent.trim();
+                    let valMatch = text.match(/[\d.,]+/);
+                    if (valMatch) {
+                        let val = parseFloat(valMatch[0].replace(/,/g, ''));
+                        if (!isNaN(val)) {
+                            price = val;
+                        }
+                    }
+                }
+            }
+
+            // 3. Try JSON-LD schema as fallback
+            if (price === null) {
+                let scripts = doc.querySelectorAll('script[type="application/ld+json"]');
+                for (let script of scripts) {
+                    try {
+                        let json = JSON.parse(script.textContent);
+                        let offers = json.offers || (json['@graph'] && json['@graph'].find(o => o.offers)?.offers);
+                        if (offers) {
+                            let val = parseFloat(offers.price || offers[0]?.price);
+                            if (!isNaN(val)) {
+                                price = val;
+                                break;
+                            }
+                        }
+                    } catch(e) {}
+                }
+            }
+
+            return { optionId, price };
+        } catch (e) {
+            console.error("Failed to fetch repair service details:", e);
+        }
+        return { optionId: null, price: null };
+    }
+
+    // Preload details and update price display on page load
+    getRepairServiceDetails().then(details => {
+        if (details.optionId) {
+            repairOptionId = details.optionId;
+        }
+        
+        let price = details.price;
+        if (price === null) {
+            price = 75; // Default fallback price if fetching fails
+        }
+        
+        const badgeEl = document.getElementById('repair-badge-price');
+        const yesPriceEl = document.getElementById('repair-yes-price');
+        const whyBuyPriceEl = document.getElementById('product-why-buy-repair-price');
+        
+        let formattedPrice = '$' + price.toFixed(2);
+        let formattedBadge = 'Only $' + (price % 1 === 0 ? price : price.toFixed(2));
+        let formattedWhyBuyPrice = '$' + (price % 1 === 0 ? price : price.toFixed(2));
+        
+        if (badgeEl) badgeEl.textContent = formattedBadge;
+        if (yesPriceEl) yesPriceEl.textContent = formattedPrice;
+        if (whyBuyPriceEl) whyBuyPriceEl.textContent = formattedWhyBuyPrice;
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        initHummProductWidget();
+        // Move Why Buy From Us grid to the bottom (below the two columns)
+        const whyBuyWrapper = document.querySelector('.why-buy-wrapper');
+        const productViewContainer = document.querySelector('.productView');
+        if (whyBuyWrapper && productViewContainer) {
+            productViewContainer.parentNode.insertBefore(whyBuyWrapper, productViewContainer.nextSibling);
+        }
+
+        // 1. Check product category to only show upsell on Appliances
+        const productCategories = [
+            {{#each product.category}}
+            "{{this}}".toLowerCase(),
+            {{/each}}
+        ];
+        const isAppliance = productCategories.some(cat => cat.includes('appliance'));
+        const upsellBox = document.querySelector('.repair-service-upsell');
+
+        if (!isAppliance) {
+            if (upsellBox) upsellBox.style.display = 'none';
+        }
+
+        const addToCartBtn = document.getElementById('form-action-addToCart');
+        if (!addToCartBtn) return;
+
+        // Clear validation errors when user selects a radio option
+        document.querySelectorAll('input[name="repair_service_option"]').forEach(radio => {
+            radio.addEventListener('change', function () {
+                if (upsellBox) upsellBox.classList.remove('error-highlight');
+                const errorMsg = document.querySelector('.repair-validation-error');
+                if (errorMsg) errorMsg.style.display = 'none';
+            });
+        });
+
+        addToCartBtn.addEventListener('click', function (e) {
+            // Only validate if the upsell box is visible/applicable
+            const isVisible = upsellBox && upsellBox.style.display !== 'none';
+
+            if (isVisible) {
+                const yesRadio = document.getElementById('repair-service-yes');
+                const noRadio = document.getElementById('repair-service-no');
+
+                if (!yesRadio.checked && !noRadio.checked) {
+                    // Prevent submission
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    // Show error message
+                    const errorMsg = document.querySelector('.repair-validation-error');
+                    if (errorMsg) errorMsg.style.display = 'flex';
+
+                    // Highlight box
+                    upsellBox.classList.add('error-highlight');
+
+                    // Scroll to box
+                    upsellBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    return false;
+                }
+
+                // If "Yes" is selected, proceed to add the service in background
+                if (yesRadio.checked) {
+                    const productName = "{{product.title}}";
+                    const productSku = "{{product.sku}}";
+                    sessionStorage.setItem('add_repair_on_cart_load', 'true');
+                    sessionStorage.setItem('repair_appliance_details', `${productSku || 'No SKU'}`);
+
+                    // Delay slightly to let the main product add first
+                    setTimeout(async function () {
+                        try {
+                            let cartRes = await fetch('/api/storefront/carts?include=lineItems.physicalItems.options,lineItems.digitalItems.options', {
+                                credentials: 'include',
+                                headers: { 'Accept': 'application/json' }
+                            });
+                            let cartData = await cartRes.json();
+                            if (!cartData || cartData.length === 0) {
+                                fetch('/cart.php?action=add&product_id=1206&qty=1', {
+                                    method: 'GET',
+                                    credentials: 'same-origin'
+                                });
+                                return;
+                            }
+
+                            let cartId = cartData[0].id;
+                            let lineItemPayload = {
+                                quantity: 1,
+                                productId: 1206
+                            };
+
+                            if (repairOptionId) {
+                                lineItemPayload.optionSelections = [
+                                    {
+                                        optionId: repairOptionId,
+                                        optionValue: `${productSku || 'No SKU'}`
+                                    }
+                                ];
+                            }
+
+                            await fetch(`/api/storefront/carts/${cartId}/items`, {
+                                method: "POST",
+                                credentials: "include",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                    "Accept": "application/json"
+                                },
+                                body: JSON.stringify({
+                                    lineItems: [lineItemPayload]
+                                })
+                            });
+                            console.log('Repair service added with option details');
+                        } catch (err) {
+                            console.error('Repair service error', err);
+                            fetch('/cart.php?action=add&product_id=1206&qty=1', {
+                                method: 'GET',
+                                credentials: 'same-origin'
+                            });
+                        }
+                    }, 1500);
+                }
+            }
+        });
+    });
+    </script>
+
+<style>
+  .why-buy-wrapper {
+    max-width: 1150px;
+    width: 95%;
+    margin: 20px auto;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+  }
+
+  .why-buy-header {
+    background: #1a5bd1;
+    color: #ffffff;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 700;
+    padding: 11px 16px;
+    letter-spacing: 0.3px;
+  }
+
+  .why-buy-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .why-buy-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    border-bottom: 1px solid #ececec;
+  }
+
+  .why-buy-col-1 {
+    border-right: 1px solid #ececec;
+  }
+
+  .why-buy-col-2 {
+    border-right: none;
+  }
+
+  .why-buy-icon {
+    width: 36px;
+    min-width: 36px;
+    height: 36px;
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .why-buy-icon svg {
+    width: 20px;
+    height: 20px;
+    fill: #000000 !important;
+    stroke: none !important;
+    display: block;
+  }
+
+  .why-buy-icon svg path,
+  .why-buy-icon svg circle,
+  .why-buy-icon svg rect,
+  .why-buy-icon svg polygon,
+  .why-buy-icon svg line {
+    fill: #000000 !important;
+    stroke: none !important;
+  }
+
+  .why-buy-content h3 {
+    margin: 0;
+    color: #1a5bd1;
+    font-size: 13.5px;
+    font-weight: 700;
+    line-height: 1.25;
+  }
+
+  .why-buy-content h3 a {
+    color: #1a5bd1;
+    text-decoration: underline;
+  }
+
+  .why-buy-content h3 a:hover {
+    text-decoration: none;
+  }
+
+  .why-buy-content p {
+    margin: 3px 0 0;
+    color: #555555;
+    font-size: 12px;
+    line-height: 1.35;
+  }
+
+  .why-buy-content p a {
+    color: #1a5bd1;
+    text-decoration: underline;
+  }
+
+  .why-buy-content p a:hover {
+    text-decoration: none;
+  }
+
+  .why-buy-content p strong {
+    color: #0f172a;
+    font-size: 12.5px;
+    font-weight: 700;
+  }
+
+  .highlight-row {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: #fbf6ee;
+    border-top: 1px solid #e8d9b8;
+  }
+
+  .highlight-row .why-buy-item {
+    border-bottom: none;
+  }
+
+  .highlight-row .why-buy-col-1 {
+    border-right: 1px solid #e8d9b8;
+  }
+
+  .highlight-row .why-buy-icon {
+    background: #fff3e0;
+    border-color: #e8c98a;
+  }
+
+  .best-value-badge {
+    display: inline-block;
+    margin-left: 8px;
+    background: #c70000;
+    color: #ffffff;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 700;
+    vertical-align: middle;
+    letter-spacing: 0.3px;
+  }
+
+  @media(max-width:768px) {
+    .why-buy-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .highlight-row {
+      grid-template-columns: 1fr;
+    }
+
+    .highlight-row .why-buy-col-1 {
+      border-right: none;
+      border-bottom: 1px solid #e8d9b8;
+    }
+
+    .why-buy-col-1 {
+      border-right: none;
+    }
+
+    .why-buy-header {
+      font-size: 18px;
+      padding: 10px 14px;
+    }
+
+    .why-buy-item {
+      gap: 10px;
+      padding: 9px 14px;
+    }
+  }
+</style>
+
+<div class="why-buy-wrapper">
+
+  <div class="why-buy-header">
+    Why Buy From Undervalue Appliances.ca ?
+  </div>
+
+  <div class="why-buy-grid">
+
+    <!-- Row 1: Left -->
+    <div class="why-buy-item why-buy-col-1">
+      <div class="why-buy-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+      </div>
+      <div class="why-buy-content">
+        <h3><a href="https://undervalueappliances.ca/about/" target="_blank">Highly Reviewed for Over a Decade</a></h3>
+        <p>Your trusted local <a href="https://undervalueappliances.ca/appliances/" target="_blank">appliance</a> experts, rated highly across major review platforms.</p>
+      </div>
+    </div>
+
+    <!-- Row 1: Right -->
+    <div class="why-buy-item why-buy-col-2">
+      <div class="why-buy-icon">
+        <svg viewBox="0 0 24 24"><path d="M20 4v16l-7-4H8v4H6V8h7l7-4zM4 9h2v6H4V9zm16.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
+      </div>
+      <div class="why-buy-content">
+        <h3><a href="https://undervalueappliances.ca/promotion/" target="_blank">Promotions & Special Offers</a></h3>
+        <p>Explore price matching, gift cards, referral rewards & <a href="https://undervalueappliances.ca/promotion/" target="_blank">exclusive promotions</a>.</p>
+      </div>
+    </div>
+
+    <!-- Row 2: Left -->
+    <div class="why-buy-item why-buy-col-1">
+      <div class="why-buy-icon">
+        <svg viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+      </div>
+      <div class="why-buy-content">
+        <h3>In Home Delivery</h3>
+        <p>We bring your <a href="https://undervalueappliances.ca/appliances/" target="_blank">appliance</a> right to your home.</p>
+      </div>
+    </div>
+
+    <!-- Row 2: Right -->
+    <div class="why-buy-item why-buy-col-2">
+      <div class="why-buy-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>
+      </div>
+      <div class="why-buy-content">
+        <h3>Reduce Waste. Save the Planet</h3>
+        <p>Every refurbished <a href="https://undervalueappliances.ca/appliances/" target="_blank">appliance</a> helps reduce waste by giving quality appliances a second life.</p>
+      </div>
+    </div>
+
+    <!-- Row 3: Left -->
+    <div class="why-buy-item why-buy-col-1">
+      <div class="why-buy-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+      </div>
+      <div class="why-buy-content">
+        <h3>Free 60 Days Warranty</h3>
+        <p>Peace of mind with warranty coverage on every <a href="https://undervalueappliances.ca/appliances/" target="_blank">appliance</a>.</p>
+      </div>
+    </div>
+
+    <!-- Row 3: Right -->
+    <div class="why-buy-item why-buy-col-2">
+      <div class="why-buy-icon">
+        <svg viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg>
+      </div>
+      <div class="why-buy-content">
+        <h3><a href="https://undervalueappliances.ca/services/" target="_blank">Professional Installation</a></h3>
+        <p><a href="https://undervalueappliances.ca/repair-service/" target="_blank">Installation services</a> tailored to your needs.</p>
+      </div>
+    </div>
+
+    <!-- Row 4: Left -->
+    <div class="why-buy-item why-buy-col-1">
+      <div class="why-buy-icon">
+        <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+      </div>
+      <div class="why-buy-content">
+        <h3>Fast & Secure Checkout</h3>
+        <p>Enjoy <strong>secure payment options</strong>, <strong>same-day delivery</strong>, and a smooth checkout experience.</p>
+      </div>
+    </div>
+
+    <!-- Row 4: Right -->
+    <div class="why-buy-item why-buy-col-2">
+      <div class="why-buy-icon">
+        <svg viewBox="0 0 24 24"><path d="M20 4H4v2h16V4zm1 10v-2l-1-5H4l-1 5v2h1v6h10v-6h4v6h2v-6h1zm-9 4H6v-4h6v4z"/></svg>
+      </div>
+      <div class="why-buy-content">
+        <h3>One Stop Shop</h3>
+        <p><a href="https://undervalueappliances.ca/appliance-parts/" target="_blank">Parts</a>, <a href="https://undervalueappliances.ca/appliances/" target="_blank">appliances</a> and <a href="https://undervalueappliances.ca/repair-service/" target="_blank">repair service</a> all in one convenient place.</p>
+      </div>
+    </div>
+
+    <!-- Row 5: Left -->
+    <div class="why-buy-item why-buy-col-1">
+      <div class="why-buy-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+      </div>
+      <div class="why-buy-content">
+        <h3>Extended Warranty</h3>
+        <p>Protection coverage available for up to 3 years.</p>
+      </div>
+    </div>
+
+    <!-- Row 5: Right -->
+    <div class="why-buy-item why-buy-col-2">
+      <div class="why-buy-icon">
+        <svg viewBox="0 0 24 24"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/></svg>
+      </div>
+      <div class="why-buy-content">
+        <h3>Price Match & Beat Guarantee</h3>
+        <p>Shop with confidence – we guarantee the best price.</p>
+      </div>
+    </div>
+
+    <!-- Row 6: Highlight Row (Humm & Afterpay Financing + Half Price Lifetime Appliance Repair in 1 Row) -->
+    <div class="highlight-row">
+      <div class="why-buy-item why-buy-col-1">
+        <div class="why-buy-icon">
+          <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>
+        </div>
+        <div class="why-buy-content">
+          <h3><a href="https://undervalueappliances.ca/finance/" target="_blank">Humm</a> & <a href="https://undervalueappliances.ca/finance/" target="_blank">Afterpay</a> Financing</h3>
+          <p>No Fees, No Interest for 18 Months.</p>
+        </div>
+      </div>
+
+      <div class="why-buy-item why-buy-col-2">
+        <div class="why-buy-icon">
+          <svg viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg>
+        </div>
+        <div class="why-buy-content">
+          <h3>Half Price Lifetime Repair – <span id="product-why-buy-repair-price" class="product-why-buy-repair-price">$--</span><span class="best-value-badge">BEST VALUE</span></h3>
+          <p>Get 50% off all appliance repairs for life.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+    // ── Product Title Suffix Cleaner (Product View Page) ────────────────────────
+    // Same pattern as productListing.html — strips trailing "* 1", "*", or " 1"
+    // from the product title on the detail/product view page.
+    (function () {
+        // Handles all 3 observed cases:
+        //   "Warranty*"    → bare asterisk at end
+        //   "Warranty * 1" → asterisk + number at end
+        //   "Warranty 1"   → standalone single digit at end
+        var SUFFIX_RE = /(\s*\*\s*\d*|\s+[1-9])\s*$/;
+
+        // Selectors for product title on product view page
+        var NAME_SELECTORS = [
+            '.productView-title',          // main product h1 title
+            'h1.productView-title',        // explicit h1 fallback
+            '.productView-title.main-heading', // class combo used in this file
+        ].join(', ');
+
+        function cleanNode(el) {
+            for (var i = 0; i < el.childNodes.length; i++) {
+                var node = el.childNodes[i];
+                if (node.nodeType === 3) { // TEXT_NODE
+                    var cleaned = node.textContent.replace(SUFFIX_RE, '');
+                    if (cleaned !== node.textContent) {
+                        node.textContent = cleaned;
+                    }
+                }
+            }
+        }
+        function cleanAll() {
+            document.querySelectorAll(NAME_SELECTORS).forEach(cleanNode);
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', cleanAll);
+        } else {
+            cleanAll();
+        }
+    })();
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+  /* Fix BigCommerce #alert-modal positioning, centering & height on Mobile */
+  #alert-modal,
+  #alert-modal.modal,
+  .modal--alert {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    margin: 0 !important;
+    height: auto !important;
+    min-height: auto !important;
+    max-height: 85vh !important;
+    width: 90% !important;
+    max-width: 440px !important;
+    border-radius: 14px !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4) !important;
+    overflow-y: auto !important;
+    box-sizing: border-box !important;
+    padding: 20px 16px !important;
+  }
+
+  #alert-modal .modal-content {
+    background: transparent !important;
+    padding: 10px 5px !important;
+    border: none !important;
+    color: #ffffff !important;
+    font-size: 15px !important;
+    line-height: 1.45 !important;
+    text-align: center !important;
+  }
+
+  #alert-modal .button-container {
+    text-align: center !important;
+    margin-top: 15px !important;
+  }
+
+  #alert-modal .button-container button.confirm {
+    background-color: #ffffff !important;
+    color: #007aff !important;
+    font-weight: 700 !important;
+    padding: 10px 28px !important;
+    border-radius: 6px !important;
+    border: none !important;
+    cursor: pointer !important;
+  }
+</style>
+
+<script>
+  // ── BigCommerce #alert-modal Text & Position Handler ──
+  (function() {
+    var targetText = "This appliance may already be in your cart or has been sold.";
+
+    function handleAlertModal() {
+      var alertModal = document.getElementById('alert-modal') || document.querySelector('#alert-modal, .modal--alert');
+      if (!alertModal) return;
+
+      var textContent = alertModal.textContent || '';
+      if (textContent.includes("don't have enough") || textContent.includes("stock on hand")) {
+        
+        // 1. Replace the error message text inside #alert-modal .modal-content
+        var contentSpan = alertModal.querySelector('.modal-content span, .modal-content p, .modal-content');
+        if (contentSpan) {
+          contentSpan.textContent = targetText;
+        }
+
+        // 2. Ensure top is centered properly
+        alertModal.style.setProperty('top', '50%', 'important');
+        alertModal.style.setProperty('transform', 'translate(-50%, -50%)', 'important');
+        alertModal.style.setProperty('height', 'auto', 'important');
+      }
+    }
+
+    var observer = new MutationObserver(function() {
+      handleAlertModal();
+    });
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function() {
+        observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['style', 'class'] });
+      });
+    } else {
+      observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['style', 'class'] });
+    }
+  })();
+</script>

@@ -1,0 +1,324 @@
+{{#if post.body}}
+<style>
+  
+    /* Full Post Page Reading Styles */
+    article.blog.full-post {
+        background: rgba(255, 255, 255, 0.07) !important;
+        border: 1px solid rgba(255, 255, 255, 0.12) !important;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2) !important;
+        max-width: 850px !important;
+        margin: 20px auto 50px auto !important;
+        display: block !important;
+        border-radius: 16px !important;
+        padding: 40px !important;
+        box-sizing: border-box !important;
+        width: 100% !important;
+        backdrop-filter: blur(15px) !important;
+        -webkit-backdrop-filter: blur(15px) !important;
+    }
+
+    article.blog.full-post:hover {
+        transform: none !important;
+        background: rgba(255, 255, 255, 0.07) !important;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2) !important;
+        border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    }
+
+    article.blog.full-post .blog-post-figure {
+        width: 100% !important;
+        height: auto !important;
+        border-radius: 10px !important;
+        margin-bottom: 30px !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        overflow: hidden !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+    }
+
+    article.blog.full-post .blog-thumbnail,
+    article.blog.full-post .blog-thumbnail a {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        width: 100% !important;
+        height: auto !important;
+        margin: 0 auto !important;
+        padding: 0 !important;
+    }
+
+    article.blog.full-post .blog-post-figure img {
+        max-width: 100% !important;
+        width: auto !important;
+        height: auto !important;
+        display: block !important;
+        margin: 0 auto !important;
+        object-fit: contain !important;
+    }
+
+    article.blog.full-post .blog-post-body {
+        padding: 0 !important;
+        display: block !important;
+    }
+
+    /* Date and Title */
+    article.blog.full-post .blog-header {
+        background: transparent !important;
+        margin: 0 0 15px 0 !important;
+        padding: 0 !important;
+        border: none !important;
+    }
+
+    article.blog.full-post .blog-date {
+        font-size: 11px !important;
+        font-weight: 700 !important;
+        text-transform: uppercase !important;
+        color: rgba(255, 255, 255, 0.5) !important;
+        letter-spacing: 1px !important;
+        margin-bottom: 12px !important;
+        background: transparent !important;
+        border: none !important;
+        padding: 0 !important;
+    }
+
+    article.blog.full-post .blog-title {
+        font-size: 30px !important;
+        line-height: 1.3 !important;
+        font-weight: 800 !important;
+        margin-bottom: 25px !important;
+        color: #ffffff !important;
+        background: transparent !important;
+        border: none !important;
+        padding: 0 !important;
+    }
+
+    article.blog.full-post .blog-title a {
+        color: inherit !important;
+        text-decoration: none !important;
+        pointer-events: none !important; /* Title is static on detail page */
+        background: transparent !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+    }
+
+    /* Post Content Styling */
+    article.blog.full-post .blog-post {
+        font-size: 15.5px !important;
+        line-height: 1.7 !important;
+        color: rgba(255, 255, 255, 0.9) !important;
+        background: transparent !important;
+        border: none !important;
+        padding: 0 !important;
+    }
+
+    article.blog.full-post .blog-post p {
+        font-size: 14.5px !important;
+        line-height: 1.65 !important;
+        color: rgba(255, 255, 255, 0.75) !important;
+        margin-bottom: 22px !important;
+        font-weight: 400 !important;
+    }
+
+    article.blog.full-post .blog-post h2 {
+        font-size: 23px !important;
+        font-weight: 800 !important;
+        color: #ffffff !important;
+        margin: 35px 0 16px 0 !important;
+        line-height: 1.3 !important;
+        display: block !important;
+    }
+
+    article.blog.full-post .blog-post h3 {
+        font-size: 19px !important;
+        font-weight: 800 !important;
+        color: #ffffff !important;
+        margin: 30px 0 14px 0 !important;
+        line-height: 1.3 !important;
+        display: block !important;
+    }
+
+    article.blog.full-post .blog-post h4 {
+        font-size: 16.5px !important;
+        font-weight: 800 !important;
+        color: #ffffff !important;
+        margin: 26px 0 12px 0 !important;
+        line-height: 1.35 !important;
+        display: block !important;
+    }
+
+    article.blog.full-post .blog-post h5 {
+        font-size: 15px !important;
+        font-weight: 800 !important;
+        color: #ffffff !important;
+        margin: 22px 0 10px 0 !important;
+        line-height: 1.35 !important;
+        display: block !important;
+    }
+
+    article.blog.full-post .blog-post h6 {
+        font-size: 14px !important;
+        font-weight: 800 !important;
+        color: #ffffff !important;
+        margin: 18px 0 8px 0 !important;
+        line-height: 1.4 !important;
+        display: block !important;
+    }
+
+    article.blog.full-post .blog-post strong,
+    article.blog.full-post .blog-post b {
+        color: #ffffff !important;
+        font-weight: 700 !important;
+    }
+
+    /* Standalone bold lines used as subheadings in markup */
+    article.blog.full-post .blog-post p strong:first-child:last-child,
+    article.blog.full-post .blog-post p b:first-child:last-child {
+        display: inline-block !important;
+        font-size: 15.5px !important;
+        margin-top: 15px !important;
+        margin-bottom: 2px !important;
+        color: #ffffff !important;
+    }
+
+    article.blog.full-post .blog-post ul, 
+    article.blog.full-post .blog-post ol {
+        margin-bottom: 22px !important;
+        padding-left: 24px !important;
+    }
+
+    article.blog.full-post .blog-post li {
+        margin-bottom: 8px !important;
+        line-height: 1.6 !important;
+    }
+
+    article.blog.full-post .blog-post a {
+        color: #4fc3f7 !important;
+        text-decoration: underline !important;
+        transition: color 0.2s ease !important;
+    }
+
+    article.blog.full-post .blog-post a:hover {
+        color: #ffffff !important;
+    }
+
+    /* Tags */
+    article.blog.full-post .tags {
+        list-style: none !important;
+        padding: 0 !important;
+        margin: 35px 0 0 0 !important;
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 6px !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+        padding-top: 25px !important;
+    }
+
+    article.blog.full-post .tag a {
+        display: inline-block !important;
+        font-size: 10.5px !important;
+        padding: 4px 10px !important;
+        background: rgba(255, 255, 255, 0.06) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 6px !important;
+        color: rgba(255, 255, 255, 0.85) !important;
+        text-decoration: none !important;
+        transition: all 0.2s ease !important;
+    }
+
+    article.blog.full-post .tag a:hover {
+        background: rgba(79, 195, 247, 0.15) !important;
+        border-color: #4fc3f7 !important;
+        color: #4fc3f7 !important;
+    }
+
+    /* Share Block styling */
+    article.blog.full-post .socialLinks {
+        margin-top: 25px !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+        padding-top: 20px !important;
+    }
+
+    /* Mobile details overrides */
+    @media (max-width: 768px) {
+        article.blog.full-post {
+            padding: 20px !important;
+            border-radius: 10px !important;
+            margin: 10px auto !important;
+        }
+
+        article.blog.full-post .blog-post-figure {
+            height: auto !important;
+            border-radius: 8px !important;
+            margin-bottom: 18px !important;
+        }
+
+        article.blog.full-post .blog-title {
+            font-size: 22px !important;
+            margin-bottom: 14px !important;
+        }
+
+        article.blog.full-post .blog-post {
+            font-size: 14px !important;
+            line-height: 1.6 !important;
+        }
+    }
+</style>
+{{/if}}
+<article class="blog{{#if post.body}} full-post{{/if}}">
+    <div class="blog-post-figure">
+        {{#if post.thumbnail}}
+            <figure class="blog-thumbnail">
+                <a href="{{post.url}}">
+                    <img class="lazyload" data-sizes="auto" src="{{cdn 'img/loading.svg'}}" data-src="{{getImage post.thumbnail 'blog_size'}}" alt="{{post.thumbnail.alt}}" title="{{post.thumbnail.alt}}">
+                </a>
+            </figure>
+        {{else}}
+            <figure class="blog-thumbnail">
+                <a href="{{post.url}}">
+                    <img class="lazyload" data-sizes="auto" src="{{cdn 'img/loading.svg'}}" data-src="https://cdn11.bigcommerce.com/s-5vtkmzi0yn/images/stencil/385x215/uploaded_images/bbb-business-cover-640x360-undervalue-appliances-logo-new.png?t=1754507151" alt="{{post.title}}" title="{{post.title}}">
+                </a>
+            </figure>
+        {{/if}}
+    </div>
+
+    <div class="blog-post-body">
+        <header class="blog-header">
+            <p class="blog-date">{{#if post.author}}{{lang 'blog.posted_by' name=post.author}} on {{/if}}{{post.date_published}}</p>
+            <h{{#if is_blog_post}}1{{else}}2{{/if}} class="blog-title">
+                <a href="{{post.url}}">{{post.title}}</a>
+            </h{{#if is_blog_post}}1{{else}}2{{/if}}>
+        </header>
+
+        <div class="blog-post">
+            {{#if post.body}}
+                {{{post.body}}}
+            {{else}}
+                {{{post.summary}}}
+                {{#if post.show_read_more}}
+                    &hellip; <p class="read-more"><a href="{{url}}" aria-label="{{post.title}} {{lang 'blog.read_more'}}"><strong>{{lang 'blog.read_more'}}</strong>
+                        <i class="icon" aria-hidden="true">
+                            <svg><use xlink:href="#icon-chevron-right" /></svg>
+                        </i>
+                    </a></p>
+                {{/if}}
+            {{/if}}
+        </div>
+
+
+        {{#if show_tags}}
+            {{#if post.tags}}
+                <ul class="tags">
+                    {{#each post.tags}}
+                    <li class="tag">
+                        <a href="{{url}}">#{{name}}</a>
+                    </li>
+                    {{/each}}
+                </ul>
+            {{/if}}
+        {{/if}}
+
+        {{>components/common/share url=post.url}}
+
+    </div>
+</article>

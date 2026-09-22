@@ -1,0 +1,328 @@
+---
+blog:
+    posts:
+        limit: {{theme_settings.blog_posts_per_page}}
+        pages: 3
+        summary: 200
+---
+{{#partial "page"}}
+
+<style>
+    /* Reset theme overrides */
+    .blog-posts, .blog-posts *,
+    article.blog, article.blog * {
+        box-sizing: border-box !important;
+    }
+
+    /* Grid layout */
+    .blog-posts {
+        display: grid !important;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)) !important;
+        gap: 28px !important;
+        margin: 40px 0 60px 0 !important;
+        padding: 0 !important;
+        list-style: none !important;
+    }
+
+    .page-heading {
+        color: #ffffff !important;
+        font-weight: 800 !important;
+        font-size: 36px !important;
+        letter-spacing: -0.5px !important;
+        margin-bottom: 30px !important;
+        text-transform: uppercase !important;
+        border-bottom: 2px solid rgba(255, 255, 255, 0.15) !important;
+        padding-bottom: 15px !important;
+    }
+
+    /* Frosted Glass Card Design */
+    article.blog {
+        background: rgba(255, 255, 255, 0.07) !important;
+        border: 1px solid rgba(255, 255, 255, 0.12) !important;
+        border-radius: 14px !important;
+        overflow: hidden !important;
+        display: flex !important;
+        flex-direction: column !important;
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+        backdrop-filter: blur(12px) !important;
+        -webkit-backdrop-filter: blur(12px) !important;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15) !important;
+        height: 100% !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        float: none !important;
+    }
+
+    article.blog:hover {
+        transform: translateY(-6px) !important;
+        border-color: rgba(255, 255, 255, 0.28) !important;
+        background: rgba(255, 255, 255, 0.12) !important;
+        box-shadow: 0 16px 40px 0 rgba(0, 0, 0, 0.3) !important;
+    }
+
+    /* Full-Bleed Thumbnail */
+    .blog-post-figure {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        height: 210px !important;
+        overflow: hidden !important;
+        position: relative !important;
+        background: rgba(0, 0, 0, 0.2) !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+        flex-shrink: 0 !important;
+    }
+
+    .blog-thumbnail {
+        margin: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+    }
+
+    .blog-thumbnail a {
+        display: block !important;
+        width: 100% !important;
+        height: 100% !important;
+    }
+
+    .blog-thumbnail img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+        transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+    }
+
+    article.blog:hover .blog-thumbnail img {
+        transform: scale(1.05) !important;
+    }
+
+    /* Content Area */
+    .blog-post-body {
+        padding: 22px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        flex-grow: 1 !important;
+        background: transparent !important;
+    }
+
+    .blog-header {
+        background: transparent !important;
+        margin: 0 0 12px 0 !important;
+        padding: 0 !important;
+        border: none !important;
+    }
+
+    /* Muted Glass Date */
+    .blog-date {
+        font-size: 10.5px !important;
+        font-weight: 700 !important;
+        text-transform: uppercase !important;
+        color: rgba(255, 255, 255, 0.5) !important;
+        letter-spacing: 1px !important;
+        margin: 0 0 12px 0 !important;
+        background: transparent !important;
+        border: none !important;
+        padding: 0 !important;
+        display: inline-block !important;
+    }
+
+    /* Crisp White Title (Strict resets) */
+    .blog-title {
+        font-size: 18.5px !important;
+        line-height: 1.4 !important;
+        font-weight: 700 !important;
+        margin: 0 0 14px 0 !important;
+        background: transparent !important;
+        padding: 0 !important;
+        border: none !important;
+    }
+
+    .blog-title a {
+        color: #ffffff !important;
+        text-decoration: none !important;
+        transition: color 0.2s ease !important;
+        background: transparent !important;
+        padding: 0 !important;
+        border: none !important;
+        display: block !important;
+    }
+
+    .blog-title a:hover {
+        color: #4fc3f7 !important;
+    }
+
+    /* Excerpt Summary description */
+    .blog-post {
+        font-size: 13.5px !important;
+        line-height: 1.6 !important;
+        color: rgba(255, 255, 255, 0.8) !important;
+        margin-bottom: 20px !important;
+        flex-grow: 1 !important;
+        background: transparent !important;
+        padding: 0 !important;
+        border: none !important;
+    }
+
+    /* Glass tag pills */
+    .tags {
+        list-style: none !important;
+        padding: 0 !important;
+        margin: 15px 0 0 0 !important;
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 6px !important;
+    }
+
+    .tag {
+        margin: 0 !important;
+    }
+
+    .tag a {
+        display: inline-block !important;
+        font-size: 10px !important;
+        padding: 4px 10px !important;
+        background: rgba(255, 255, 255, 0.06) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 6px !important;
+        color: rgba(255, 255, 255, 0.85) !important;
+        text-decoration: none !important;
+        transition: all 0.2s ease !important;
+    }
+
+    .tag a:hover {
+        background: rgba(79, 195, 247, 0.15) !important;
+        border-color: #4fc3f7 !important;
+        color: #4fc3f7 !important;
+    }
+
+    /* Read More Action */
+    .read-more {
+        margin-top: 10px !important;
+        margin-bottom: 0 !important;
+    }
+
+    .read-more a {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        color: #4fc3f7 !important;
+        font-size: 12.5px !important;
+        font-weight: 700 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.5px !important;
+        text-decoration: none !important;
+        transition: all 0.2s ease !important;
+    }
+
+    .read-more a:hover {
+        color: #ffffff !important;
+    }
+
+    .read-more a svg {
+        fill: currentColor !important;
+        width: 12px !important;
+        height: 12px !important;
+        transition: transform 0.2s ease !important;
+    }
+
+    .read-more a:hover svg {
+        transform: translateX(3px) !important;
+    }
+
+    /* Glass Pagination controls */
+    .pagination {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        list-style: none !important;
+        padding: 0 !important;
+        margin: 50px 0 !important;
+        gap: 8px !important;
+    }
+
+    .pagination-item {
+        margin: 0 !important;
+        display: inline-block !important;
+    }
+
+    .pagination-item a, .pagination-item span {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        min-width: 38px !important;
+        height: 38px !important;
+        padding: 0 14px !important;
+        border-radius: 8px !important;
+        background: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        color: rgba(255, 255, 255, 0.8) !important;
+        font-size: 13px !important;
+        font-weight: 600 !important;
+        text-decoration: none !important;
+        transition: all 0.2s ease !important;
+        box-sizing: border-box !important;
+        backdrop-filter: blur(5px) !important;
+        -webkit-backdrop-filter: blur(5px) !important;
+    }
+
+    .pagination-item--current span {
+        background: #ffffff !important;
+        border-color: #ffffff !important;
+        color: #0f62fe !important;
+        font-weight: 700 !important;
+    }
+
+    .pagination-item a:hover {
+        background: rgba(255, 255, 255, 0.15) !important;
+        border-color: rgba(255, 255, 255, 0.25) !important;
+        color: #ffffff !important;
+    }
+
+    /* Mobile Responsive Custom overrides */
+    @media (max-width: 768px) {
+        .blog-posts {
+            grid-template-columns: 1fr !important;
+            gap: 20px !important;
+        }
+
+        article.blog {
+            border-radius: 10px !important;
+        }
+
+        .blog-post-figure {
+            height: 180px !important;
+        }
+
+        .blog-post-body {
+            padding: 16px !important;
+        }
+
+        .blog-title {
+            font-size: 16px !important;
+        }
+
+        .blog-post {
+            font-size: 13px !important;
+            margin-bottom: 12px !important;
+        }
+    }
+</style>
+
+<div class="container">
+    {{> components/common/breadcrumbs breadcrumbs=breadcrumbs}}
+    <main class="page">
+        {{#unless theme_settings.hide_blog_page_heading }}
+            <h1 class="page-heading">{{ blog.name }}</h1>
+        {{/unless}}
+        <div class="blog-posts">
+            {{#each blog.posts}}
+                {{> components/blog/post post=this}}
+            {{/each}}
+        </div>
+    
+        {{> components/common/paginator pagination.blog}}
+    </main>
+</div>
+
+{{/partial}}
+{{> layout/base}}

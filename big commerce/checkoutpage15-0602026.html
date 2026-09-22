@@ -1,0 +1,492 @@
+{{#partial "head"}}
+
+{{{ checkout.checkout_head }}}
+{{{ stylesheet '/assets/css/optimized-checkout.css' }}}
+{{ getFontsCollection }}
+
+<script type="text/javascript">
+    window.language = {{{langJson 'optimized_checkout'}}};
+</script>
+
+{{{head.scripts}}}
+
+{{/partial}}
+
+{{#partial "page"}}
+<header class="checkoutHeader optimizedCheckout-header">
+    <div class="checkoutHeader-content">
+        <h1 class="is-srOnly">{{lang 'checkout.title'}}</h1>
+        <h2 class="checkoutHeader-heading">
+            <a class="checkoutHeader-link" href="{{urls.home}}">
+                {{#if checkout.header_image}}
+                <img alt="{{settings.store_logo.title}}" class="checkoutHeader-logo" id="logoImage"
+                    src="{{ checkout.header_image }}" />
+                {{else}}
+                <span class="header-logo-text">{{settings.store_logo.title}}</span>
+                {{/if}}
+            </a>
+        </h2>
+    </div>
+</header>
+
+{{{ checkout.checkout_content }}}
+
+{{{ footer.scripts }}}
+
+{{/partial}}
+
+{{> layout/empty}}
+
+<style>
+    span.cart-priceItem-postFix.optimizedCheckout-contentSecondary {
+        display: none;
+    }
+
+    .cart-priceItem-link a {
+        color: red;
+        text-decoration: underline;
+    }
+
+    .swal2-modal .swal2-content {
+        color: #000;
+        font-size: 1.14286rem;
+    }
+
+    .cart-priceItem--discount33 {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 0;
+    }
+
+    .cart-priceItem--discount33 .cart-priceItem-label span {
+        color: #0f9d58;
+        font-weight: 600;
+    }
+
+    .cart-priceItem--discount33 .cart-priceItem-value span {
+        color: #0f9d58;
+        font-weight: 700;
+    }
+</style>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<script>
+jQuery(function ($) {
+    var nativeValueSetter = null;
+    try {
+        nativeValueSetter = Object.getOwnPropertyDescriptor(
+            window.HTMLInputElement.prototype, 'value'
+        ).set;
+    } catch (e) {}
+
+    function setNativeValue(el, value) {
+        if (!el) return;
+        if (nativeValueSetter) {
+            nativeValueSetter.call(el, value);
+        } else {
+            el.value = value;
+        }
+        var ev = new Event('input', { bubbles: true });
+        el.dispatchEvent(ev);
+    }
+
+    function cleanPostal(v) {
+        return (v || '').toUpperCase().replace(/^(.{3})\s+/, '$1');
+    }
+
+    $(document).on('input change blur', '#postCodeInput', function () {
+        var el = this;
+        var cleaned = cleanPostal(el.value);
+        if (el.value !== cleaned) {
+            setNativeValue(el, cleaned);
+            try {
+                el.setSelectionRange(cleaned.length, cleaned.length);
+            } catch (e) {}
+        }
+    });
+
+    var checks = 0;
+    var poll = setInterval(function () {
+        var el = document.getElementById('postCodeInput');
+        if (el) {
+            var cleaned = cleanPostal(el.value);
+            if (el.value !== cleaned) setNativeValue(el, cleaned);
+        }
+        checks++;
+        if (checks > 40) clearInterval(poll);
+    }, 250);
+
+    var observer = new MutationObserver(function () {
+        var el = document.getElementById('postCodeInput');
+        if (el) {
+            var cleaned = cleanPostal(el.value);
+            if (el.value !== cleaned) setNativeValue(el, cleaned);
+        }
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+});
+</script>
+
+<script>
+$(document).ready(function () {
+
+    function changeShippingText() {
+        var $el = $(".stepHeader-title.optimizedCheckout-headingPrimary");
+        if ($el.length) {
+            $el.filter(function () {
+                return $(this).text().trim() === "Shipping";
+            }).text("Delivery");
+        } else {
+            setTimeout(changeShippingText, 100);
+        }
+    }
+
+    function changeShippingAddressText() {
+        var $el = $("legend.form-legend.optimizedCheckout-headingSecondary[data-test='shipping-address-heading']");
+        if ($el.length) {
+            $el.filter(function () {
+                return $(this).text().trim() === "Shipping Address";
+            }).text("Delivery Address");
+        } else {
+            setTimeout(changeShippingAddressText, 100);
+        }
+    }
+
+    function changeShippingMethodText() {
+        var $el = $("legend.form-legend.optimizedCheckout-headingSecondary");
+        if ($el.length) {
+            $el.filter(function () {
+                return $(this).text().trim() === "Shipping Method";
+            }).text("Delivery Method");
+        } else {
+            setTimeout(changeShippingMethodText, 100);
+        }
+    }
+
+    function changeCheckboxLabelText() {
+        var $el = $("label.form-label.optimizedCheckout-form-label[for='sameAsBilling']");
+        if ($el.length) {
+            $el.filter(function () {
+                return $(this).text().trim() === "My billing address is the same as my shipping address.";
+            }).text("My billing address is the same as my delivery address.");
+        } else {
+            setTimeout(changeCheckboxLabelText, 100);
+        }
+    }
+
+    function changeCartShippingText() {
+        var $el = $("div[data-test='cart-shipping'] .cart-priceItem-label span[data-test='cart-price-label']");
+        if ($el.length) {
+            $el.filter(function () {
+                return $(this).text().trim() === "Shipping";
+            }).text("Delivery");
+        } else {
+            setTimeout(changeCartShippingText, 100);
+        }
+    }
+
+    changeShippingText();
+    changeShippingAddressText();
+    changeShippingMethodText();
+    changeCheckboxLabelText();
+    changeCartShippingText();
+});
+</script>
+
+<script>
+$(document).ready(function () {
+
+    function isPastSameDayCutoff() {
+        var now = new Date();
+        var hours = now.getHours();
+        var minutes = now.getMinutes();
+        return (hours > 12) || (hours === 12 && minutes > 0);
+    }
+
+    function disableSameDayDelivery() {
+        if (!isPastSameDayCutoff()) return;
+
+        var sameDayOption = $("input[type='radio']").filter(function () {
+            return $(this).next("label").find(".shippingOption-desc").text().toLowerCase().includes("same day");
+        });
+
+        if (sameDayOption.length > 0) {
+            sameDayOption.each(function () {
+                if ($(this).is(":checked")) {
+                    $(this).prop("checked", false).trigger("change");
+                    $("input[type='radio']").not(sameDayOption).first().prop("checked", true).trigger("change");
+                }
+                $(this).prop("disabled", true).closest(".form-checklist-item").css("opacity", "0.5");
+            });
+
+            if (!$("input[type='radio']").is(":checked")) {
+                $("input[type='radio']").not(sameDayOption).first().prop("checked", true).trigger("change");
+            }
+        }
+    }
+
+    function waitForShippingOptions() {
+        if ($(".form-checklist-item").length > 0) {
+            disableSameDayDelivery();
+            setInterval(disableSameDayDelivery, 2000);
+        } else {
+            setTimeout(waitForShippingOptions, 500);
+        }
+    }
+
+    waitForShippingOptions();
+
+    var targetNode = document.querySelector(".form-checklist");
+    if (targetNode) {
+        new MutationObserver(disableSameDayDelivery).observe(targetNode, {
+            childList: true,
+            subtree: true
+        });
+    }
+
+    $(document).on("change", ".form-checklist-checkbox, input[type='radio']", disableSameDayDelivery);
+
+    $(document).on("click", "#checkout-payment-continue", function (e) {
+        var selectedOption = $("input[name^='shippingOptionIds']:checked");
+        var selectedOptionText = selectedOption.closest('.form-field').find('.shippingOption-desc').text().trim();
+
+        if (selectedOptionText.includes("Delivery Same Day") && isPastSameDayCutoff()) {
+            alert("Same Day Delivery is not available after 12 PM. Please select another option.");
+            e.preventDefault();
+            return false;
+        }
+    });
+
+});
+</script>
+
+<script>
+$(document).ready(function () {
+
+    var SERVICE_SKUS = ['UA01092199'];
+
+    var SERVICE_NAME_PATTERNS = [
+        'stacking kit installation',
+        'installation service',
+        'delivery service',
+        'haul away',
+        'protection plan',
+        'extended warranty'
+    ];
+
+    var BUNDLE_TIERS = [
+        { qty: 3, amount: 99.99, perItem: 33.33 },
+        { qty: 4, amount: 200.00, perItem: 50.00 },
+        { qty: 5, amount: 300.00, perItem: 60.00 }
+    ];
+
+    function isServiceItem(item) {
+        var sku = (item.sku || '').toUpperCase().trim();
+        for (var i = 0; i < SERVICE_SKUS.length; i++) {
+            if (sku === SERVICE_SKUS[i].toUpperCase()) return true;
+        }
+
+        var name = (item.name || '').toLowerCase();
+        for (var j = 0; j < SERVICE_NAME_PATTERNS.length; j++) {
+            if (name.indexOf(SERVICE_NAME_PATTERNS[j]) > -1) return true;
+        }
+
+        return false;
+    }
+
+    function isAlreadyDiscountedItem(item) {
+        var listPrice = parseFloat(item.listPrice || 0);
+        var salePrice = parseFloat(item.salePrice || 0);
+        var couponAmount = parseFloat(item.couponAmount || 0);
+
+        if (couponAmount > 0) return true;
+        if (listPrice > 0 && salePrice > 0 && salePrice < listPrice) return true;
+
+        return false;
+    }
+
+    function formatMoney(amount) {
+        return "$"+amount
+    }
+
+    function getNextTierByEligibleQty(eligibleQty) {
+        for (var i = 0; i < BUNDLE_TIERS.length; i++) {
+            if (eligibleQty < BUNDLE_TIERS[i].qty) {
+                return BUNDLE_TIERS[i];
+            }
+        }
+        return null;
+    }
+
+    function analyzeCart(cart) {
+    var result = {
+        regularCount: 0,
+        discountedCount: 0,
+        serviceCount: 0,
+        totalDiscount: 0
+    };
+
+    if (!cart || !cart.lineItems || !cart.lineItems.physicalItems) {
+        return result;
+    }
+
+    cart.lineItems.physicalItems.forEach(function (item) {
+        if (isServiceItem(item)) {
+            result.serviceCount += 1;
+            return;
+        }
+
+        if (isAlreadyDiscountedItem(item) && (item.discountAmount || 0) <= 0) {
+            result.discountedCount += 1;
+            return;
+        }
+
+        result.regularCount += 1;
+        result.totalDiscount += item.discountAmount || 0;
+    });
+
+    return result;
+}
+
+function buildMainMessage(summary) {
+    if (summary.totalDiscount <= 0) return '';
+
+    var totalSelected = summary.regularCount + summary.discountedCount;
+
+    if (summary.discountedCount > 0) {
+        var eligibilityNote = '';
+
+        if (summary.regularCount === 1) {
+            eligibilityNote = 'You have only 1 regular item in your cart, so the discount applies to that 1 item only. ' +
+                'Your other ' + summary.discountedCount + ' item' +
+                (summary.discountedCount > 1 ? 's are' : ' is') +
+                ' already discounted and not eligible for bundle savings.';
+        } else {
+            eligibilityNote = 'You selected ' + totalSelected + ' items, but only ' +
+                summary.regularCount + ' regular item' +
+                (summary.regularCount > 1 ? 's are' : ' is') +
+                ' eligible for bundle discount. ' +
+                summary.discountedCount + ' item' +
+                (summary.discountedCount > 1 ? 's are' : ' is') +
+                ' already discounted and excluded.';
+        }
+
+        return eligibilityNote + ' ' + formatMoney(summary.totalDiscount) + ' off applies to regular items only.';
+    }
+
+    return 'You selected ' + summary.regularCount + ' regular item' +
+        (summary.regularCount > 1 ? 's' : '') + '. ' +
+        formatMoney(summary.totalDiscount) + ' off applies to regular items.';
+}
+
+function buildNextOfferMessage(summary) {
+    var nextTier = getNextTierByEligibleQty(summary.regularCount);
+    if (!nextTier) return '';
+
+    var itemsNeeded = nextTier.qty - summary.regularCount;
+    if (itemsNeeded <= 0) return '';
+
+    return 'Add ' + itemsNeeded + ' more regular item' +
+        (itemsNeeded > 1 ? 's' : '') +
+        ' (non-discounted) to unlock ' + formatMoney(nextTier.perItem) +
+        ' off per regular item.';
+}
+
+    function renderPromoRows(cartData) {
+        var cart = Array.isArray(cartData) ? cartData[0] : cartData;
+        if (!cart) return;
+
+        var summary = analyzeCart(cart);
+
+        $('[data-custom-promo-row="true"]').remove();
+
+        var $target = $('section.cart-section > div[data-test="cart-subtotal"]');
+        if (!$target.length) return;
+
+        var html = '';
+        var mainMessage = buildMainMessage(summary);
+        var nextOfferMessage = buildNextOfferMessage(summary);
+
+        if (summary.totalDiscount > 0) {
+            html +=
+                '<div data-test="cart-discount" data-custom-promo-row="true">' +
+                    '<div aria-live="polite" class="cart-priceItem optimizedCheckout-contentPrimary cart-priceItem--discount33">' +
+                        '<span class="cart-priceItem-label" style="max-width:78%; line-height:1.5;">' +
+                            '<span data-test="cart-price-label">' + mainMessage + '</span>' +
+                        '</span>' +
+                        '<span class="cart-priceItem-value">' +
+                            '<span data-test="cart-price-value">-' + formatMoney(summary.totalDiscount) + '</span>' +
+                        '</span>' +
+                    '</div>' +
+                '</div>';
+        }
+
+        if (nextOfferMessage) {
+            html +=
+                '<div data-custom-promo-row="true" style="margin-top:6px;">' +
+                    '<div class="cart-priceItem optimizedCheckout-contentSecondary" style="font-size:13px;color:#0f3f91;line-height:1.5;">' +
+                        '<span class="cart-priceItem-label">' +
+                            '<span>' + nextOfferMessage + '</span>' +
+                        '</span>' +
+                    '</div>' +
+                '</div>';
+        }
+
+        $target.after(html);
+    }
+
+    function fetchCartAndRenderPromo() {
+        $.ajax({
+            url: '/api/storefront/carts?include=lineItems.physicalItems.options',
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            },
+            success: function (data) {
+                renderPromoRows(data);
+            },
+            error: function (err) {
+                console.log('Cart API error:', err.status, err.responseText);
+            }
+        });
+    }
+
+    function waitForCartSection() {
+        if ($('section.cart-section > div[data-test="cart-subtotal"]').length > 0) {
+            fetchCartAndRenderPromo();
+        } else {
+            setTimeout(waitForCartSection, 500);
+        }
+    }
+
+    waitForCartSection();
+});
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    function replaceAfterpayText() {
+        var afterpayLabel = document.querySelector(
+            'label[for="radio-afterpay-pay_by_installment"] .paymentProviderHeader-name'
+        );
+
+        if (afterpayLabel && afterpayLabel.textContent.trim() === "Pay over time") {
+            afterpayLabel.innerHTML =
+                '<span>Multiple financing structures - <a href="https://www.afterpay.com/en-CA/how-it-works" target="_blank" style="text-decoration: underline; color: #0070ba;">how it works</a></span>';
+            return true;
+        }
+        return false;
+    }
+
+    if (!replaceAfterpayText()) {
+        var interval = setInterval(function () {
+            if (replaceAfterpayText()) {
+                clearInterval(interval);
+            }
+        }, 500);
+    }
+});
+</script>

@@ -1,0 +1,33 @@
+<script>
+(function(){
+  const loadScript = function() {
+    const paoUrl = 'https://pao.popup-upsell.spri-it.com/fetch/bc/pao.js?app_id=17';
+    const sPao = document.createElement('script');
+    sPao.type = 'text/javascript';
+    sPao.async = true;
+    sPao.src = paoUrl;
+    const s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(sPao, s);
+  }
+
+  const jsContextOrderId = parseInt('{{checkout.order.id}}') || null;
+  if (!jsContextOrderId) {
+    loadScript();
+    return;
+  }
+
+  fetch('/api/storefront/order/' + jsContextOrderId, {
+    credentials: 'include'
+  })
+  .then(function(response) {
+    return response.json();
+  })
+  .then(function(orderData) {
+    window.paoOrderData = orderData;
+    loadScript();
+  })
+  .catch(function(error) {
+    console.log('BCPAO error: ' + error);
+  });
+})();
+</script>

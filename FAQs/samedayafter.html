@@ -1,0 +1,91 @@
+<style>
+.faq_item {
+            border: 1px solid #ddd;
+            margin-bottom: 10px; /* Space between questions */
+            background: #1a5bd1;
+        }
+        .faq_item h3 {
+            padding: 15px;
+            margin: 0;
+            cursor: pointer;
+            background: #1a5bd1;
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .faq_item .faq_answer {
+            display: none;
+            padding: 15px;
+            background: #1a5bd1; /* Light blue background */
+            color: #fff;
+            font-size: 18px;
+        }
+        .faq_item.active h3 {
+            background: #4a90e2; /* Lighter blue when active */
+        }
+        .faq_item.active .faq_answer {
+            display: block;
+        }
+        .faq_item h3::after {
+            content: " >";
+            float: right;
+            font-weight: bold;
+            color: #fff;
+        }
+        .faq_answer a {
+            color: #fff;
+            text-decoration: underline;
+            font-weight: 600;
+        }
+        .faq_answer a:hover {
+            color: #d6e4ff;
+        }
+    </style>
+<div class="container-faq">
+    <div class="faq_item">
+        <h3>What is the turn around time for delivery?</h3>
+        <div class="faq_answer">
+            <p>We know you want your new appliance fast — that's why we offer <b>same-day delivery</b> when your order is placed by noon EST. Can't make the same-day cutoff? We also offer convenient next-day delivery, or standard delivery within one week, so you can pick whichever option fits your schedule and budget. Have a specific date in mind or questions about availability in your area? Visit our <a href="https://undervalueappliances.ca/contact-us/">Contact Us</a> page and our team will help you plan it out.</p>
+        </div>
+    </div>
+    <div class="faq_item">
+        <h3>Is removal of my broken or unwanted appliance an option?</h3>
+        <div class="faq_answer">
+            <p>Absolutely — for just <b>$19.95</b>, our delivery team will haul away your old or broken appliance at the same time they deliver your new one, so you don't have to lift a finger or make a separate trip. It's a simple way to upgrade without the hassle of disposing of your old unit yourself. Just add removal service when you check out, or mention it when you place your order through our <a href="https://undervalueappliances.ca/contact-us/">Contact Us</a> page.</p>
+        </div>
+    </div>
+    <div class="faq_item">
+        <h3>Do you offer hookup service?</h3>
+        <div class="faq_answer">
+            <p>Yes — for <b>$19.95</b>, our delivery team will professionally connect your new appliance for you, including hot and cold water hoses, fridge water lines, and dryer vents, so it's ready to use the moment they leave. This ensures everything is installed safely and correctly the first time. Need a more involved installation, like dishwasher hookup or washer/dryer stacking? Check out our <a href="https://undervalueappliances.ca/repair-service/">Repair Service</a> page for our full range of installation services.</p>
+        </div>
+    </div>
+    <div class="faq_item">
+        <h3>How much does delivery cost?</h3>
+        <div class="faq_answer">
+            <p>
+                Delivery is <b>FREE</b> when you spend over $699 pre-tax on appliances — one more reason to bundle your purchase and save. Don't hit that threshold? Local delivery within 25km of our distribution center is just $74.95, with next-day delivery available for $109.95 and same-day delivery (ordered before noon EST) for $149.95.<br /><br />
+                Deliveries are scheduled between 8AM-8PM, and our delivery company will give you a courtesy call the day before, followed by another call roughly 20 minutes to 3 hours before arrival so you're never left guessing.<br /><br />
+                Want to see if your order qualifies for free delivery? Check our current <a href="https://undervalueappliances.ca/promotion/">Promotions</a> page for bundle deals, or visit our <a href="https://undervalueappliances.ca/contact-us/">Contact Us</a> page if you have questions about delivery to your specific address.
+            </p>
+        </div>
+    </div>
+    <div class="faq_item">
+        <h3>Is pick-up an option?</h3>
+        <div class="faq_answer">
+            <p>Yes — if you'd rather skip delivery fees altogether, we offer <b>free curbside pickup</b> at our Hyde Park, London location, by appointment. It's a fast and easy way to get your appliance the same day, on your own schedule. To book a pickup time that works for you, visit our <a href="https://undervalueappliances.ca/contact-us/">Contact Us</a> page or give our team a call.</p>
+        </div>
+    </div>
+</div>
+<script>
+    document.querySelectorAll(".faq_item h3").forEach((question) => {
+        question.addEventListener("click", function () {
+            const parent = this.parentElement;
+            const isActive = parent.classList.contains("active");
+            document.querySelectorAll(".faq_item").forEach((item) => item.classList.remove("active"));
+            if (!isActive) {
+                parent.classList.add("active");
+            }
+        });
+    });
+</script>

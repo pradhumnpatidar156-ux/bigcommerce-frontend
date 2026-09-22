@@ -1,0 +1,362 @@
+<table class="cart" data-cart-quantity="{{cart.quantity}}">
+    <thead class="cart-header">
+        <tr>
+            <th class="cart-header-item" colspan="2">{{lang 'cart.checkout.item'}}</th>
+            <th class="cart-header-item">{{lang 'cart.checkout.price'}}</th>
+            <th class="cart-header-item cart-header-quantity">{{lang 'cart.checkout.quantity'}}</th>
+            <th class="cart-header-item">{{lang 'cart.checkout.total'}}</th>
+        </tr>
+    </thead>
+    <tbody class="cart-list">
+        {{#each cart.items}}
+        <tr class="cart-item" data-item-row>
+            <td class="cart-item-block cart-item-figure">
+                {{#if type '==' 'GiftCertificate'}}
+                <img class="cart-item-fixed-image" src="{{cdn ../theme_settings.default_image_gift_certificate}}"
+                    alt="{{lang 'cart.gift_certificates.gift_certificate'}}"
+                    title="{{lang 'cart.gift_certificates.gift_certificate'}}">
+                {{else}}
+                {{> components/common/responsive-img
+                image=image
+                class="cart-item-image"
+                fallback_size=../theme_settings.productthumb_size
+                lazyload="lazyload"
+                default_image=../theme_settings.default_image_product
+                }}
+                {{/if}}
+            </td>
+            <td class="cart-item-block cart-item-title">
+                {{#if brand.name}}
+                <p class="cart-item-brand">{{brand.name}}</p>
+                {{/if}}
+                <h2 class="cart-item-name">
+                    <a class="cart-item-name__label" href="{{url}}">{{name}}</a>
+                </h2>
+                {{#if release_date}}
+                <p>({{release_date}})</p>
+                {{/if}}
+
+                {{#if options}}
+                <dl class="definitionList">
+                    {{#each options}}
+                    <dt class="definitionList-key">{{name}}:</dt>
+                    <dd class="definitionList-value">
+                        {{#if is_file}}
+                        <a href="/viewfile.php?attributeId={{id}}&cartitem={{../id}}">{{value}}</a>
+                        {{else}}
+                        {{> components/common/product-options}}
+                        {{/if}}
+                    </dd>
+                    {{/each}}
+                </dl>
+
+                <a href="{{url}}" class="change-warranty" data-item-id="{{id}}" data-product-url="{{url}}">
+                    {{lang 'common.change'}}
+                </a>
+                {{/if}}
+
+                {{#if type '==' 'GiftCertificate'}}
+                <a href="{{edit_url}}"
+                    aria-label="{{lang 'cart.gift_certificates.change_gift_certificate' certificate_name=name}}">
+                    {{lang 'common.change'}}
+                </a>
+                {{/if}}
+                {{> components/cart/item-giftwrap this}}
+                {{#if event_date}}
+                <dl class="cart-item-options">
+                    <dt class="cart-item-option-title">{{event_date.name}}</dt>
+                    <dd class="cart-item-option-description">{{event_date.date}}</dd>
+                </dl>
+                {{/if}}
+            </td>
+
+            <td class="cart-item-block cart-item-info">
+                <span class="cart-item-label">{{lang 'cart.checkout.price'}}</span>
+                {{#or ../customer (if ../theme_settings.restrict_to_login '!==' true)}}
+                <span
+                    class="cart-item-value {{#if price_discounted}}price--discounted{{/if}}">{{price.formatted}}</span>
+                {{#if price_discounted}}
+                <span class="cart-item-value">{{price_discounted.formatted}}</span>
+                {{/if}}
+                {{else}}
+                {{> components/common/login-for-pricing}}
+                {{/or}}
+            </td>
+
+            <td class="cart-item-block cart-item-info cart-item-quantity">
+                <label class="form-label cart-item-label" for="qty-{{id}}">{{lang 'products.quantity'}}</label>
+                <div class="form-increment">
+                    {{#if can_modify}}
+                    <button class="button button--icon" data-cart-update data-cart-itemid="{{id}}" data-action="dec">
+                        <span class="is-srOnly">{{lang 'products.quantity_decrease' name=name}}</span>
+                        <i class="icon" aria-hidden="true"><svg>
+                                <use xlink:href="#icon-keyboard-arrow-down" />
+                            </svg></i>
+                    </button>
+                    {{/if}}
+                    <input class="form-input form-input--incrementTotal cart-item-qty-input" id="qty-{{id}}"
+                        name="qty-{{id}}" type="tel" value="{{quantity}}" data-quantity-min="{{min_purchase_quantity}}"
+                        data-quantity-max="{{max_purchase_quantity}}"
+                        data-quantity-min-error="{{lang 'products.quantity_min' quantity=min_purchase_quantity}}"
+                        data-quantity-max-error="{{lang 'products.quantity_max' quantity=max_purchase_quantity}}"
+                        min="1" pattern="[0-9]*" data-cart-itemid="{{id}}" data-action="manualQtyChange"
+                        aria-label="{{name}}" aria-live="polite" {{#unless can_modify}} disabled{{/unless}}>
+                    {{#if can_modify}}
+                    <button class="button button--icon" data-cart-update data-cart-itemid="{{id}}" data-action="inc">
+                        <span class="is-srOnly">{{lang 'products.quantity_increase' name=name}}</span>
+                        <i class="icon" aria-hidden="true"><svg>
+                                <use xlink:href="#icon-keyboard-arrow-up" />
+                            </svg></i>
+                    </button>
+                    {{/if}}
+                </div>
+            </td>
+
+            <td class="cart-item-block cart-item-info">
+                <span class="cart-item-label">{{lang 'cart.checkout.total'}}</span>
+                {{#or ../customer (if ../theme_settings.restrict_to_login '!==' true)}}
+                <strong
+                    class="cart-item-value {{#if total_discounted}}price--discounted{{/if}}">{{total.formatted}}</strong>
+                {{#if total_discounted}}
+                <strong class="cart-item-value">{{total_discounted.formatted}}</strong>
+                {{/if}}
+                {{else}}
+                {{> components/common/login-for-pricing}}
+                {{/or}}
+                {{#or can_modify (if type '==' 'GiftCertificate')}}
+                <button class="cart-remove icon" data-cart-itemid="{{id}}"
+                    data-confirm-delete="{{lang 'cart.confirm_delete'}}"
+                    aria-label="{{lang 'cart.remove_item' name=name}}">
+                    <svg>
+                        <use xlink:href="#icon-close"></use>
+                    </svg>
+                </button>
+                {{/or}}
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+<!-- Tier Progress Box -->
+<!--<div id="tier-progress-box" style="-->
+<!--    background: #1f5bd8;-->
+<!--    border: 1px solid rgba(255,255,255,.2);-->
+<!--    padding: 20px;-->
+<!--    border-radius: 8px;-->
+<!--    margin: 20px 0;-->
+<!--    color: #fff;-->
+<!--">-->
+<!--    <h3 style="color:#fff; margin-bottom:10px; font-size:20px;">-->
+<!--        🎉 Volume Discount Available-->
+<!--    </h3>-->
+<!--    <div id="tier-message" style="color:#fff; margin-bottom:15px; font-size:15px;"></div>-->
+<!--    <div style="width:100%; height:12px; background:rgba(255,255,255,.25); border-radius:50px; overflow:hidden;">-->
+<!--        <div id="tier-progress-fill" style="-->
+<!--            width: 0%;-->
+<!--            height: 100%;-->
+<!--            background: white;-->
+<!--            border-radius: 50px;-->
+<!--            transition: .5s;-->
+<!--        "></div>-->
+<!--    </div>-->
+<!--    <div style="display:flex; justify-content:space-between; margin-top:10px; color:#fff; font-size:13px; font-weight:600;">-->
+<!--        <span>$0</span>-->
+<!--        <span>$100</span>-->
+<!--        <span>$250</span>-->
+<!--        <span>$500</span>-->
+<!--    </div>-->
+<!--</div>-->
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+
+    // ─── Change Warranty Button ───────────────────────────────────────────────────
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".change-warranty").forEach(button => {
+            button.addEventListener("click", async function (event) {
+                event.preventDefault();
+                let cartItemId = this.dataset.itemId;
+                let productUrl = this.dataset.productUrl;
+
+                if (!productUrl) {
+                    alert("Error: Product URL is missing!");
+                    return;
+                }
+
+                try {
+                    let response = await fetch("/api/storefront/carts", {
+                        headers: { "Accept": "application/json" }
+                    });
+                    let cartData = await response.json();
+
+                    if (cartData.length > 0) {
+                        let cartId = cartData[0].id;
+                        await fetch(`/api/storefront/carts/${cartId}/items/${cartItemId}`, {
+                            method: "DELETE",
+                            headers: { "Accept": "application/json" }
+                        });
+                        window.location.assign(productUrl);
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
+                }
+            });
+        });
+    });
+
+    // ─── Discount Row — har baar re-inject karo ──────────────────────────────────
+    function injectDiscountRow() {
+        // Pehle purani discount row hato (duplicate na bane)
+        $('li.cart-total--discount-custom').remove();
+
+        let totalUnit = 0;
+        let totalFinal = 0;
+
+        $('tr.cart-item').each(function () {
+            let unitPriceText = $(this).find('td.cart-item-info .cart-item-value').first().text();
+            let totalPriceText = $(this).find('td.cart-item-info .cart-item-value').last().text();
+            let unitPrice = parseFloat(unitPriceText.replace(/\$/g, '').replace(/,/g, '').trim()) || 0;
+            let totalPrice = parseFloat(totalPriceText.replace(/\$/g, '').replace(/,/g, '').trim()) || 0;
+            totalUnit += unitPrice;
+            totalFinal += totalPrice;
+        });
+
+        let discountAmount = totalUnit - totalFinal;
+        if (discountAmount <= 0) return;
+
+        let formattedDiscount = discountAmount.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+
+        $('ul.cart-totals li.cart-total:nth-child(2)').after(
+            `<li class="cart-total cart-total--discount-custom">
+            <div class="cart-total-label"><strong>Discount:</strong></div>
+            <div class="cart-total-value"><span>${formattedDiscount}</span></div>
+        </li>`
+        );
+    }
+
+    // Page load pe pehli baar
+    setTimeout(injectDiscountRow, 2000);
+
+    // ─── Tier Progress ────────────────────────────────────────────────────────────
+    let lastValidSubtotal = -1; // -1 matlab abhi koi data nahi aaya
+
+    function updateTierProgress() {
+        fetch('/api/storefront/carts', {
+            credentials: 'include',
+            headers: { 'Accept': 'application/json' }
+        })
+            .then(res => res.json())
+            .then(data => {
+                // Valid data check
+                if (!data || !Array.isArray(data) || data.length === 0) return;
+
+                let subtotal = parseFloat(data[0].baseAmount);
+
+                // NaN ya negative aaye toh purana dikhao
+                if (isNaN(subtotal) || subtotal < 0) return;
+
+                // 0 bhi valid hai (empty cart) — sirf pehli baar 0 allow karo
+                // Agar pehle se valid data tha aur ab 0 aa raha hai — BC mid-update hai, skip karo
+                if (subtotal === 0 && lastValidSubtotal > 0) return;
+
+                lastValidSubtotal = subtotal;
+                renderTierProgress(subtotal);
+
+                // Discount row bhi refresh karo
+                setTimeout(injectDiscountRow, 300);
+            })
+            .catch(() => {
+                // Error pe kuch mat karo — purana UI rakho
+            });
+    }
+
+    function renderTierProgress(subtotal) {
+        let message = '';
+        let progress = 0;
+        let remaining = 0;
+
+        if (subtotal < 100) {
+            remaining = (100 - subtotal).toFixed(2);
+            progress = (subtotal / 100) * 33.33;
+            message = `Spend <b>$${remaining}</b> more to unlock <b>5% OFF</b>`;
+
+        } else if (subtotal < 250) {
+            remaining = (250 - subtotal).toFixed(2);
+            progress = 33.33 + ((subtotal - 100) / 150) * 33.33;
+            message = `✅ 5% OFF unlocked<br>Spend <b>$${remaining}</b> more to unlock <b>10% OFF</b>`;
+
+        } else if (subtotal < 500) {
+            remaining = (500 - subtotal).toFixed(2);
+            progress = 66.66 + ((subtotal - 250) / 250) * 33.34;
+            message = `✅ 5% OFF unlocked<br>✅ 10% OFF unlocked<br>Spend <b>$${remaining}</b> more to unlock <b>15% OFF</b>`;
+
+        } else {
+            progress = 100;
+            message = `🎉 Maximum <b>15% OFF</b> unlocked`;
+        }
+
+        $('#tier-message').html(message);
+        $('#tier-progress-fill').css('width', progress + '%');
+    }
+
+    // ─── Event Delegation ─────────────────────────────────────────────────────────
+    document.addEventListener('click', function (e) {
+        if (e.target.closest('[data-cart-update]')) {
+            clearTimeout(window.tierRefresh);
+            window.tierRefresh = setTimeout(updateTierProgress, 1500);
+        }
+    });
+
+    document.addEventListener('change', function (e) {
+        if (e.target.closest('[data-action="manualQtyChange"]')) {
+            clearTimeout(window.tierRefresh);
+            window.tierRefresh = setTimeout(updateTierProgress, 1500);
+        }
+    });
+
+    // Page load
+    updateTierProgress();
+
+</script>
+
+<style>
+    /* Cart loading overlay — white background hatao, sirf spinner dikhao */
+    .loadingOverlay,
+    .loading-overlay,
+    [data-cart-status] .loadingOverlay,
+    .cart .loadingOverlay,
+    .cart-item .loadingOverlay {
+        background: transparent !important;
+        background-color: transparent !important;
+    }
+
+    .loadingOverlay:after,
+    .loading-overlay:after {
+        background: transparent !important;
+    }
+
+    /* Stencil aria-busy override */
+    [aria-busy="true"]::before,
+    [aria-busy="true"]::after {
+        background: transparent !important;
+    }
+
+    .price--retail {
+        color: #888;
+        text-decoration: line-through;
+        margin-right: 4px;
+    }
+
+    .price--sale {
+        color: #d00;
+        font-weight: bold;
+    }
+
+    .cart-item-savings {
+        display: block;
+        font-size: 0.9em;
+        color: green;
+        margin-top: 4px;
+    }
+</style>

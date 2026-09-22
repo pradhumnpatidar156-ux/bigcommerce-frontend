@@ -1,0 +1,651 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<div class="humm-zeno-promo">
+    <!-- Main Header (Inline layout) -->
+    <div class="hzp-header">
+        <div class="hzp-brand">
+            <img src="https://cdn.shophumm.com/humm/uploads/humm-logo.svg" alt="Humm Logo">
+            <span class="hzp-tag">Financing</span>
+        </div>
+        <div class="hzp-header-text">
+            <h1>18 Months No Fees, No Interest</h1>
+            <p>Featured financing plan with 0% APR. Easy monthly payments, apply in minutes!</p>
+        </div>
+    </div>
+
+    <!-- Middle Panel: Calculator & Options Side-by-Side -->
+    <div class="hzp-middle-grid">
+        <!-- Calculator Column (Left) -->
+        <div class="hzp-card hzp-calc-card">
+            <h2>Repayment Calculator</h2>
+            <p class="hzp-sub">Adjust the slider to estimate your repayments</p>
+
+            <div class="hzp-calc-row">
+                <div class="hzp-slider-box">
+                    <div class="hzp-amount-display">
+                        <span class="hzp-currency">$</span>
+                        <input type="number" id="hzp-calc-amount-input" class="hzp-amount-input" min="150" max="30000" value="2500">
+                    </div>
+                    <div class="hzp-slider-container">
+                        <input type="range" id="hzp-amount-slider" min="150" max="30000" step="1" value="2500">
+                        <div class="hzp-slider-labels">
+                            <span>$150</span>
+                            <span>$15,000</span>
+                            <span>$30,000</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Focus Summary Box (Inline next to slider) -->
+                <div id="hzp-focus-panel">
+                    <div class="hzp-focus-rate" id="hzp-focus-rate">From $138.89/month</div>
+                    <div class="hzp-focus-details" id="hzp-focus-details">
+                        18 monthly payments (first payment of <strong style="color:#ff822e;">$138.89 today</strong> + 17 monthly installments of <strong>$138.89</strong> at 0% APR).
+                    </div>
+                    <div class="hzp-focus-total" id="hzp-focus-total">Total repayment: $2,500.00</div>
+                    <div class="hzp-focus-disclaimer">*Subject to Humm approval.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Options Column (Right) -->
+        <div class="hzp-card hzp-options-card">
+            <h2>Financing Plans</h2>
+            <p class="hzp-sub">Select an option to view installment schedules</p>
+            <div class="hzp-options-list" id="hzp-options-list">
+                <!-- Javascript will inject 2-column grid of options here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Bar: Steps & CTA aligned horizontally -->
+    <div class="hzp-bottom-bar">
+        <div class="hzp-step-item">
+            <div class="hzp-step-num">1</div>
+            <div class="hzp-step-content">
+                <h3>Shop & Checkout</h3>
+                <p>Select <strong>Humm</strong> as your payment option at checkout.</p>
+            </div>
+        </div>
+        <div class="hzp-step-item">
+            <div class="hzp-step-num">2</div>
+            <div class="hzp-step-content">
+                <h3>Apply in 7 Mins</h3>
+                <p>Complete a quick application and get an instant decision.</p>
+            </div>
+        </div>
+        <div class="hzp-step-item">
+            <div class="hzp-step-num">3</div>
+            <div class="hzp-step-content">
+                <h3>Pay Over Time</h3>
+                <p>Enjoy your purchase today and pay in easy installments.</p>
+            </div>
+        </div>
+        <div class="hzp-cta-item">
+            <a href="https://humm-canada-prod-web-app.herokuapp.com/application?retailerId=001OO00000i5J8mYAE" target="_blank" class="hzp-btn">
+                Pre-Apply for Humm Financing
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+/* CSS Reset and Font Import Scope */
+.humm-zeno-promo {
+    font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: #ffffff;
+    color: #0f172a;
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
+    margin: 10px auto;
+    max-width: 1250px;
+    box-sizing: border-box;
+}
+
+.humm-zeno-promo * {
+    box-sizing: border-box;
+}
+
+/* Header Styling (Horizontal Row) */
+.hzp-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 12px;
+    margin-bottom: 15px;
+    gap: 20px;
+}
+
+.hzp-brand {
+    display: inline-flex;
+    align-items: center;
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    padding: 6px 14px;
+    border-radius: 50px;
+    flex-shrink: 0;
+}
+
+.hzp-brand img {
+    height: 22px;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.05));
+}
+
+.hzp-tag {
+    color: #475569;
+    font-weight: 800;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    border-left: 2px solid #cbd5e1;
+    padding-left: 8px;
+    margin-left: 8px;
+    line-height: 1;
+}
+
+.hzp-header-text {
+    text-align: right;
+}
+
+.hzp-header h1 {
+    font-size: 20px;
+    font-weight: 800;
+    margin: 0 0 2px 0;
+    color: #0f172a;
+    letter-spacing: -0.5px;
+}
+
+.hzp-header p {
+    font-size: 12px;
+    color: #475569;
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* Middle Layout: Calculator & Options */
+.hzp-middle-grid {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+/* Card Styling */
+.hzp-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.01);
+}
+
+.hzp-card h2 {
+    font-size: 15px;
+    font-weight: 700;
+    margin: 0 0 2px 0;
+    color: #0f172a;
+}
+
+.hzp-sub {
+    font-size: 11.5px;
+    color: #64748b;
+    margin: 0 0 12px 0;
+}
+
+/* Calculator Row Components */
+.hzp-calc-row {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 15px;
+    align-items: center;
+}
+
+.hzp-slider-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.hzp-amount-display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+
+.hzp-currency {
+    font-size: 18px;
+    color: #ff822e;
+    margin-right: 2px;
+    transform: translateY(-2px);
+}
+
+.hzp-amount-input {
+    border: none;
+    border-bottom: 2px dashed #cbd5e1;
+    background: transparent;
+    font-size: 32px;
+    font-weight: 800;
+    width: 140px;
+    text-align: center;
+    color: #0f172a;
+    font-family: inherit;
+    outline: none;
+    padding: 0;
+    margin: 0;
+    letter-spacing: -1px;
+}
+.hzp-amount-input:focus {
+    border-bottom-color: #ff822e;
+}
+.hzp-amount-input::-webkit-outer-spin-button,
+.hzp-amount-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+.hzp-amount-input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.hzp-slider-container input[type=range] {
+    -webkit-appearance: none;
+    width: 100%;
+    background: transparent;
+}
+
+.hzp-slider-container input[type=range]:focus {
+    outline: none;
+}
+
+.hzp-slider-container input[type=range]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 6px;
+    cursor: pointer;
+    background: #e2e8f0;
+    border-radius: 3px;
+}
+
+.hzp-slider-container input[type=range]::-webkit-slider-thumb {
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background: #ff822e;
+    cursor: pointer;
+    -webkit-appearance: none;
+    margin-top: -5px;
+    box-shadow: 0 2px 6px rgba(255, 130, 46, 0.4);
+    transition: transform 0.1s ease;
+}
+
+.hzp-slider-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: #64748b;
+    margin-top: 4px;
+    font-weight: 600;
+}
+
+/* Focus Panel Styling */
+#hzp-focus-panel {
+    background: #ffffff;
+    border: 1.5px solid #ff822e;
+    border-radius: 10px;
+    padding: 12px;
+    box-shadow: 0 2px 8px rgba(255, 130, 46, 0.05);
+}
+
+.hzp-focus-rate {
+    font-size: 15px;
+    font-weight: 800;
+    color: #ff822e;
+    margin-bottom: 4px;
+}
+
+.hzp-focus-details {
+    font-size: 11px;
+    line-height: 1.4;
+    color: #334155;
+    margin-bottom: 6px;
+}
+
+.hzp-focus-total {
+    font-size: 11px;
+    color: #475569;
+    border-top: 1px solid #e2e8f0;
+    padding-top: 4px;
+}
+
+.hzp-focus-disclaimer {
+    font-size: 9.5px;
+    color: rgba(0, 0, 0, 0.45);
+    margin-top: 2px;
+    font-style: italic;
+}
+
+/* 2-Column Options List Grid */
+.hzp-options-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+}
+
+.hzp-option-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 8px 10px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.hzp-option-row:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+    transform: translateX(1px);
+}
+
+.hzp-option-row.active {
+    background: #fff7ed;
+    border-color: #ff822e;
+}
+
+.hzp-opt-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.hzp-opt-val {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: #ff822e;
+}
+
+/* Bottom Bar: Steps & CTA aligned horizontally */
+.hzp-bottom-bar {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 12px 15px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1.3fr;
+    gap: 15px;
+    align-items: center;
+}
+
+.hzp-step-item {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.hzp-step-num {
+    background: #ff822e;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 800;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.hzp-step-content h3 {
+    font-size: 11.5px;
+    font-weight: 700;
+    margin: 0 0 1px 0;
+    color: #0f172a;
+}
+
+.hzp-step-content p {
+    font-size: 10px;
+    line-height: 1.3;
+    color: #475569;
+    margin: 0;
+}
+
+.hzp-btn {
+    display: inline-block;
+    width: 100%;
+    background: #ff822e;
+    color: #ffffff !important;
+    font-weight: 700;
+    font-size: 11.5px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    text-align: center;
+    text-decoration: none !important;
+    transition: all 0.2s ease;
+    box-shadow: 0 3px 10px rgba(255, 130, 46, 0.25);
+    border: none;
+    cursor: pointer;
+    letter-spacing: 0.3px;
+}
+
+.hzp-btn:hover {
+    background: #ff9147;
+    transform: translateY(-1px);
+    box-shadow: 0 5px 15px rgba(255, 130, 46, 0.35);
+}
+
+/* Responsive Overrides */
+@media (max-width: 950px) {
+    .hzp-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .hzp-header-text {
+        text-align: center;
+    }
+    .hzp-middle-grid {
+        grid-template-columns: 1fr;
+    }
+    .hzp-calc-row {
+        grid-template-columns: 1fr;
+    }
+    .hzp-bottom-bar {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+}
+</style>
+
+<script>
+(function() {
+    // Repayment Calculation Helper
+    function calcMonthly(principal, annualRate, months) {
+        if (annualRate === 0) return principal / months;
+        let monthlyRate = (annualRate / 100) / 12;
+        return (monthlyRate * principal) / (1 - Math.pow(1 + monthlyRate, -months));
+    }
+
+    const slider = document.getElementById('hzp-amount-slider');
+    const amountInput = document.getElementById('hzp-calc-amount-input');
+    const optionsList = document.getElementById('hzp-options-list');
+    const focusRate = document.getElementById('hzp-focus-rate');
+    const focusDetails = document.getElementById('hzp-focus-details');
+    const focusTotal = document.getElementById('hzp-focus-total');
+
+    let currentSelectedTerm = 18; // default focus term is 18
+
+    function updateCalculator(customVal) {
+        const val = customVal !== undefined ? customVal : parseFloat(slider.value);
+        
+        // Update input field if user is not actively typing inside it
+        if (document.activeElement !== amountInput) {
+            amountInput.value = Math.round(val);
+        }
+
+        // Clamp val for calculations
+        const calculationVal = Math.min(30000, Math.max(150, val));
+
+        // Calculate Plan Instalments
+        const plan12 = (calculationVal / 12).toFixed(2);
+        const plan18 = (calculationVal / 18).toFixed(2); // Promoted: No fees, no interest (0% APR)
+        const plan24 = calcMonthly(calculationVal, 9.99, 24).toFixed(2);
+        const plan36 = calcMonthly(calculationVal, 9.99, 36).toFixed(2);
+        const plan48 = calcMonthly(calculationVal, 15.99, 48).toFixed(2);
+        const plan60 = calcMonthly(calculationVal, 15.99, 60).toFixed(2);
+
+        // Repayment totals
+        const repay12 = (plan12 * 12).toFixed(2);
+        const repay18 = (plan18 * 18).toFixed(2);
+        const repay24 = (plan24 * 24).toFixed(2);
+        const repay36 = (plan36 * 36).toFixed(2);
+        const repay48 = (plan48 * 48).toFixed(2);
+        const repay60 = (plan60 * 60).toFixed(2);
+
+        // Descriptions templates
+        const plans = {
+            12: {
+                rate: `From $${plan12}/month`,
+                details: `12 monthly payments (first payment of <strong style="color:#ff822e;">$${plan12} today</strong> + 11 monthly installments of <strong>$${plan12}</strong> at 0% APR).`,
+                total: `Total repayment: <strong>$${parseFloat(repay12).toLocaleString()}</strong>`,
+                label: '12 Months',
+                valueDisplay: `$${plan12}/mo (0% APR)`
+            },
+            18: {
+                rate: `From $${plan18}/month`,
+                details: `18 monthly payments (first payment of <strong style="color:#ff822e;">$${plan18} today</strong> + 17 monthly installments of <strong>$${plan18}</strong> at 0% APR).`,
+                total: `Total repayment: <strong>$${parseFloat(repay18).toLocaleString()}</strong>`,
+                label: '18 Months',
+                valueDisplay: `$${plan18}/mo (0% APR)`
+            },
+            24: {
+                rate: `From $${plan24}/month`,
+                details: `24 monthly payments (first payment of <strong style="color:#ff822e;">$${plan24} today</strong> + 23 monthly installments of <strong>$${plan24}</strong> at 9.99% APR).`,
+                total: `Total repayment: <strong>$${parseFloat(repay24).toLocaleString()}</strong>`,
+                label: '24 Months',
+                valueDisplay: `$${plan24}/mo (9.99% APR)`
+            },
+            36: {
+                rate: `From $${plan36}/month`,
+                details: `36 monthly payments (first payment of <strong style="color:#ff822e;">$${plan36} today</strong> + 35 monthly installments of <strong>$${plan36}</strong> at 9.99% APR).`,
+                total: `Total repayment: <strong>$${parseFloat(repay36).toLocaleString()}</strong>`,
+                label: '36 Months',
+                valueDisplay: `$${plan36}/mo (9.99% APR)`
+            },
+            48: {
+                rate: `From $${plan48}/month`,
+                details: `48 monthly payments (first payment of <strong style="color:#ff822e;">$${plan48} today</strong> + 47 monthly installments of <strong>$${plan48}</strong> at 15.99% APR).`,
+                total: `Total repayment: <strong>$${parseFloat(repay48).toLocaleString()}</strong>`,
+                label: '48 Months',
+                valueDisplay: `$${plan48}/mo (15.99% APR)`
+            },
+            60: {
+                rate: `From $${plan60}/month`,
+                details: `60 monthly payments (first payment of <strong style="color:#ff822e;">$${plan60} today</strong> + 59 monthly installments of <strong>$${plan60}</strong> at 15.99% APR).`,
+                total: `Total repayment: <strong>$${parseFloat(repay60).toLocaleString()}</strong>`,
+                label: '60 Months',
+                valueDisplay: `$${plan60}/mo (15.99% APR)`
+            }
+        };
+
+        // If val < 500, include Bi-weekly option
+        let optionListHtml = '';
+        if (val < 500) {
+            const biWeekly = (val / 6).toFixed(2);
+            const repayBiWeekly = (biWeekly * 6).toFixed(2);
+            plans['biweekly'] = {
+                rate: `From $${biWeekly}/fortnight`,
+                details: `6 bi-weekly payments (first payment of <strong style="color:#ff822e;">$${biWeekly} today</strong> + 5 bi-weekly installments of <strong>$${biWeekly}</strong> at 0% APR).`,
+                total: `Total repayment: <strong>$${parseFloat(repayBiWeekly).toLocaleString()}</strong>`,
+                label: '6 Bi-Weekly',
+                valueDisplay: `$${biWeekly}/fn (0% APR)`
+            };
+
+            // Force term if previous selected is not supported under 500
+            if (currentSelectedTerm === 60 || currentSelectedTerm === 48 || currentSelectedTerm === 36 || !plans[currentSelectedTerm]) {
+                currentSelectedTerm = 'biweekly';
+            }
+
+            optionListHtml += `
+                <div class="hzp-option-row ${currentSelectedTerm === 'biweekly' ? 'active' : ''}" data-term="biweekly">
+                    <span class="hzp-opt-label">6 Bi-Weekly</span>
+                    <span class="hzp-opt-val">${plans['biweekly'].valueDisplay}</span>
+                </div>
+            `;
+        } else {
+            // Force fallback if 'biweekly' is selected but value is >= 500
+            if (currentSelectedTerm === 'biweekly') {
+                currentSelectedTerm = 18;
+            }
+        }
+
+        // Render all other monthly plan rows
+        const terms = [12, 18, 24, 36, 48, 60];
+        terms.forEach(t => {
+            optionListHtml += `
+                <div class="hzp-option-row ${currentSelectedTerm == t ? 'active' : ''}" data-term="${t}">
+                    <span class="hzp-opt-label">${plans[t].label}</span>
+                    <span class="hzp-opt-val">${plans[t].valueDisplay}</span>
+                </div>
+            `;
+        });
+
+        optionsList.innerHTML = optionListHtml;
+
+        // Update active highlighted display
+        const activePlan = plans[currentSelectedTerm];
+        if (activePlan) {
+            focusRate.innerHTML = activePlan.rate;
+            focusDetails.innerHTML = activePlan.details;
+            focusTotal.innerHTML = activePlan.total;
+        }
+
+        // Add event listeners to newly generated rows
+        const rows = optionsList.querySelectorAll('.hzp-option-row');
+        rows.forEach(r => {
+            r.addEventListener('click', function() {
+                rows.forEach(el => el.classList.remove('active'));
+                this.classList.add('active');
+                currentSelectedTerm = this.dataset.term;
+                updateCalculator();
+            });
+        });
+    }
+
+    slider.addEventListener('input', function() {
+        updateCalculator();
+    });
+
+    amountInput.addEventListener('input', function() {
+        let val = parseFloat(this.value);
+        if (!isNaN(val)) {
+            let clampedVal = Math.min(30000, Math.max(150, val));
+            slider.value = clampedVal;
+            updateCalculator(val);
+        }
+    });
+
+    amountInput.addEventListener('blur', function() {
+        let val = parseFloat(this.value);
+        if (isNaN(val) || val < 150) {
+            this.value = 150;
+        } else if (val > 30000) {
+            this.value = 30000;
+        } else {
+            this.value = Math.round(val);
+        }
+        slider.value = this.value;
+        updateCalculator();
+    });
+
+    // Initialize calculator
+    updateCalculator();
+})();
+</script>
