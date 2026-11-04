@@ -1,0 +1,907 @@
+<!-- ==========================================================================
+     PAYPAL PAY IN 4 DYNAMIC INSTALLMENT WIDGET & MODAL
+     Undervalue Appliances - BigCommerce Stencil Theme
+     Calculates 4 interest-free payments spaced 2 weeks apart dynamically.
+     Supports real-time updates on price change (variants / swatches).
+     Matches HUMM financing styling and official PayPal Pay in 4 modal popup.
+     ========================================================================== -->
+
+<style>
+/* --------------------------------------------------------------------------
+   1. INLINE PRODUCT PAGE PROMO CARD (Matches .humm-inline-promo style)
+   -------------------------------------------------------------------------- */
+.paypal-payin4-promo {
+    background: rgba(0, 112, 186, 0.04) !important;
+    border: 1px solid #0070ba !important;
+    border-radius: 10px !important;
+    padding: 22px 24px !important;
+    box-sizing: border-box !important;
+    color: #ffffff !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    margin: 18px 0 20px 0 !important;
+    text-align: left !important;
+    width: 100% !important;
+    position: relative !important;
+    font-family: inherit !important;
+    transition: all 0.25s ease !important;
+}
+
+/* Header */
+.paypal-payin4-header {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    margin-bottom: 16px !important;
+    flex-wrap: wrap !important;
+    gap: 12px !important;
+}
+.paypal-payin4-brand-wrap {
+    display: flex !important;
+    align-items: center !important;
+}
+.paypal-payin4-logo-img {
+    height: 30px !important;
+    vertical-align: middle !important;
+    filter: drop-shadow(0 0 8px rgba(0, 112, 186, 0.4)) !important;
+}
+.paypal-payin4-brand-title {
+    color: #ffffff !important;
+    font-weight: 800 !important;
+    font-size: 18px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    border-left: 2px solid rgba(255, 255, 255, 0.25) !important;
+    padding-left: 12px !important;
+    margin-left: 12px !important;
+    display: inline-block !important;
+    vertical-align: middle !important;
+    line-height: 1 !important;
+}
+.paypal-payin4-badge {
+    background: #0070ba !important;
+    color: #ffffff !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    padding: 4px 10px !important;
+    border-radius: 4px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    box-shadow: 0 2px 6px rgba(0, 112, 186, 0.3) !important;
+}
+
+/* Primary text description */
+.paypal-payin4-desc {
+    font-size: 14.5px !important;
+    line-height: 1.5 !important;
+    margin-bottom: 14px !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
+    padding-bottom: 14px !important;
+    text-align: left !important;
+    color: #ffffff !important;
+    min-height: 48px !important;
+}
+.paypal-payin4-highlight-amt {
+    font-size: 18px !important;
+    font-weight: bold !important;
+    color: #38bdf8 !important;
+    margin-bottom: 4px !important;
+}
+.paypal-payin4-subline {
+    font-size: 13.5px !important;
+    line-height: 1.4 !important;
+    color: #ffffff !important;
+}
+
+/* Inline Payment Schedule Stepper */
+.paypal-inline-schedule-wrap {
+    margin-bottom: 14px !important;
+    background: rgba(255, 255, 255, 0.03) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 8px !important;
+    padding: 14px 16px !important;
+}
+.paypal-inline-schedule-top {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    margin-bottom: 12px !important;
+}
+.paypal-inline-schedule-title {
+    font-size: 12.5px !important;
+    font-weight: 700 !important;
+    color: rgba(255, 255, 255, 0.85) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+}
+.paypal-modal-open-trigger {
+    background: transparent !important;
+    border: none !important;
+    color: #38bdf8 !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    text-decoration: underline !important;
+    cursor: pointer !important;
+    padding: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    transition: color 0.2s ease !important;
+}
+.paypal-modal-open-trigger:hover {
+    color: #ffffff !important;
+}
+
+.paypal-stepper-container {
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: space-between !important;
+    position: relative !important;
+    padding: 4px 6px 2px 6px !important;
+}
+.paypal-stepper-col {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    z-index: 2 !important;
+    min-width: 60px !important;
+}
+.paypal-stepper-dot {
+    width: 13px !important;
+    height: 13px !important;
+    border-radius: 50% !important;
+    background: #64748b !important;
+    margin-bottom: 8px !important;
+    transition: all 0.2s ease !important;
+}
+.paypal-stepper-dot.active {
+    background: #0070ba !important;
+    box-shadow: 0 0 0 3px rgba(0, 112, 186, 0.35) !important;
+}
+.paypal-stepper-amt {
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    color: #ffffff !important;
+    line-height: 1.2 !important;
+}
+.paypal-stepper-lbl {
+    font-size: 11px !important;
+    color: rgba(255, 255, 255, 0.7) !important;
+    margin-top: 3px !important;
+    white-space: nowrap !important;
+}
+.paypal-stepper-line {
+    flex: 1 !important;
+    height: 0 !important;
+    border-top: 2px dashed rgba(255, 255, 255, 0.25) !important;
+    margin: 6px 6px 0 6px !important;
+    z-index: 1 !important;
+}
+
+/* Accordion Collapsible Box (matching HUMM accordion style) */
+.paypal-accordion {
+    margin-bottom: 14px !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 8px !important;
+    background: rgba(255, 255, 255, 0.02) !important;
+    overflow: hidden !important;
+    width: 100% !important;
+}
+.paypal-accordion-trigger {
+    width: 100% !important;
+    background: transparent !important;
+    border: none !important;
+    padding: 10px 14px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    font-size: 13px !important;
+    cursor: pointer !important;
+    text-align: left !important;
+    outline: none !important;
+    transition: background 0.2s ease !important;
+}
+.paypal-accordion-trigger:hover {
+    background: rgba(255, 255, 255, 0.05) !important;
+}
+.paypal-accordion-icon {
+    transition: transform 300ms ease !important;
+    display: block !important;
+    fill: currentColor !important;
+}
+.paypal-accordion.open .paypal-accordion-icon {
+    transform: rotate(180deg) !important;
+}
+.paypal-accordion-content {
+    max-height: 0;
+    overflow: hidden !important;
+    transition: max-height 300ms ease-out !important;
+}
+.paypal-accordion-inner {
+    padding: 4px 14px 14px 14px !important;
+    font-size: 13px !important;
+    color: rgba(255, 255, 255, 0.85) !important;
+    line-height: 1.5 !important;
+}
+.paypal-accordion-list {
+    margin: 4px 0 0 18px !important;
+    padding: 0 !important;
+}
+.paypal-accordion-list li {
+    margin-bottom: 8px !important;
+}
+
+/* Bottom Callout Note (matching HUMM bottom notice box) */
+.paypal-payin4-note {
+    background: rgba(255, 255, 255, 0.04) !important;
+    border-radius: 8px !important;
+    padding: 12px 14px !important;
+    font-size: 12px !important;
+    color: rgba(255, 255, 255, 0.85) !important;
+    border-left: 4px solid #0070ba !important;
+    text-align: left !important;
+    line-height: 1.4 !important;
+}
+
+/* --------------------------------------------------------------------------
+   2. PAYPAL PAY IN 4 POPUP MODAL (Pixel-Perfect from Reference Screenshot)
+   -------------------------------------------------------------------------- */
+.paypal-modal-overlay {
+    position: fixed !important;
+    inset: 0 !important;
+    background: rgba(0, 0, 0, 0.65) !important;
+    z-index: 9999999 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 16px !important;
+    backdrop-filter: blur(4px) !important;
+    -webkit-backdrop-filter: blur(4px) !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transition: opacity 0.25s ease, visibility 0.25s ease !important;
+}
+.paypal-modal-overlay.active {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Modal Card (Pure clean white background strictly matching screenshot) */
+.paypal-modal-card {
+    background: #ffffff !important;
+    color: #2c2e2f !important;
+    border-radius: 16px !important;
+    width: 100% !important;
+    max-width: 520px !important;
+    max-height: 90vh !important;
+    overflow-y: auto !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35) !important;
+    padding: 32px 32px 28px !important;
+    position: relative !important;
+    box-sizing: border-box !important;
+    transform: translateY(20px) scale(0.98) !important;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+    text-align: left !important;
+}
+.paypal-modal-overlay.active .paypal-modal-card {
+    transform: translateY(0) scale(1) !important;
+}
+
+/* Top bar: PayPal Emblem + Close 'X' Button */
+.paypal-modal-top-bar {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    margin-bottom: 20px !important;
+}
+.paypal-modal-emblem-svg {
+    height: 38px !important;
+    width: 32px !important;
+    vertical-align: middle !important;
+}
+.paypal-modal-close-btn {
+    border: 1px solid #d1d5db !important;
+    background: #ffffff !important;
+    color: #111827 !important;
+    width: 38px !important;
+    height: 38px !important;
+    border-radius: 8px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    font-size: 16px !important;
+    line-height: 1 !important;
+    padding: 0 !important;
+    transition: all 0.15s ease !important;
+    outline: none !important;
+}
+.paypal-modal-close-btn:hover {
+    background: #f3f4f6 !important;
+    border-color: #9ca3af !important;
+}
+
+/* Modal Titles */
+.paypal-modal-title {
+    font-size: 26px !important;
+    font-weight: 800 !important;
+    color: #001435 !important;
+    line-height: 1.25 !important;
+    margin: 0 0 10px 0 !important;
+    letter-spacing: -0.4px !important;
+}
+.paypal-modal-subtitle {
+    font-size: 15px !important;
+    color: #2c2e2f !important;
+    line-height: 1.5 !important;
+    margin: 0 0 28px 0 !important;
+}
+
+/* Modal Stepper (Screenshot Layout) */
+.paypal-modal-stepper {
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: space-between !important;
+    margin: 28px 0 32px 0 !important;
+    position: relative !important;
+}
+.paypal-modal-step {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    z-index: 2 !important;
+    min-width: 65px !important;
+}
+.paypal-modal-dot {
+    width: 14px !important;
+    height: 14px !important;
+    border-radius: 50% !important;
+    background: #2c2e2f !important;
+    margin-bottom: 12px !important;
+}
+.paypal-modal-dot.first {
+    background: #0070ba !important;
+}
+.paypal-modal-amt {
+    font-size: 13.5px !important;
+    font-weight: 700 !important;
+    color: #001435 !important;
+    line-height: 1.2 !important;
+}
+.paypal-modal-lbl {
+    font-size: 12px !important;
+    color: #545d68 !important;
+    margin-top: 4px !important;
+}
+.paypal-modal-line {
+    flex: 1 !important;
+    height: 0 !important;
+    border-top: 2px dashed #b7bcbf !important;
+    margin: 7px 4px 0 4px !important;
+    z-index: 1 !important;
+}
+
+/* 3-Step Guide */
+.paypal-modal-guide-list {
+    margin: 0 0 24px 0 !important;
+    padding: 0 0 0 22px !important;
+    color: #2c2e2f !important;
+    font-size: 15px !important;
+    line-height: 1.6 !important;
+}
+.paypal-modal-guide-list li {
+    margin-bottom: 12px !important;
+    padding-left: 4px !important;
+}
+.paypal-modal-guide-list strong {
+    color: #001435 !important;
+}
+
+/* Disclaimer Footer */
+.paypal-modal-disclaimer {
+    border-top: 1px solid #e5e7eb !important;
+    padding-top: 18px !important;
+    font-size: 11.5px !important;
+    color: #687173 !important;
+    line-height: 1.55 !important;
+    margin: 0 !important;
+}
+
+/* Responsive tweaks */
+@media (max-width: 480px) {
+    .paypal-payin4-promo {
+        padding: 18px 16px !important;
+    }
+    .paypal-modal-card {
+        padding: 24px 18px 20px !important;
+    }
+    .paypal-modal-title {
+        font-size: 22px !important;
+    }
+    .paypal-modal-subtitle {
+        font-size: 14px !important;
+        margin-bottom: 22px !important;
+    }
+    .paypal-modal-amt {
+        font-size: 12px !important;
+    }
+    .paypal-modal-lbl {
+        font-size: 10.5px !important;
+    }
+    .paypal-modal-step {
+        min-width: 50px !important;
+    }
+    .paypal-stepper-col {
+        min-width: 48px !important;
+    }
+    .paypal-stepper-amt {
+        font-size: 11.5px !important;
+    }
+    .paypal-stepper-lbl {
+        font-size: 10px !important;
+    }
+}
+</style>
+
+<!-- ==========================================================================
+     HTML: INLINE PRODUCT PROMO CONTAINER
+     ========================================================================== -->
+<div class="paypal-payin4-promo" id="paypal-payin4-container">
+    <!-- Header row with PayPal Branding -->
+    <div class="paypal-payin4-header">
+        <div class="paypal-payin4-brand-wrap">
+            <!-- Official PayPal Logo Image with SVG fallback -->
+            <img class="paypal-payin4-logo-img" 
+                 src="https://www.paypalobjects.com/paypal-ui/logos/svg/paypal-color.svg" 
+                 alt="PayPal"
+                 onerror="this.style.display='none'; document.getElementById('paypal-inline-fallback-svg').style.display='inline-block';">
+            
+            <svg id="paypal-inline-fallback-svg" style="display:none; height: 26px; vertical-align: middle;" viewBox="0 0 100 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill="#003087" d="M13.2 2.6H5.4c-.6 0-1.1.4-1.2 1L.1 23.3c-.1.5.3 1 .8 1h3.9c.6 0 1.1-.4 1.2-1l.9-5.7c.1-.6.6-1 1.2-1h2.7c5.2 0 8.3-2.5 9-7.5.3-2.2 0-3.9-1-5.1-.9-1-2.5-1.5-4.6-1.5zm.9 7.4c-.4 2.8-2.6 2.8-4.6 2.8h-1.3l1-6.1h1.3c1.4 0 2.7 0 3.3.8.5.5.5 1.4.3 2.5z"/>
+                <path fill="#0079c1" d="M34.8 10.3h-3.9c-.3 0-.6.2-.7.5l-.2 1-.3-.4c-.8-1.2-2.6-1.5-4.4-1.5-4.1 0-7.6 3.1-8.3 7.6-.4 2.3.1 4.5 1.5 6 1.2 1.3 3 1.9 4.9 1.9 3.5 0 5.4-2.3 5.4-2.3l-.2 1.2c-.1.5.3 1 .8 1h3.6c.6 0 1.1-.4 1.2-1l2.1-13.4c.1-.6-.3-1-1-1zm-4.6 7.4c-.4 2.3-2.2 3.8-4.5 3.8-1.1 0-2-.4-2.6-1.1-.5-.7-.7-1.7-.5-2.7.4-2.3 2.3-3.8 4.5-3.8 1.1 0 2 .4 2.6 1.1.5.7.7 1.7.5 2.7z"/>
+            </svg>
+
+            <span class="paypal-payin4-brand-title">Pay in 4</span>
+        </div>
+        <span class="paypal-payin4-badge">0% Interest</span>
+    </div>
+
+    <!-- Main dynamic description -->
+    <div class="paypal-payin4-desc" id="paypal-main-desc">
+        Calculating payment schedule...
+    </div>
+
+    <!-- Payment Schedule Visual Stepper -->
+    <div class="paypal-inline-schedule-wrap">
+        <div class="paypal-inline-schedule-top">
+            <span class="paypal-inline-schedule-title">Payment Schedule (Every 2 Weeks)</span>
+            <button type="button" class="paypal-modal-open-trigger" id="paypal-modal-trigger-btn" aria-label="Learn more about PayPal Pay in 4">
+                <span>Learn more</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+            </button>
+        </div>
+
+        <div class="paypal-stepper-container" id="paypal-inline-stepper-row">
+            <!-- Dynamically populated 4-dot stepper -->
+        </div>
+    </div>
+
+    <!-- Accordion Collapsible Box (How it works) -->
+    <div class="paypal-accordion">
+        <div class="paypal-accordion-trigger" role="button" tabindex="0" aria-expanded="false">
+            <span>How Pay in 4 Works</span>
+            <svg class="paypal-accordion-icon" viewBox="0 0 24 24" width="18" height="18">
+                <path d="M7 10l5 5 5-5H7z" fill="currentColor"></path>
+            </svg>
+        </div>
+        <div class="paypal-accordion-content">
+            <div class="paypal-accordion-inner">
+                <ol class="paypal-accordion-list">
+                    <li>Choose <strong>PayPal</strong> at checkout to pay later with <strong>Pay in 4</strong>.</li>
+                    <li>Complete your purchase with a <strong>25% first payment</strong> today.</li>
+                    <li>Use autopay for the remaining 3 payments every 2 weeks. <strong>It's that easy!</strong></li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom note -->
+    <div class="paypal-payin4-note">
+        Pay in 4 is available to approved consumers for purchases of $10 to $2,000 (CAD) with no late fees and no impact on credit score. Availability depends on the merchant.
+    </div>
+</div>
+
+<!-- ==========================================================================
+     HTML: PAYPAL PAY IN 4 POPUP MODAL (Matching attached reference screenshot)
+     ========================================================================== -->
+<div id="paypal-payin4-modal" class="paypal-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="paypal-modal-headline" style="display: none;">
+    <div class="paypal-modal-card">
+        <!-- Top row: Official PayPal Emblem + Close button -->
+        <div class="paypal-modal-top-bar">
+            <!-- Official dual-color PayPal emblem SVG -->
+            <svg class="paypal-modal-emblem-svg" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g clip-path="url(#paypal-modal-clip-path)">
+                    <path fill="#002991" d="M38.914 13.35c0 5.574-5.144 12.15-12.927 12.15H18.49l-.368 2.322L16.373 39H7.056l5.605-36h15.095c5.083 0 9.082 2.833 10.555 6.77a9.687 9.687 0 0 1 .603 3.58z"/>
+                    <path fill="#60CDFF" d="M44.284 23.7A12.894 12.894 0 0 1 31.53 34.5h-5.206L24.157 48H14.89l1.483-9 1.75-11.178.367-2.322h7.497c7.773 0 12.927-6.576 12.927-12.15 3.825 1.974 6.055 5.963 5.37 10.35z"/>
+                    <path fill="#008CFF" d="M38.914 13.35C37.31 12.511 35.365 12 33.248 12h-12.64L18.49 25.5h7.497c7.773 0 12.927-6.576 12.927-12.15z"/>
+                </g>
+                <defs>
+                    <clipPath id="paypal-modal-clip-path"><path fill="#fff" d="M7.056 3h37.35v45H7.056z"/></clipPath>
+                </defs>
+            </svg>
+
+            <!-- Close 'X' Button -->
+            <button type="button" class="paypal-modal-close-btn" id="paypal-modal-close-btn" aria-label="Close dialog">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="1" y1="1" x2="13" y2="13"></line>
+                    <line x1="13" y1="1" x2="1" y2="13"></line>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Headline & Subtitle -->
+        <h2 id="paypal-modal-headline" class="paypal-modal-title">Pay in 4 interest-free payments</h2>
+        <p class="paypal-modal-subtitle">
+            Split your purchase of <strong id="paypal-modal-total-display">$0.00</strong> into 4 with no impact on credit score and no late fees.
+        </p>
+
+        <!-- Stepper Timeline (Strictly matching screenshot) -->
+        <div class="paypal-modal-stepper">
+            <div class="paypal-modal-step">
+                <div class="paypal-modal-dot first"></div>
+                <div class="paypal-modal-amt" id="paypal-m-step1">$0.00</div>
+                <div class="paypal-modal-lbl">Today</div>
+            </div>
+            <div class="paypal-modal-line"></div>
+            <div class="paypal-modal-step">
+                <div class="paypal-modal-dot"></div>
+                <div class="paypal-modal-amt" id="paypal-m-step2">$0.00</div>
+                <div class="paypal-modal-lbl">2 weeks</div>
+            </div>
+            <div class="paypal-modal-line"></div>
+            <div class="paypal-modal-step">
+                <div class="paypal-modal-dot"></div>
+                <div class="paypal-modal-amt" id="paypal-m-step3">$0.00</div>
+                <div class="paypal-modal-lbl">4 weeks</div>
+            </div>
+            <div class="paypal-modal-line"></div>
+            <div class="paypal-modal-step">
+                <div class="paypal-modal-dot"></div>
+                <div class="paypal-modal-amt" id="paypal-m-step4">$0.00</div>
+                <div class="paypal-modal-lbl">6 weeks</div>
+            </div>
+        </div>
+
+        <!-- 3-Step Guide -->
+        <ol class="paypal-modal-guide-list">
+            <li>Choose PayPal at checkout to pay later with <strong>Pay in 4</strong>.</li>
+            <li>Complete your purchase with a <strong>25% first payment</strong>.</li>
+            <li>Use autopay for the rest of your payments. <strong>It's easy!</strong></li>
+        </ol>
+
+        <!-- Disclaimer Footer -->
+        <p class="paypal-modal-disclaimer">
+            Pay in 4 is available to approved consumers for purchases of $10 to $2,000 (CAD) for certain transaction types. Availability depends on the merchant.
+        </p>
+    </div>
+</div>
+
+<!-- ==========================================================================
+     JAVASCRIPT: DYNAMIC CALCULATION, REAL-TIME MUTATION OBSERVER & MODAL LOGIC
+     ========================================================================== -->
+<script>
+(function() {
+    'use strict';
+
+    /**
+     * Calculate 4 interest-free payments spaced 2 weeks apart.
+     * Follows PayPal penny distribution rule:
+     * e.g., $604.49 -> $151.12, $151.12, $151.12, $151.13
+     */
+    function calculatePayIn4(totalPrice) {
+        var price = parseFloat(totalPrice);
+        if (isNaN(price) || price <= 0) return null;
+
+        var cents = Math.round(price * 100);
+        var base = Math.floor(cents / 4);
+        var rem = cents % 4;
+
+        // Distribute remainder cents to later installments so sum strictly equals total
+        var p1 = ((base + (rem >= 4 ? 1 : 0)) / 100).toFixed(2);
+        var p2 = ((base + (rem >= 3 ? 1 : 0)) / 100).toFixed(2);
+        var p3 = ((base + (rem >= 2 ? 1 : 0)) / 100).toFixed(2);
+        var p4 = ((base + (rem >= 1 ? 1 : 0)) / 100).toFixed(2);
+
+        return {
+            total: price.toFixed(2),
+            p1: p1,
+            p2: p2,
+            p3: p3,
+            p4: p4,
+            isEligible: (price >= 10 && price <= 2000)
+        };
+    }
+
+    /**
+     * Reliably parse product price from BigCommerce DOM (matching HUMM financing detector)
+     */
+    function getProductPriceFromDOM() {
+        var priceText = '';
+        var activePriceEl = document.querySelector('.productView-price [data-product-price-without-tax], .productView-price [data-product-price-with-tax]');
+        if (activePriceEl && activePriceEl.textContent) {
+            priceText = activePriceEl.textContent;
+        }
+        if (!priceText) {
+            var el = document.querySelector('.productView-price .price--withoutTax') || 
+                     document.querySelector('.productView-price .price--withTax') ||
+                     document.querySelector('.productView-price .price--main') ||
+                     document.querySelector('.productView-price .price') ||
+                     document.querySelector('.productView-price');
+            if (el && el.textContent) {
+                priceText = el.textContent;
+            }
+        }
+        if (!priceText) {
+            var metaEl = document.querySelector('meta[property="product:price:amount"], meta[itemprop="price"]');
+            if (metaEl) {
+                priceText = metaEl.getAttribute('content') || '';
+            }
+        }
+        if (priceText) {
+            // Strip out currency symbols and commas
+            var cleaned = priceText.replace(/[^0-9.]/g, '').trim();
+            var price = parseFloat(cleaned);
+            if (!isNaN(price) && price > 0) return price;
+        }
+        return 0;
+    }
+
+    /**
+     * Stencil server-side price fallback (if placed in Stencil template context)
+     */
+    function getServerPrice() {
+        var raw = "{{#if product.price.with_tax}}{{product.price.with_tax.value}}{{else}}{{product.price.without_tax.value}}{{/if}}";
+        var price = parseFloat(raw);
+        return (!isNaN(price) && price > 0) ? price : 0;
+    }
+
+    /**
+     * Update all PayPal Pay in 4 displays (inline widget + modal)
+     */
+    function updatePaypalWidget() {
+        var price = getProductPriceFromDOM() || getServerPrice();
+        if (price <= 0) return;
+
+        var data = calculatePayIn4(price);
+        if (!data) return;
+
+        // 1. Update Inline Promo Description Text
+        var descEl = document.getElementById('paypal-main-desc');
+        if (descEl) {
+            if (data.isEligible) {
+                descEl.innerHTML = 
+                    '<div class="paypal-payin4-highlight-amt">From $' + data.p1 + ' / payment</div>' +
+                    '<div class="paypal-payin4-subline">' +
+                        '4 interest-free payments (first payment of <strong style="color: #38bdf8;">$' + data.p1 + ' today</strong> + 3 bi-weekly installments of <strong style="color: #ffffff;">$' + data.p2 + '</strong> at 0% APR).' +
+                    '</div>' +
+                    '<div style="font-size: 12.5px; color: rgba(255,255,255,0.7); margin-top: 6px;">Total purchase: <strong>$' + data.total + '</strong> with no interest and no late fees.</div>';
+            } else if (price < 10) {
+                descEl.innerHTML = 
+                    '<div class="paypal-payin4-subline" style="color: rgba(255,255,255,0.85);">' +
+                        'Pay in 4 is available for purchases from $10.00 to $2,000.00 CAD.' +
+                    '</div>';
+            } else {
+                descEl.innerHTML = 
+                    '<div class="paypal-payin4-subline" style="color: rgba(255,255,255,0.85);">' +
+                        'Pay in 4 is available for orders up to $2,000.00 CAD. Standard PayPal payment available at checkout.' +
+                    '</div>';
+            }
+        }
+
+        // 2. Update Inline Stepper Row
+        var inlineStepper = document.getElementById('paypal-inline-stepper-row');
+        if (inlineStepper) {
+            inlineStepper.innerHTML = 
+                '<div class="paypal-stepper-col">' +
+                    '<div class="paypal-stepper-dot active"></div>' +
+                    '<div class="paypal-stepper-amt">$' + data.p1 + '</div>' +
+                    '<div class="paypal-stepper-lbl">Today</div>' +
+                '</div>' +
+                '<div class="paypal-stepper-line"></div>' +
+                '<div class="paypal-stepper-col">' +
+                    '<div class="paypal-stepper-dot"></div>' +
+                    '<div class="paypal-stepper-amt">$' + data.p2 + '</div>' +
+                    '<div class="paypal-stepper-lbl">2 weeks</div>' +
+                '</div>' +
+                '<div class="paypal-stepper-line"></div>' +
+                '<div class="paypal-stepper-col">' +
+                    '<div class="paypal-stepper-dot"></div>' +
+                    '<div class="paypal-stepper-amt">$' + data.p3 + '</div>' +
+                    '<div class="paypal-stepper-lbl">4 weeks</div>' +
+                '</div>' +
+                '<div class="paypal-stepper-line"></div>' +
+                '<div class="paypal-stepper-col">' +
+                    '<div class="paypal-stepper-dot"></div>' +
+                    '<div class="paypal-stepper-amt">$' + data.p4 + '</div>' +
+                    '<div class="paypal-stepper-lbl">6 weeks</div>' +
+                '</div>';
+        }
+
+        // 3. Update Modal Dialog Elements
+        var modalTotal = document.getElementById('paypal-modal-total-display');
+        if (modalTotal) modalTotal.textContent = '$' + data.total;
+
+        var m1 = document.getElementById('paypal-m-step1');
+        var m2 = document.getElementById('paypal-m-step2');
+        var m3 = document.getElementById('paypal-m-step3');
+        var m4 = document.getElementById('paypal-m-step4');
+        if (m1) m1.textContent = '$' + data.p1;
+        if (m2) m2.textContent = '$' + data.p2;
+        if (m3) m3.textContent = '$' + data.p3;
+        if (m4) m4.textContent = '$' + data.p4;
+    }
+
+    /**
+     * Modal Controller
+     */
+    function openPaypalModal(e) {
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        var modal = document.getElementById('paypal-payin4-modal');
+        if (modal) {
+            // Move modal to body if inside a relative parent to avoid clipping
+            if (modal.parentElement !== document.body) {
+                document.body.appendChild(modal);
+            }
+            modal.style.display = 'flex';
+            // Trigger reflow for CSS animation
+            void modal.offsetHeight;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    function closePaypalModal(e) {
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        var modal = document.getElementById('paypal-payin4-modal');
+        if (modal) {
+            modal.classList.remove('active');
+            setTimeout(function() {
+                modal.style.display = 'none';
+                document.body.style.overflow = '';
+            }, 250);
+        }
+    }
+
+    /**
+     * Setup Event Handlers and Observers
+     */
+    function initPaypalPayIn4() {
+        var productView = document.querySelector('.productView');
+        var container = document.getElementById('paypal-payin4-container');
+
+        // Check if on a product page
+        if (!productView) {
+            if (container) container.style.display = 'none';
+            return;
+        }
+
+        // Auto-relocate container into productView if injected via footer or Script Manager
+        if (container && !container.closest('.productView')) {
+            var hummPromo = document.querySelector('.humm-inline-promo');
+            var cartForm = document.querySelector('form[data-cart-item-add]') || document.querySelector('.productView-options form');
+            var priceEl = document.querySelector('.productView-price');
+
+            if (hummPromo && hummPromo.parentNode) {
+                hummPromo.parentNode.insertBefore(container, hummPromo.nextSibling);
+            } else if (cartForm) {
+                var btn = cartForm.querySelector('.form-action, #form-action-addToCart, [data-button-purchase]');
+                if (btn) {
+                    cartForm.insertBefore(container, btn);
+                } else {
+                    cartForm.appendChild(container);
+                }
+            } else if (priceEl && priceEl.parentNode) {
+                priceEl.parentNode.insertBefore(container, priceEl.nextSibling);
+            }
+        }
+
+        // Initial Calculation
+        updatePaypalWidget();
+
+        // Global Event Delegation
+        document.addEventListener('click', function(e) {
+            // Modal Open Trigger
+            if (e.target.closest('#paypal-modal-trigger-btn') || e.target.closest('.paypal-modal-open-trigger')) {
+                openPaypalModal(e);
+                return;
+            }
+
+            // Modal Close Trigger
+            if (e.target.closest('#paypal-modal-close-btn')) {
+                closePaypalModal(e);
+                return;
+            }
+
+            // Backdrop click
+            var modal = document.getElementById('paypal-payin4-modal');
+            if (modal && e.target === modal) {
+                closePaypalModal(e);
+                return;
+            }
+
+            // Accordion toggle
+            var trigger = e.target.closest('.paypal-accordion-trigger');
+            if (trigger) {
+                e.preventDefault();
+                e.stopPropagation();
+                var accordion = trigger.closest('.paypal-accordion');
+                if (accordion) {
+                    var content = accordion.querySelector('.paypal-accordion-content');
+                    accordion.classList.toggle('open');
+                    if (accordion.classList.contains('open')) {
+                        trigger.setAttribute('aria-expanded', 'true');
+                        if (content) content.style.maxHeight = content.scrollHeight + 'px';
+                    } else {
+                        trigger.setAttribute('aria-expanded', 'false');
+                        if (content) content.style.maxHeight = '0px';
+                    }
+                }
+            }
+        }, true);
+
+        // Close on ESC key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' || e.keyCode === 27) {
+                closePaypalModal(e);
+            }
+        });
+
+        // MutationObserver for dynamic price updates (BigCommerce option/variant swatch selection)
+        var priceContainer = document.querySelector('.productView-price');
+        if (priceContainer) {
+            var debounceTimer = null;
+            var observer = new MutationObserver(function() {
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(updatePaypalWidget, 60);
+            });
+            observer.observe(priceContainer, {
+                childList: true,
+                subtree: true,
+                characterData: true
+            });
+        }
+
+        // Additional listeners for option dropdowns / radio button changes
+        var cartForm = document.querySelector('form[data-cart-item-add]') || document.querySelector('.productView-options');
+        if (cartForm) {
+            cartForm.addEventListener('change', function() {
+                setTimeout(updatePaypalWidget, 120);
+                setTimeout(updatePaypalWidget, 400); // safety fallback for async pricing
+            });
+        }
+    }
+
+    // Run on DOM ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initPaypalPayIn4);
+    } else {
+        initPaypalPayIn4();
+    }
+})();
+</script>

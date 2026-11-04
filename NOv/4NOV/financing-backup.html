@@ -1,0 +1,505 @@
+<style>
+  .container.container--wide {
+    max-width: 100%;
+    padding: 0;
+  }
+
+  header.page__header.page__header--centered,
+  section.section.section--isolated.section--tight.section--text-centered {
+    display: none !important;
+  }
+
+  .page__content.rte {
+    margin: 0;
+  }
+
+  .finance-slider {
+    width: 100%;
+    aspect-ratio: 12 / 2;
+    background-size: cover !important;
+    background-position: center center !important;
+    position: relative;
+    margin-top:50px;
+  }
+  .finance-slider-first {
+    width: 100%;
+    aspect-ratio: 18 / 6;
+    background-size: cover !important;
+    background-position: center center !important;
+    position: relative;
+    margin-top:50px;
+  }
+  .finance-slider::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    /* background: rgba(0, 0, 0, 0.18); */
+    /* margin-top:30px; */
+  }
+
+  .promotion-section {
+    padding: 50px 0;
+    background: #1a5bd1;
+  }
+
+  .promotion-section .container {
+    max-width: 1240px;
+    margin: 0 auto;
+  }
+
+  .promotion-section h2 {
+    color: #fff !important;
+    text-align: center;
+    font-size: 38px !important;
+    font-weight: 700;
+    margin: 0 0 12px;
+  }
+
+  .promotion-intro {
+    color: #e6efff;
+    text-align: center;
+    font-size: 17px;
+    line-height: 1.7;
+    max-width: 980px;
+    margin: 0 auto 30px;
+  }
+
+  .finance-block {
+    margin-top: 30px;
+    margin-bottom:150px
+  }
+
+  .finance-block:first-of-type {
+    margin-top: 0;
+  }
+
+  .finance-card {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 10px;
+    padding: 22px;
+    margin-bottom: 22px;
+  }
+
+  .finance-card h3 {
+    color: #fff;
+    font-size: 28px;
+    margin: 0 0 8px;
+    text-align: center;
+  }
+
+  .finance-card p {
+    color: #dbe8ff;
+    text-align: center;
+    margin: 0 0 18px;
+    line-height: 1.6;
+    font-size: 15px;
+  }
+
+  .table-responsive {
+    overflow-x: auto;
+  }
+
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0;
+  }
+
+  .table th:first-child,
+  .table td:first-child {
+    padding-left: 20px;
+  }
+
+  .table th {
+    background: #1e88c5;
+    color: #fff;
+    font-weight: 600;
+    text-align: center;
+    padding: 18px 14px;
+    border-right: solid 2px #3599d3;
+    border-bottom: solid 2px #3599d3;
+    white-space: nowrap;
+  }
+
+  .table th:first-child {
+    text-align: left;
+  }
+
+  .table td {
+    text-align: center;
+    padding: 18px 14px;
+    border-right: solid 2px #3599d3;
+    border-bottom: solid 2px #3599d3;
+    font-size: 15px;
+    color: #fff;
+    vertical-align: middle;
+    background: #1a5bd1;
+  }
+
+  .table td:first-child {
+    text-align: left;
+    color: #fff;
+    background: #1e88c5;
+  }
+
+  .table td span {
+    display: block;
+    border-top: solid 1px #3599d3;
+    padding: 6px 0 0;
+    margin-top: 9px;
+  }
+
+  .finance-logo {
+    text-align: center;
+    font-size: 30px;
+    color:#de640d;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .finance-label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-top: solid 1px #3599d3;
+    padding:6px;
+    margin-top: 9px;
+    background: #f58220;
+    color: #fff;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    border-radius: 4px;
+    text-transform: uppercase;
+  }
+
+  .finance-small {
+    text-align: center;
+  }
+
+  .click-btn {
+    color: #fff;
+    border: none;
+    text-decoration: underline;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 0;
+  }
+
+  .plan-note {
+    color: #dce8ff;
+    font-size: 13px;
+    margin-top: 14px;
+    line-height: 1.6;
+    text-align: center;
+  }
+
+  @media (max-width: 1024px) {
+    .promotion-section .container {
+      padding: 0 15px;
+    }
+
+    .table th,
+    .table td {
+      word-break: initial;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .promotion-section {
+      padding: 35px 0;
+    }
+
+    .promotion-section h2 {
+      font-size: 30px !important;
+    }
+
+    .finance-card h3 {
+      font-size: 24px;
+    }
+
+    .promotion-intro,
+    .finance-card p {
+      font-size: 15px;
+    }
+
+    .table td,
+    .table th {
+      padding: 16px 10px;
+      font-size: 14px;
+    }
+
+    .finance-logo {
+      font-size: 25px;
+    }
+  }
+</style>
+
+
+
+<div class="promotion-section">
+  
+  <div class="container">
+    <!-- <h2>Flexible Financing Options</h2> -->
+    <!-- <p class="promotion-intro">
+      We are preparing to promote HUMM Canada as a featured financing partner while continuing to offer Afterpay. HUMM Canada promotes flexible financing up to $30,000 and says customers can apply in-store or online and receive a credit decision in less than 7 minutes.
+    </p> -->
+<div
+  style="background: url('https://cdn.crucials.io/upload/5vtkmzi0yn/humm-banner-image-28903039.png');"
+  class="finance-slider-first"
+></div>
+    <!-- HUMM TABLE FIRST -->
+    <div class="finance-block">
+      <!-- <div class="finance-card"> -->
+      
+
+        <div class="table-responsive">
+        <table class="table">
+  <thead>
+    <tr>
+      <th>&nbsp;</th>
+      <th>Amount Spent</th>
+      <th>Length of Term</th>
+      <th>Interest Rate</th>
+      <!-- <th>Money Down</th> -->
+      <th>Monthly Client Fee</th>
+      <th>Online Application</th>
+    </tr>
+  </thead>
+  <tbody>
+
+
+<!-- Bi-Weekly Plan -->
+<tr>
+  <td>
+    <div class="finance-logo">humm</div>
+    <!-- <div class="finance-small">No Interest </div> -->
+  </td>
+  <td>Less than $500</td>
+  <td>6 bi-weekly payments</td>
+  <td>0%</td>
+  <!-- <td>$0</td> -->
+  <td>$0</td>
+  <td>
+  Take 7 minutes to apply for HUMM Canada financing
+  <a
+    href="https://humm-canada-prod-web-app.herokuapp.com/application?retailerId=001OO00000i5J8mYAE"
+    class="click-btn"
+    target="_blank"
+    rel="noopener noreferrer"
+  >here</a> then click HUMM at our checkout
+</td>
+</tr>
+
+<!-- No Interest Plan -->
+<tr>
+  <td>
+    <div class="finance-logo">humm</div>
+    <!-- <div class="finance-small">No Interest</div> -->
+  </td>
+  <td>upto $30,000</td>
+  <td>12, 18 months</td>
+  <td>0%</td>
+  <!-- <td>$0</td> -->
+  <td>$0</td>
+ <td>
+  Take 7 minutes to apply for HUMM Canada financing
+  <a
+    href="https://humm-canada-prod-web-app.herokuapp.com/application?retailerId=001OO00000i5J8mYAE"
+    class="click-btn"
+    target="_blank"
+    rel="noopener noreferrer"
+  >here</a> then click HUMM at our checkout
+</td>
+</tr>
+
+<!-- 9.99% Interest Plan -->
+<tr>
+  <td>
+    <div class="finance-logo">humm</div>
+    <!-- <div class="finance-small">9.99% Interest</div> -->
+  </td>
+  <td>upto $30,000</td>
+  <td>24, 36 months</td>
+  <td>9.99%</td>
+  <!-- <td>$0</td> -->
+  <td>$0</td>
+  <td>
+  Take 7 minutes to apply for HUMM Canada financing
+  <a
+    href="https://humm-canada-prod-web-app.herokuapp.com/application?retailerId=001OO00000i5J8mYAE"
+    class="click-btn"
+    target="_blank"
+    rel="noopener noreferrer"
+  >here</a> then click HUMM at our checkout
+</td>
+</tr>
+
+<!-- 15.99% Interest Plan -->
+<tr>
+  <td>
+    <div class="finance-logo">humm</div>
+    <!-- <div class="finance-small">15.99% Interest</div> -->
+  </td>
+  <td>upto $30,000</td>
+  <td>48, 60 months</td>
+  <td>15.99%</td>
+  <!-- <td>$0</td> -->
+  <td>$0</td>
+  
+  <td>
+  Take 7 minutes to apply for HUMM Canada financing
+  <a
+    href="https://humm-canada-prod-web-app.herokuapp.com/application?retailerId=001OO00000i5J8mYAE"
+    class="click-btn"
+    target="_blank"
+    rel="noopener noreferrer"
+  >here</a> then click HUMM at our checkout
+</td>
+</tr>
+
+
+  </tbody>
+</table>
+
+        </div>
+
+        <!-- <p class="plan-note">
+          HUMM table uses only the checked or marked plans from the chart you provided.
+        </p> -->
+      <!-- </div> -->
+    </div>
+
+    <!-- AFTERPAY TABLE SECOND -->
+  
+    <div class="promotion-section">
+  <div class="container">
+      <div
+  style="background: url('https://media.zenobuilder.com/upload/5vtkmzi0yn/1f76f768-3fc3-401c-98a0-87e8b2ea30f2-95932756.jpeg');"
+  class="finance-slider"
+></div>
+    <div class="finance-block">
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>&nbsp;</th>
+            <th>Amount spent</th>
+            <th>Lenght of term</th>
+            <th>Interest Rate</th>
+            <th>Money Down</th>
+            <th>Fees</th>
+            <th>Online application</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!--tr>
+            <td>
+              <img
+                src="https://cdn11.bigcommerce.com/s-5vtkmzi0yn/images/stencil/original/image-manager/paypal-logo.png?t=1717100295"
+              />
+            </td>
+            <td>$30 - $1500</td>
+            <td>6 Weeks</td>
+            <td>0%</td>
+            <td>25% of your total <br />1st of 4 bi-weekly payments</td>
+            <td>$0</td>
+            <td>
+              Yes - How to<br /><a href="#" id="openCustomModalBtn">
+                Click Here</a
+              >
+            </td>
+          </tr-->
+          <!--tr>
+            <td>
+              <img
+                src="https://cdn11.bigcommerce.com/s-5vtkmzi0yn/images/stencil/original/image-manager/logo-landcare.png?t=1717100499"
+              /><span style="text-align:center">Pay Monthly</span>
+
+            </td>
+            <td>Under $2500<br /><span>Over $2500</span></td>
+            <td>Up to 36 months<br /><span>Up to 60 months</span></td>
+            <td>9.9% - 29.9%<br />Based on credit report</td>
+            <td>$0</td>
+            <td>Dependent on loan amount<br />$49 - 149</td>
+            <td>
+              Yes - to apply<br /><a
+                href="https://applicant.myfrontline.app/LendCare/MZ63M38Q8P8Z"
+                class="click-btn"
+                target="_blank"
+                >Click here</a
+              >
+            </td>
+          </tr-->
+		    <tr>
+            <td>
+              <img
+                src="https://cdn11.bigcommerce.com/s-5vtkmzi0yn/images/stencil/original/image-manager/logoa.jpg?t=1717100499"
+              /><span style="text-align:center">4 Payments Over 6 Weeks</span>
+            </td>
+            <td>$1-$2,000</td>
+            <td>6 weeks</td>
+            <td>0%</td>
+            <td>1st of 4 bi-weekly payments</td>
+            <td>$0</td>
+            <td>
+               Take 5 minutes to create an Afterpay account <a
+                href="https://www.afterpay.com/en-US/mobile-app?utm_source=afterpay&amp%3Butm_medium=link&amp%3Butm_campaign=Afterpay%20Sign-up&amp%3Butm_content=top%20nav%20-%20sign-up%20link&redirectShopUrl=https%3A%2F%2Fwww.afterpay.com%2Fen-US%2Fpay-monthly&_branch_match_id=1504213777915884797&utm_medium=organic-web&_branch_referrer=H4sIAAAAAAAAA01OywrCMBD8mvaWVuxNCKKCIHgrvXgpad2aYJMsm8TSi9%2Fu1gcI%2B96ZYXSMGDZlqYYIhGpOoVCIxWjcvUw6nS8rHE5ztyW4GoI%2B1tpjQ6PUCy%2Brdtn6yDFNU%2FFTKHpv%2BQRONDV3vgjrXdTjnCuLWbVP0bY9j8rcnNx9Wdl6VfMuEv6jmAcuyuiR%2F049uArO8EHytPjMF2jwiXqQPxN%2FIpadJyvfyCfBAETG3dqO%2FBSA5EGTt%2FACuSCHkwcBAAA%3D"
+                class="click-btn"
+                target="_blank"
+                >here</a> then click Afterpay at our checkout</td>
+          </tr>
+		  <tr>
+            <td>
+              <img
+                src="https://cdn11.bigcommerce.com/s-5vtkmzi0yn/images/stencil/original/image-manager/logoa.jpg?t=1717100499"
+              /><span style="text-align:center">Pay Monthly</span>
+            </td>
+            <td>$400-$4,000</td>
+            <td>3, 6, 12, or 24 months</td>
+            <td>0%</td>
+            <td>First payment</td>
+            <td>$0</td>
+            <td>
+              Take 5 minutes to create an Afterpay account <a
+                href="https://www.afterpay.com/en-US/mobile-app?utm_source=afterpay&amp%3Butm_medium=link&amp%3Butm_campaign=Afterpay%20Sign-up&amp%3Butm_content=top%20nav%20-%20sign-up%20link&redirectShopUrl=https%3A%2F%2Fwww.afterpay.com%2Fen-US%2Fpay-monthly&_branch_match_id=1504213777915884797&utm_medium=organic-web&_branch_referrer=H4sIAAAAAAAAA01OywrCMBD8mvaWVuxNCKKCIHgrvXgpad2aYJMsm8TSi9%2Fu1gcI%2B96ZYXSMGDZlqYYIhGpOoVCIxWjcvUw6nS8rHE5ztyW4GoI%2B1tpjQ6PUCy%2Brdtn6yDFNU%2FFTKHpv%2BQRONDV3vgjrXdTjnCuLWbVP0bY9j8rcnNx9Wdl6VfMuEv6jmAcuyuiR%2F049uArO8EHytPjMF2jwiXqQPxN%2FIpadJyvfyCfBAETG3dqO%2FBSA5EGTt%2FACuSCHkwcBAAA%3D"
+                class="click-btn"
+                target="_blank"
+                >here</a> then click Afterpay at our checkout
+           
+               </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    </div>
+    </div>
+</div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

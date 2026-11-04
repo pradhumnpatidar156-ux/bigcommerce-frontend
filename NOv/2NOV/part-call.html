@@ -1,0 +1,264 @@
+<!-- ============================================================ -->
+<!-- UNDERVALUE APPLIANCES - APPLIANCE PARTS CALL TO ORDER BANNER -->
+<!-- Copy & Paste this entire code into your Page Builder HTML widget -->
+<!-- ============================================================ -->
+
+<style>
+  /* --- HIDE DEFAULT EMBARRASSING "NO PRODUCTS" NOTICE ON /parts/ --- */
+  #product-listing-container > p,
+  .page-content > p:first-of-type {
+    display: none !important;
+  }
+
+  /* --- STRICTLY PREVENT ANY BADGES IN HEADER, NAVIGATION, OR BREADCRUMBS --- */
+  header .parts-category-call-badge,
+  nav .parts-category-call-badge,
+  .navPages .parts-category-call-badge,
+  .breadcrumbs .parts-category-call-badge,
+  .breadcrumb .parts-category-call-badge,
+  .header .parts-category-call-badge {
+    display: none !important;
+  }
+
+  /* --- PARTS HERO BANNER CONTAINER --- */
+  .parts-banner-wrap {
+    background-color: #1A5BD1;
+    border-radius: 8px;
+    padding: 40px 24px;
+    text-align: center;
+    margin: 20px auto;
+    max-width: 100%;
+    box-sizing: border-box;
+    box-shadow: 0 6px 20px rgba(26, 91, 209, 0.25);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  }
+
+  /* --- "CALL TO ORDER" WHITE BUTTON --- */
+  .parts-call-btn {
+    display: inline-block;
+    background-color: #FFFFFF;
+    color: #1A5BD1 !important;
+    font-size: 20px;
+    font-weight: 600;
+    padding: 10px 32px;
+    border-radius: 6px;
+    text-decoration: none !important;
+    letter-spacing: 0.3px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+    cursor: pointer;
+  }
+
+  .parts-call-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.22);
+    background-color: #F8F9FA;
+    color: #1449A8 !important;
+  }
+
+  /* --- MAIN HEADING --- */
+  .parts-call-headline {
+    color: #FFFFFF !important;
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.35;
+    margin-top: 20px;
+    margin-bottom: 12px;
+    letter-spacing: 0.2px;
+  }
+
+  .parts-call-headline a {
+    color: #FFFFFF !important;
+    text-decoration: none !important;
+    border-bottom: 2px dashed rgba(255, 255, 255, 0.7);
+    padding-bottom: 2px;
+    transition: border-color 0.2s ease;
+  }
+
+  .parts-call-headline a:hover {
+    border-bottom-color: #FFFFFF;
+  }
+
+  /* --- SUPPORTING INFORMATION TEXT --- */
+  .parts-call-subtext {
+    color: rgba(255, 255, 255, 0.95);
+    font-size: 16px;
+    line-height: 1.5;
+    max-width: 780px;
+    margin: 12px auto 0 auto;
+    font-weight: 400;
+  }
+
+  /* --- HIGHLIGHT BADGES --- */
+  .parts-features-row {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.25);
+  }
+
+  .parts-feature-badge {
+    background: rgba(255, 255, 255, 0.15);
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 6px 14px;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* --- BADGE UNDER EACH CATEGORY (FOR /appliance-parts/ PAGE) --- */
+  .parts-category-call-badge {
+    margin-top: 8px;
+    text-align: center;
+  }
+
+  .parts-category-call-badge a {
+    display: inline-block;
+    background-color: #1A5BD1;
+    color: #FFFFFF !important;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 5px 12px;
+    border-radius: 4px;
+    text-decoration: none !important;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .parts-category-call-badge a:hover {
+    background-color: #0E44A3;
+    transform: scale(1.03);
+  }
+
+  /* --- MOBILE RESPONSIVENESS --- */
+  @media (max-width: 768px) {
+    .parts-banner-wrap {
+      padding: 30px 16px;
+      margin: 15px 0;
+    }
+
+    .parts-call-btn {
+      font-size: 18px;
+      padding: 9px 26px;
+      width: 80%;
+      max-width: 260px;
+    }
+
+    .parts-call-headline {
+      font-size: 21px;
+      margin-top: 16px;
+    }
+
+    .parts-call-subtext {
+      font-size: 14px;
+    }
+
+    .parts-features-row {
+      gap: 8px;
+      margin-top: 18px;
+      padding-top: 16px;
+    }
+
+    .parts-feature-badge {
+      font-size: 12px;
+      padding: 5px 10px;
+    }
+  }
+</style>
+
+<!-- ================= MAIN PARTS BANNER ================= -->
+<div class="parts-banner-wrap">
+  <!-- 1. White "Call to order" button -->
+  <a href="tel:18338637858" class="parts-call-btn">Call to order</a>
+
+  <!-- 2. Main phone headline -->
+  <div class="parts-call-headline">
+    Call to get your part shipped today <a href="tel:18338637858">1-833-863-7858</a>
+  </div>
+
+  <!-- 3. Helpful guidance subtext -->
+  <div class="parts-call-subtext">
+    We carry thousands of OEM replacement parts for <strong>Refrigerators, Washers, Dryers, Dishwashers, Stoves/Ranges, and Freezers</strong>.
+    Have your appliance model number ready and our specialists will verify compatibility and ship your part same-day!
+  </div>
+
+  <!-- 4. Trust Badges -->
+  <div class="parts-features-row">
+    <span class="parts-feature-badge">✓ 100% Genuine OEM Parts</span>
+    <span class="parts-feature-badge">✓ Fast Same-Day Shipping</span>
+    <span class="parts-feature-badge">✓ Live Expert Assistance</span>
+  </div>
+</div>
+
+<!-- ================= SCRIPT ================= -->
+<script>
+(function() {
+  function cleanupAndSetup() {
+    // 1. Hide the "There are no products listed under this category." message
+    var paragraphs = document.querySelectorAll('#product-listing-container p, .page-content p');
+    paragraphs.forEach(function(p) {
+      if (p.textContent && p.textContent.indexOf('There are no products listed') !== -1) {
+        p.style.display = 'none';
+      }
+    });
+
+    // 2. Remove ANY badges that might have attached to header, nav, or breadcrumbs
+    var invalidBadges = document.querySelectorAll(
+      'header .parts-category-call-badge, ' +
+      'nav .parts-category-call-badge, ' +
+      '.navPages .parts-category-call-badge, ' +
+      '.breadcrumbs .parts-category-call-badge, ' +
+      '.breadcrumb .parts-category-call-badge'
+    );
+    invalidBadges.forEach(function(el) {
+      el.remove();
+    });
+
+    // 3. Only add badges on category cards if NOT on the /parts/ banner page
+    // (On /parts/, only the main big banner should display)
+    var currentPath = window.location.pathname.toLowerCase();
+    if (currentPath.indexOf('/parts') !== -1 && currentPath.indexOf('/appliance-parts') === -1) {
+      return; // Exit on /parts/ page so header/breadcrumbs are never touched
+    }
+
+    // 4. On category listing pages (e.g. /appliance-parts/), only target category layout cards
+    var categoryLinks = document.querySelectorAll('[data-sub-layout] a, .sd-simple-text-editable a');
+    categoryLinks.forEach(function(link) {
+      if (link.closest('header') || link.closest('nav') || link.closest('.breadcrumbs') || link.closest('.parts-banner-wrap')) {
+        return;
+      }
+
+      var text = (link.textContent || '').trim().toLowerCase();
+      var isPartCategory = text.indexOf('freezer') !== -1 ||
+                           text.indexOf('refrigerator') !== -1 ||
+                           text.indexOf('washer') !== -1 ||
+                           text.indexOf('dryer') !== -1 ||
+                           text.indexOf('dishwasher') !== -1 ||
+                           text.indexOf('stove') !== -1;
+
+      if (isPartCategory) {
+        var parent = link.closest('div[data-sub-layout], .sd-simple-text-editable, p') || link.parentNode;
+        if (parent && !parent.querySelector('.parts-category-call-badge')) {
+          var badge = document.createElement('div');
+          badge.className = 'parts-category-call-badge';
+          badge.innerHTML = '<a href="tel:18338637858" title="Call to order">📞 Call to order 1-833-863-7858</a>';
+          parent.appendChild(badge);
+        }
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', cleanupAndSetup);
+  } else {
+    cleanupAndSetup();
+  }
+  setTimeout(cleanupAndSetup, 400);
+  setTimeout(cleanupAndSetup, 1200);
+})();
+</script>

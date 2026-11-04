@@ -5,13 +5,7 @@
 {{ getFontsCollection }}
 
 <script type="text/javascript">
-    window.language = {
-        {
-            {
-                langJson 'optimized_checkout'
-            }
-        }
-    };
+    window.language = {{{langJson 'optimized_checkout'}}};
 </script>
 
 {{{head.scripts}}}
@@ -55,13 +49,14 @@
 
 
 <script>
+
     // new format postal code jQuery
     jQuery(function ($) {
         // Try to grab native setter for input.value (best for React-controlled inputs)
         var nativeValueSetter = null;
         try {
             nativeValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
-        } catch (e) {}
+        } catch (e) { }
 
         function setNativeValue(el, value) {
             if (!el) return;
@@ -71,15 +66,12 @@
                 el.value = value;
             }
             // Notify frameworks (React) that value changed
-            var ev = new Event('input', {
-                bubbles: true
-            });
+            var ev = new Event('input', { bubbles: true });
             el.dispatchEvent(ev);
         }
 
         function cleanPostal(v) {
-            return (v || '').toUpperCase().replace(/^(.{3})\s+/,
-            '$1'); // remove space after first 3 chars + uppercase
+            return (v || '').toUpperCase().replace(/^(.{3})\s+/, '$1'); // remove space after first 3 chars + uppercase
         }
 
         // Delegated handler: works even if element is injected later
@@ -88,9 +80,7 @@
             var cleaned = cleanPostal(el.value);
             if (el.value !== cleaned) {
                 setNativeValue(el, cleaned);
-                try {
-                    el.setSelectionRange(cleaned.length, cleaned.length);
-                } catch (e) {}
+                try { el.setSelectionRange(cleaned.length, cleaned.length); } catch (e) { }
             }
         });
 
@@ -114,10 +104,7 @@
                 if (el.value !== cleaned) setNativeValue(el, cleaned);
             }
         });
-        observer.observe(document.body, {
-            childList: true,
-            subtree: true
-        });
+        observer.observe(document.body, { childList: true, subtree: true });
     });
 
     $(document).ready(function () {
@@ -138,9 +125,7 @@
 
         // Function to change the "Shipping Address" legend text to "Delivery Address"
         function changeShippingAddressText() {
-            var $shippingLegend = $(
-                "legend.form-legend.optimizedCheckout-headingSecondary[data-test='shipping-address-heading']"
-                );
+            var $shippingLegend = $("legend.form-legend.optimizedCheckout-headingSecondary[data-test='shipping-address-heading']");
 
             if ($shippingLegend.length) {
                 $shippingLegend.filter(function () {
@@ -175,8 +160,7 @@
             if ($checkboxLabel.length) {
                 $checkboxLabel.filter(function () {
                     // Check for the specific text in the checkbox label
-                    return $(this).text().trim() ===
-                        "My billing address is the same as my shipping address.";
+                    return $(this).text().trim() === "My billing address is the same as my shipping address.";
                 }).text("My billing address is the same as my delivery address.");
             } else {
                 // Retry after 100ms if not found
@@ -186,8 +170,7 @@
 
         // Function to change the cart shipping text to delivery
         function changeCartShippingText() {
-            var $cartShippingLabel = $(
-                "div[data-test='cart-shipping'] .cart-priceItem-label span[data-test='cart-price-label']");
+            var $cartShippingLabel = $("div[data-test='cart-shipping'] .cart-priceItem-label span[data-test='cart-price-label']");
 
             if ($cartShippingLabel.length) {
                 $cartShippingLabel.filter(function () {
@@ -200,13 +183,76 @@
             }
         }
 
+        // Function to update the summary delivery price display when curbside pickup is selected
+        function updatePickupSummaryText() {
+            var isPickup = false;
+            var $radios = $("input[name^='shippingOptionIds']");
+
+            if ($radios.length > 0) {
+                // We are on the delivery selection step
+                var hasCheckedRadio = false;
+                $radios.filter(":checked").each(function () {
+                    hasCheckedRadio = true;
+                    var text = $(this).next("label").text() || $(this).closest(".form-checklist-item, .form-field").text() || "";
+                    if (text.toLowerCase().includes("pickup")) {
+                        isPickup = true;
+                    }
+                });
+
+                if (hasCheckedRadio) {
+                    sessionStorage.setItem("selected_shipping_is_pickup", isPickup ? "true" : "false");
+                } else {
+                    var stored = sessionStorage.getItem("selected_shipping_is_pickup");
+                    if (stored === "true") {
+                        isPickup = true;
+                    }
+                }
+            } else {
+                // We are on other steps (Billing, Payment)
+                var stored = sessionStorage.getItem("selected_shipping_is_pickup");
+                if (stored === "true") {
+                    isPickup = true;
+                }
+
+                // Scan collapsed header summary texts for pickup selection as fallback
+                $(".stepHeader").each(function () {
+                    var headerText = $(this).text().toLowerCase();
+                    if (headerText.includes("delivery") || headerText.includes("shipping")) {
+                        if ($(this).text().toLowerCase().includes("pickup")) {
+                            isPickup = true;
+                        }
+                    }
+                });
+            }
+
+            var $priceVal = $("div[data-test='cart-shipping'] span[data-test='cart-price-value']");
+            if ($priceVal.length) {
+                if (isPickup) {
+                    $priceVal.css("display", "none");
+                    if ($priceVal.parent().find(".custom-pickup-price").length === 0) {
+                        $priceVal.after('<span class="custom-pickup-price" style="white-space: nowrap;">--</span>');
+                    }
+                } else {
+                    $priceVal.css("display", "");
+                    $priceVal.parent().find(".custom-pickup-price").remove();
+                }
+            } else {
+                $(".custom-pickup-price").remove();
+            }
+        }
+
         // Call all functions to make the necessary text changes
         changeShippingText();
         changeShippingAddressText();
         changeShippingMethodText();
         changeCheckboxLabelText();
         changeCartShippingText();
+
+        // Run immediately and poll to handle dynamic React updates
+        updatePickupSummaryText();
+        setInterval(updatePickupSummaryText, 250);
     });
+
 </script>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -240,13 +286,11 @@
                     if ($(this).is(":checked")) {
                         // Deselect same-day and select another available option
                         $(this).prop("checked", false).trigger("change");
-                        $("input[type='radio']").not(sameDayOption).first().prop("checked", true)
-                            .trigger("change");
+                        $("input[type='radio']").not(sameDayOption).first().prop("checked", true).trigger("change");
                         // console.log("Same-day delivery deselected.");
                     }
 
-                    $(this).prop("disabled", true).closest(".form-checklist-item").css("opacity",
-                    "0.5");
+                    $(this).prop("disabled", true).closest(".form-checklist-item").css("opacity", "0.5");
                     // console.log("Same-day delivery disabled.");
                 });
 
@@ -280,10 +324,7 @@
         // Re-check if shipping options change dynamically
         var targetNode = document.querySelector(".form-checklist");
         if (targetNode) {
-            new MutationObserver(disableSameDayDelivery).observe(targetNode, {
-                childList: true,
-                subtree: true
-            });
+            new MutationObserver(disableSameDayDelivery).observe(targetNode, { childList: true, subtree: true });
         }
 
         // Re-check on any manual change
@@ -325,39 +366,7 @@
     });
 
 
-    $(document).ready(function () {
-
-        let totalMailPrice2 = 0;
-        let totalDisPrice2 = 0;
-
-        setTimeout(() => {
-            $('li.productList-item').each(function () {
-                let totalPriceText = $(this).find(
-                    'div.product div.product-actions .product-price').first().text();
-                let unitPriceText = $(this).find(
-                        'div.product div.product-actions .product-price--beforeDiscount').last()
-                    .text() || totalPriceText;
-                let unitPrice = parseFloat(unitPriceText.replace('$', '').replace(',', '')
-                .trim()) || 0;
-                let totalPrice = parseFloat(totalPriceText.replace('$', '').replace(',', '')
-                    .trim()) || 0;
-                totalMailPrice2 += unitPrice;
-                totalDisPrice2 += totalPrice;
-            });
-            dfsdf = parseFloat(totalMailPrice2) - parseFloat(totalDisPrice2)
-            console.log('dfsdf', dfsdf)
-            let formatteddfsdf = dfsdf.toLocaleString('en-US', {
-                style: 'currency',
-                currency: 'USD'
-            });
-            $('section.cart-section > div[data-test="cart-subtotal"]').after(
-                `<div data-test="cart-discount"><div aria-live="polite" class="cart-priceItem optimizedCheckout-contentPrimary cart-priceItem--discount33"><span class="cart-priceItem-label"><span data-test="cart-price-label">Discount  </span></span><span class="cart-priceItem-value"><span data-test="cart-price-value">${formatteddfsdf}</span></span></div></div>`
-                )
-            console.log('Total of Unit Prices:', totalMailPrice2.toFixed(2));
-            console.log('Total of Total Prices:', totalDisPrice2.toFixed(2));
-        }, 5000)
-
-    });
+    // Cart-level discount row script removed. Handled dynamically by updateBuyMoreSaveMore below.
 
 
     document.addEventListener("DOMContentLoaded", function () {
@@ -385,10 +394,1213 @@
             }, 500);
         }
     });
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+        function syncHummRadioState() {
+            const radioHumm = document.getElementById('radio-humm');
+            const customRadio = document.querySelector('.humm-custom-radio');
+            const customDot = document.querySelector('.humm-custom-dot');
+            const hummContent = document.getElementById('humm-payment-content');
+
+            if (radioHumm && customRadio && customDot) {
+                if (radioHumm.checked) {
+                    customRadio.style.borderColor = '#333333';
+                    customDot.style.display = 'block';
+                    if (hummContent) hummContent.style.display = 'block';
+                } else {
+                    customRadio.style.borderColor = '#b8b8b8';
+                    customDot.style.display = 'none';
+                    if (hummContent) hummContent.style.display = 'none';
+                }
+            }
+        }
+
+        function checkAndInjectHumm() {
+            if (document.getElementById('custom-humm-payment')) {
+                syncHummRadioState();
+                return;
+            }
+
+            const anyPaymentInput = document.querySelector('input[name="paymentProviderRadio"]') || 
+                                    document.querySelector('input[id*="afterpay"]') || 
+                                    document.querySelector('label[for*="afterpay"]');
+            if (!anyPaymentInput) return;
+
+            const list = anyPaymentInput.closest('ul') || anyPaymentInput.closest('.form-checklist');
+            if (!list) return;
+
+            const afterpayInput = document.querySelector('input[id*="afterpay"]') || document.querySelector('label[for*="afterpay"]');
+            const afterpayLi = afterpayInput ? afterpayInput.closest('li') : null;
+
+            const hummLi = document.createElement('li');
+            hummLi.className = 'form-checklist-item paymentProvider';
+            hummLi.id = 'custom-humm-payment';
+            hummLi.style.cssText = 'border-bottom: 1px solid #e2e8f0; list-style: none; padding: 0;';
+            hummLi.innerHTML = `
+      <div class="form-field" style="margin: 0; padding: 0; position: relative;">
+        <input class="form-radio optimizedCheckout-form-radio" id="radio-humm" name="paymentProviderRadio" type="radio" value="humm" style="display: none !important;">
+        <label class="form-label" for="radio-humm" style="display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 18px 20px 18px 20px; margin: 0; cursor: pointer; box-sizing: border-box; gap: 15px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div class="humm-custom-radio" style="width: 26px; height: 26px; border: 1px solid #b8b8b8; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: #fff; flex-shrink: 0; box-sizing: border-box; transition: all 0.2s ease;">
+              <div class="humm-custom-dot" style="width: 12px; height: 12px; border-radius: 50%; background: #333333; display: none;"></div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <img src="https://cdn.crucials.io/upload/5vtkmzi0yn/images-36693704.png" alt="Humm" class="humm-payment-logo" style="height: 32px; width: auto; object-fit: contain; display: block; margin: 0 !important;">
+              <div style="display: flex; align-items: baseline; gap: 8px; margin: 0 !important; padding: 0 !important;">
+                <span class="paymentProviderHeader-name" style="font-weight: 700; font-size: 15.5px; margin: 0 !important; padding: 0 !important; line-height: normal !important; display: inline-block !important; position: static !important; transform: none !important;">Humm Financing</span>
+                <span style="font-size: 13.5px; color: #64748b; font-weight: normal; margin: 0 !important; padding: 0 !important; line-height: normal !important; display: inline-block !important;">— No Fees No Interest for 18 Months</span>
+              </div>
+            </div>
+          </div>
+          <a href="https://undervalueappliances.ca/finance/" target="_blank" class="humm-info-link" style="text-decoration: underline; color: #0070ba; font-size: 13px; font-weight: 600; z-index: 99; position: relative;">how it works</a>
+        </label>
+      </div>
+      <div class="paymentProviderContent" id="humm-payment-content" style="display: none; padding: 20px 20px 20px 61px; background: #f8fafc; border-top: 1px solid #e2e8f0; font-size: 13.5px; line-height: 1.5; color: #334155; font-family: sans-serif;">
+        <p style="margin: 0 0 8px 0;">To pay using <strong>Humm Financing</strong>, please complete your order details, or click <a href="https://undervalueappliances.ca/finance/" target="_blank" style="text-decoration: underline; color: #0070ba; font-weight: 600;">here to learn more & apply</a>.</p>
+        <p style="margin: 0;">Once you place your order, you can contact our support team at <a href="tel:+18338637858" style="color: #0070ba; font-weight: 600;">+1 (833) 863-7858</a> to link your approved Humm plan and finalize the transaction.</p>
+      </div>
+    `;
+
+            if (afterpayLi) {
+                afterpayLi.after(hummLi);
+            } else {
+                list.appendChild(hummLi);
+            }
+
+            const radioHumm = document.getElementById('radio-humm');
+
+            // Handle clicks on hummLi correctly
+            hummLi.addEventListener('click', function (e) {
+                // If clicking any link, let the browser handle it (e.g. open page)
+                if (e.target.closest('a')) {
+                    e.stopPropagation();
+                    return;
+                }
+                
+                // If clicking inside the payment details panel, don't trigger the radio selection
+                if (e.target.closest('#humm-payment-content')) {
+                    e.stopPropagation();
+                    return;
+                }
+
+                e.preventDefault();
+                radioHumm.checked = true;
+
+                // Trigger change event manually
+                const event = new Event('change', { bubbles: true });
+                radioHumm.dispatchEvent(event);
+                syncHummRadioState();
+            });
+
+            // Handle Humm radio checked status
+            radioHumm.addEventListener('change', function () {
+                if (radioHumm.checked) {
+                    // Unselect other radios
+                    const otherRadios = list.querySelectorAll('input[name="paymentProviderRadio"]:not(#radio-humm)');
+                    otherRadios.forEach(r => {
+                        r.checked = false;
+                    });
+                }
+                syncHummRadioState();
+            });
+
+            syncHummRadioState();
+        }
+
+        // Poll check because checkout is highly dynamic React app
+        setInterval(checkAndInjectHumm, 500);
+
+        // General click handler to hide Humm content if another radio is selected
+        document.addEventListener('click', function (e) {
+            const clickedRadio = e.target.closest('input[name="paymentProviderRadio"]');
+            if (clickedRadio && clickedRadio.id !== 'radio-humm') {
+                const radioHumm = document.getElementById('radio-humm');
+                if (radioHumm) radioHumm.checked = false;
+                syncHummRadioState();
+            }
+            // Handle click on labels
+            const clickedLabel = e.target.closest('label');
+            if (clickedLabel && clickedLabel.getAttribute('for') && clickedLabel.getAttribute('for') !== 'radio-humm') {
+                const correspondingRadio = document.getElementById(clickedLabel.getAttribute('for'));
+                if (correspondingRadio && correspondingRadio.name === 'paymentProviderRadio') {
+                    const radioHumm = document.getElementById('radio-humm');
+                    if (radioHumm) radioHumm.checked = false;
+                    syncHummRadioState();
+                }
+            }
+        });
+
+        // Intercept place order button click
+        document.addEventListener('click', function (e) {
+            const submitBtn = e.target.closest('#checkout-payment-continue, [data-test="checkout-payment-continue"]');
+            if (submitBtn) {
+                const radioHumm = document.getElementById('radio-humm');
+                if (radioHumm && radioHumm.checked) {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    if (window.Swal) {
+                        window.Swal.fire({
+                            title: 'Humm Financing',
+                            html: `To complete your purchase with Humm Financing, please contact our support team at <a href="tel:+18338637858"><strong>+1 (833) 863-7858</strong></a> to link your approved Humm plan.<br><br>Or you can read more and apply on our <a href="https://undervalueappliances.ca/finance/" target="_blank" style="text-decoration:underline;color:#0070ba;">Financing Page</a>.`,
+                            icon: 'info',
+                            confirmButtonText: 'View Financing Details',
+                            showCancelButton: true,
+                            cancelButtonText: 'Close'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.open('https://undervalueappliances.ca/finance/', '_blank');
+                            }
+                        });
+                    } else {
+                        alert("To complete your purchase with Humm Financing, please contact our support team at +1 (833) 863-7858 to link your approved Humm plan.");
+                        window.open('https://undervalueappliances.ca/finance/', '_blank');
+                    }
+                }
+            }
+        }, true);
+    });
+
+
+
+
+</script>
+
+<script>
+    // ─── Repair Service Checkout Promotion for New Customers ──────────────────────
+    $(document).ready(function () {
+        async function getProductType(item) {
+            if (!item) return 'part';
+            if (item.productId == 1206) return 'service';
+            
+            // Cache to prevent duplicate calls
+            if (!window.productTypeCache) {
+                window.productTypeCache = {};
+            }
+            if (window.productTypeCache[item.productId]) {
+                return window.productTypeCache[item.productId];
+            }
+            
+            let type = null;
+            let token = "{{settings.storefront_api.token}}" || 
+                        (typeof stencilBootstrap !== 'undefined' && stencilBootstrap.config && stencilBootstrap.config.storefrontApiToken) || 
+                        (window.stencilBootstrap && window.stencilBootstrap.config && window.stencilBootstrap.config.storefrontApiToken) || 
+                        '';
+                        
+            if (token) {
+                try {
+                    let res = await fetch('/graphql', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({
+                            query: `
+                                query getProductCustomFields($productId: Int!) {
+                                    site {
+                                        product(entityId: $productId) {
+                                            customFields {
+                                                edges {
+                                                    node {
+                                                        name
+                                                        value
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            `,
+                            variables: {
+                                productId: parseInt(item.productId)
+                            }
+                        })
+                    });
+                    
+                    if (res.ok) {
+                        let json = await res.json();
+                        let customFields = json?.data?.site?.product?.customFields?.edges || [];
+                        for (let edge of customFields) {
+                            let node = edge.node;
+                            if (node && node.name.toLowerCase() === 'product_type') {
+                                let val = node.value.toLowerCase().trim();
+                                if (val === 'appliance') {
+                                    type = 'appliance';
+                                    break;
+                                } else if (val === 'service' || val === 'services') {
+                                    type = 'service';
+                                    break;
+                                } else if (val === 'part' || val === 'parts' || val === 'accessory' || val === 'accessories') {
+                                    type = 'part';
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                } catch (e) {
+                    console.error("GraphQL custom field fetch failed:", e);
+                }
+            }
+            
+            if (!type) {
+                // Fallback to name keywords & breadcrumbs/URL checking
+                let isApp = await checkApplianceFallback(item);
+                type = isApp ? 'appliance' : 'part';
+            }
+            
+            window.productTypeCache[item.productId] = type;
+            return type;
+        }
+
+        async function checkApplianceFallback(item) {
+            if (item.url) {
+                try {
+                    let res = await fetch(item.url);
+                    if (res.ok) {
+                        let htmlText = await res.text();
+                        let parser = new DOMParser();
+                        let doc = parser.parseFromString(htmlText, 'text/html');
+                        let breadcrumbs = doc.querySelector('.breadcrumbs, .breadcrumb, [class*="breadcrumb"]');
+                        if (breadcrumbs) {
+                            let text = breadcrumbs.textContent.toLowerCase();
+                            const partOrServiceRegex = /\b(parts?|services?|accessories?)\b/i;
+                            const applianceRegex = /\bappliances?\b/i;
+
+                            if (partOrServiceRegex.test(text)) {
+                                return false;
+                            }
+                            if (applianceRegex.test(text)) {
+                                return true;
+                            }
+                        }
+                        let canonical = doc.querySelector('link[rel="canonical"]');
+                        let urlStr = canonical ? canonical.href.toLowerCase() : item.url.toLowerCase();
+                        if (urlStr.includes('/services/') || urlStr.includes('/appliance-parts/') || urlStr.includes('/parts/')) {
+                            return false;
+                        }
+                    }
+                } catch (e) {
+                    console.error("Error fetching product page for fallback check:", e);
+                }
+            }
+            return true;
+        }
+
+        async function isItemAppliance(item) {
+            if (!item) return false;
+            if (item.productId == 1206) return false;
+            
+            let type = await getProductType(item);
+            item.product_type = type; // Enrich the item object for frontend identification
+            
+            return type === 'appliance';
+        }
+
+        function updateDeliveryDiscountPromo(totalDisPrice, isPickup, hasAppliances) {
+            let $deliveryContainer = $("div[data-test='cart-shipping']");
+            if ($deliveryContainer.length === 0) return;
+
+            let $labelSpan = $deliveryContainer.find(".cart-priceItem-label");
+            if ($labelSpan.length === 0) return;
+
+            if (!hasAppliances || totalDisPrice === 0) {
+                $deliveryContainer.find(".delivery-progress-wrapper").remove();
+                $labelSpan.find(".delivery-promo-msg").remove();
+                return;
+            }
+
+            $labelSpan.css({
+                "display": "flex",
+                "flex-direction": "column",
+                "align-items": "flex-start"
+            });
+
+            // Clean up any old text-only message elements if present
+            $labelSpan.find(".delivery-promo-msg").not(".delivery-progress-wrapper .delivery-promo-msg").remove();
+
+            let progress = Math.min(100, Math.max(0, (totalDisPrice / 699) * 100));
+            let progressPct = progress.toFixed(1);
+            let fillColor = progress >= 100 ? 'linear-gradient(90deg, #3b82f6, #1d4ed8)' : '#333333';
+            
+            let msg = "";
+            let msgColor = "#475569";
+            let msgWeight = "normal";
+
+            if (totalDisPrice >= 699) {
+                if (isPickup) {
+                    $deliveryContainer.find(".delivery-progress-wrapper").remove();
+                    return;
+                }
+                msg = "You Spent Over $699 Pre-Tax On Appliances - $75.00 Delivery discount applied!";
+                msgColor = "#1d4ed8";
+                msgWeight = "bold";
+            } else {
+                let diff = (699 - totalDisPrice).toFixed(2);
+                msg = `Spend $699.00+ Pre-Tax on appliances to get $75.00 off delivery! (Add $${diff} more)`;
+            }
+
+            let $progressWrapper = $deliveryContainer.find(".delivery-progress-wrapper");
+            if ($progressWrapper.length === 0) {
+                $labelSpan.append(`
+                    <div class="delivery-progress-wrapper" style="width: 100%; max-width: 200px; margin-top: 4px;">
+                        <div class="delivery-track" style="position: relative; height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden; margin-bottom: 4px;">
+                            <div class="delivery-fill" style="height: 100%; width: ${progressPct}%; background: ${fillColor}; border-radius: 3px; transition: width 0.5s ease;"></div>
+                        </div>
+                        <span class="delivery-promo-msg" style="font-size: 10px; color: ${msgColor}; font-weight: ${msgWeight}; display: block; line-height: 1.2;">${msg}</span>
+                    </div>
+                `);
+            } else {
+                $progressWrapper.find(".delivery-fill").css({
+                    "width": progressPct + "%",
+                    "background": fillColor
+                });
+                $progressWrapper.find(".delivery-promo-msg").text(msg).css({
+                    "color": msgColor,
+                    "font-weight": msgWeight
+                });
+            }
+        }
+
+        async function updateBuyMoreSaveMore() {
+            try {
+                let res = await fetch('/api/storefront/carts?include=lineItems.physicalItems.options,lineItems.digitalItems.options', {
+                    credentials: 'include',
+                    headers: { 'Accept': 'application/json' }
+                });
+                let cartData = await res.json();
+                if (!cartData || cartData.length === 0) {
+                    $('.cart-priceItem--discount33').remove();
+                    updateDeliveryDiscountPromo(0, false, false);
+                    return;
+                }
+
+                let cart = cartData[0];
+                let physicalItems = cart.lineItems?.physicalItems || [];
+                
+                // Count total appliances and calculate regular vs discounted prices
+                let applianceCount = 0;
+                let totalMailPrice = 0;
+                let totalDisPrice = 0;
+
+                for (let item of physicalItems) {
+                    let isAppliance = await isItemAppliance(item);
+                    if (isAppliance) {
+                        applianceCount += item.quantity;
+                    }
+                    
+                    // Exclude repair service from the discount difference
+                    if (item.productId != 1206 && !item.name.toLowerCase().includes("repair service")) {
+                        let listPrice = item.listPrice ?? item.originalPrice;
+                        let salePrice = item.salePrice ?? item.listPrice;
+                        
+                        totalMailPrice += (listPrice * item.quantity);
+                        totalDisPrice += (salePrice * item.quantity);
+                    }
+                }
+
+                let calculatedDiscount = totalMailPrice - totalDisPrice;
+
+                // Hide the promo row completely only if they don't have any appliances in their cart
+                if (applianceCount === 0) {
+                    $('.cart-priceItem--discount33').remove();
+                    updateDeliveryDiscountPromo(0, false, false);
+                    return;
+                }
+
+                // Call delivery discount promo helper
+                let isPickup = sessionStorage.getItem("selected_shipping_is_pickup") === "true";
+                updateDeliveryDiscountPromo(totalDisPrice, isPickup, true);
+
+                // Determine current tier and next tier messages based on applianceCount
+                let labelText = "Buy More Save More";
+                let displayDiscount = calculatedDiscount;
+                let progress = 0;
+
+                if (applianceCount === 1) progress = 20;
+                else if (applianceCount === 2) progress = 40;
+                else if (applianceCount === 3) progress = 60;
+                else if (applianceCount === 4) progress = 80;
+                else if (applianceCount >= 5) progress = 100;
+
+                let bmsmFillColor = applianceCount >= 3 ? 'linear-gradient(90deg, #3b82f6, #1d4ed8)' : '#333333';
+
+                if (applianceCount === 3) {
+                    labelText = "Buy 3 Save More ($33.33 Off/Reg. Appliance)";
+                } else if (applianceCount === 4) {
+                    labelText = "Buy 4 Save More ($50.00 Off/Reg. Appliance)";
+                } else if (applianceCount >= 5) {
+                    labelText = "Buy 5 Save More ($60.00 Off/Reg. Appliance)";
+                } else {
+                    // applianceCount is 1 or 2
+                    labelText = "Buy More Save More";
+                    displayDiscount = 0;
+                }
+
+                let formattedDiscount = displayDiscount.toLocaleString('en-US', {
+                    style: 'currency',
+                    currency: 'USD'
+                });
+                let valueText = displayDiscount > 0 ? `-${formattedDiscount}` : formattedDiscount;
+
+                let $discountContainer = $('div[data-test="cart-discount"]');
+                if ($discountContainer.length === 0) {
+                    let subtotalRow = $('section.cart-section > div[data-test="cart-subtotal"]');
+                    if (subtotalRow.length > 0) {
+                        subtotalRow.after(`
+                            <div data-test="cart-discount">
+                                <div aria-live="polite" class="cart-priceItem optimizedCheckout-contentPrimary cart-priceItem--discount33">
+                                    <span class="cart-priceItem-label" style="display: flex; flex-direction: column; align-items: flex-start; max-width: 80%;">
+                                        <span data-test="cart-price-label" style="font-weight: bold; font-size: 11.5px; white-space: nowrap;">${labelText}</span>
+                                        <div class="bmsm-checkout-progress" style="width: 100%; margin-top: 2px;">
+                                            <div class="bmsm-track" style="position: relative; height: 8px; background: #e2e8f0; border-radius: 4px; margin: 6px 0 32px 0;">
+                                                <div class="bmsm-fill" style="height: 100%; width: ${progress}%; background: ${bmsmFillColor}; border-radius: 4px; transition: width 0.5s ease;"></div>
+                                                <div class="bmsm-marker bmsm-marker-3" style="position: absolute; left: 60%; top: -2px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; z-index: 2;">
+                                                    <div class="bmsm-dot" style="width: 12px; height: 12px; border-radius: 50%; background: #fff; border: 2px solid #cbd5e1; transition: all 0.3s ease;"></div>
+                                                    <span class="bmsm-label" style="font-size: 8.5px; font-weight: 700; color: #64748b; margin-top: 4px; white-space: nowrap; text-align: center; line-height: 1.2;">3 Qty<br><span style="font-weight: normal; color: #475569; font-size: 7.5px;">$33.33</span></span>
+                                                </div>
+                                                <div class="bmsm-marker bmsm-marker-4" style="position: absolute; left: 80%; top: -2px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; z-index: 2;">
+                                                    <div class="bmsm-dot" style="width: 12px; height: 12px; border-radius: 50%; background: #fff; border: 2px solid #cbd5e1; transition: all 0.3s ease;"></div>
+                                                    <span class="bmsm-label" style="font-size: 8.5px; font-weight: 700; color: #64748b; margin-top: 4px; white-space: nowrap; text-align: center; line-height: 1.2;">4 Qty<br><span style="font-weight: normal; color: #475569; font-size: 7.5px;">$50.00</span></span>
+                                                </div>
+                                                <div class="bmsm-marker bmsm-marker-5" style="position: absolute; left: 100%; top: -2px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; z-index: 2;">
+                                                    <div class="bmsm-dot" style="width: 12px; height: 12px; border-radius: 50%; background: #fff; border: 2px solid #cbd5e1; transition: all 0.3s ease;"></div>
+                                                    <span class="bmsm-label" style="font-size: 8.5px; font-weight: 700; color: #64748b; margin-top: 4px; white-space: nowrap; text-align: center; line-height: 1.2; transform: translateX(-5px);">5+ Qty<br><span style="font-weight: normal; color: #475569; font-size: 7.5px; display: inline-block; transform: translateX(-2px);">$60.00</span></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </span>
+                                    <span class="cart-priceItem-value">
+                                        <span data-test="cart-price-value">${valueText}</span>
+                                    </span>
+                                </div>
+                            </div>
+                        `);
+                    }
+                } else {
+                    $discountContainer.find('span[data-test="cart-price-label"]').text(labelText).css({
+                        "font-size": "11.5px",
+                        "white-space": "nowrap"
+                    });
+                    $discountContainer.find('span[data-test="cart-price-value"]').text(valueText);
+                    
+                    let $progressBox = $discountContainer.find('.bmsm-checkout-progress');
+                    if ($progressBox.length === 0) {
+                        $discountContainer.find('.cart-priceItem-label').append(`
+                            <div class="bmsm-checkout-progress" style="width: 100%; margin-top: 2px;">
+                                <div class="bmsm-track" style="position: relative; height: 8px; background: #e2e8f0; border-radius: 4px; margin: 6px 0 32px 0;">
+                                    <div class="bmsm-fill" style="height: 100%; width: ${progress}%; background: ${bmsmFillColor}; border-radius: 4px; transition: width 0.5s ease;"></div>
+                                    <div class="bmsm-marker bmsm-marker-3" style="position: absolute; left: 60%; top: -2px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; z-index: 2;">
+                                        <div class="bmsm-dot" style="width: 12px; height: 12px; border-radius: 50%; background: #fff; border: 2px solid #cbd5e1; transition: all 0.3s ease;"></div>
+                                        <span class="bmsm-label" style="font-size: 8.5px; font-weight: 700; color: #64748b; margin-top: 4px; white-space: nowrap; text-align: center; line-height: 1.2;">3 Qty<br><span style="font-weight: normal; color: #475569; font-size: 7.5px;">$33.33</span></span>
+                                    </div>
+                                    <div class="bmsm-marker bmsm-marker-4" style="position: absolute; left: 80%; top: -2px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; z-index: 2;">
+                                        <div class="bmsm-dot" style="width: 12px; height: 12px; border-radius: 50%; background: #fff; border: 2px solid #cbd5e1; transition: all 0.3s ease;"></div>
+                                        <span class="bmsm-label" style="font-size: 8.5px; font-weight: 700; color: #64748b; margin-top: 4px; white-space: nowrap; text-align: center; line-height: 1.2;">4 Qty<br><span style="font-weight: normal; color: #475569; font-size: 7.5px;">$50.00</span></span>
+                                    </div>
+                                    <div class="bmsm-marker bmsm-marker-5" style="position: absolute; left: 100%; top: -2px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; z-index: 2;">
+                                        <div class="bmsm-dot" style="width: 12px; height: 12px; border-radius: 50%; background: #fff; border: 2px solid #cbd5e1; transition: all 0.3s ease;"></div>
+                                        <span class="bmsm-label" style="font-size: 8.5px; font-weight: 700; color: #64748b; margin-top: 4px; white-space: nowrap; text-align: center; line-height: 1.2; transform: translateX(-5px);">5+ Qty<br><span style="font-weight: normal; color: #475569; font-size: 7.5px; display: inline-block; transform: translateX(-2px);">$60.00</span></span>
+                                    </div>
+                                </div>
+                            </div>
+                        `);
+                    } else {
+                        $progressBox.find('.bmsm-fill').css({
+                            'width': progress + '%',
+                            'background': bmsmFillColor
+                        });
+                    }
+
+                    // Refresh dot colors
+                    let $progBox = $discountContainer.find('.bmsm-checkout-progress');
+                    let $dot3 = $progBox.find('.bmsm-marker-3 .bmsm-dot');
+                    let $lbl3 = $progBox.find('.bmsm-marker-3 .bmsm-label');
+                    if (applianceCount >= 3) {
+                        $dot3.css({ 'background': '#1d4ed8', 'border-color': '#fff' });
+                        $lbl3.css({ 'color': '#1d4ed8', 'font-weight': 'bold' });
+                    } else {
+                        $dot3.css({ 'background': '#fff', 'border-color': '#cbd5e1' });
+                        $lbl3.css({ 'color': '#64748b', 'font-weight': 'normal' });
+                    }
+
+                    let $dot4 = $progBox.find('.bmsm-marker-4 .bmsm-dot');
+                    let $lbl4 = $progBox.find('.bmsm-marker-4 .bmsm-label');
+                    if (applianceCount >= 4) {
+                        $dot4.css({ 'background': '#1d4ed8', 'border-color': '#fff' });
+                        $lbl4.css({ 'color': '#1d4ed8', 'font-weight': 'bold' });
+                    } else {
+                        $dot4.css({ 'background': '#fff', 'border-color': '#cbd5e1' });
+                        $lbl4.css({ 'color': '#64748b', 'font-weight': 'normal' });
+                    }
+
+                    let $dot5 = $progBox.find('.bmsm-marker-5 .bmsm-dot');
+                    let $lbl5 = $progBox.find('.bmsm-marker-5 .bmsm-label');
+                    if (applianceCount >= 5) {
+                        $dot5.css({ 'background': '#1d4ed8', 'border-color': '#fff' });
+                        $lbl5.css({ 'color': '#1d4ed8', 'font-weight': 'bold' });
+                    } else {
+                        $dot5.css({ 'background': '#fff', 'border-color': '#cbd5e1' });
+                        $lbl5.css({ 'color': '#64748b', 'font-weight': 'normal' });
+                }
+            }
+        } catch (e) {
+            console.error("Error updating buy more save more discount:", e);
+        }
+    }
+
+        // Poll check
+        updateBuyMoreSaveMore();
+        setInterval(updateBuyMoreSaveMore, 1500);
+
+        let repairOptionId = null;
+        let repairServicePrice = null;
+
+        async function getRepairServiceDetails() {
+            try {
+                let res = await fetch('/lifetime-half-price-repair-service/');
+                let html = await res.text();
+                
+                let optionId = null;
+                let match = html.match(/name=["']attribute\[(\d+)\]["']/i);
+                if (match) {
+                    optionId = parseInt(match[1]);
+                }
+
+                let price = null;
+                let parser = new DOMParser();
+                let doc = parser.parseFromString(html, 'text/html');
+                
+                // 1. Try og:price:amount meta tag
+                let ogPriceMeta = doc.querySelector('meta[property="og:price:amount"]');
+                if (ogPriceMeta) {
+                    let val = parseFloat(ogPriceMeta.getAttribute('content'));
+                    if (!isNaN(val)) {
+                        price = val;
+                    }
+                }
+
+                // 2. Try standard price element data attributes/classes as fallback
+                if (price === null) {
+                    let priceEl = doc.querySelector('[data-product-price-without-tax]') || 
+                                  doc.querySelector('[data-product-price-with-tax]') ||
+                                  doc.querySelector('.price--withoutTax') ||
+                                  doc.querySelector('.price--withTax') ||
+                                  doc.querySelector('.productView-price .price');
+                    if (priceEl) {
+                        let text = priceEl.textContent.trim();
+                        let valMatch = text.match(/[\d.,]+/);
+                        if (valMatch) {
+                            let val = parseFloat(valMatch[0].replace(/,/g, ''));
+                            if (!isNaN(val)) {
+                                price = val;
+                            }
+                        }
+                    }
+                }
+
+                // 3. Try JSON-LD schema as fallback
+                if (price === null) {
+                    let scripts = doc.querySelectorAll('script[type="application/ld+json"]');
+                    for (let script of scripts) {
+                        try {
+                            let json = JSON.parse(script.textContent);
+                            let offers = json.offers || (json['@graph'] && json['@graph'].find(o => o.offers)?.offers);
+                            if (offers) {
+                                let val = parseFloat(offers.price || offers[0]?.price);
+                                if (!isNaN(val)) {
+                                    price = val;
+                                    break;
+                                }
+                            }
+                        } catch(e) {}
+                    }
+                }
+
+                return { optionId, price };
+            } catch (e) {
+                console.error("Failed to fetch repair service details:", e);
+            }
+            return { optionId: null, price: null };
+        }
+
+        async function getRepairServiceOptionId() {
+            if (repairOptionId) {
+                return repairOptionId;
+            }
+            try {
+                let details = await getRepairServiceDetails();
+                repairOptionId = details.optionId;
+                return repairOptionId;
+            } catch (e) {
+                console.error("Failed to fetch option ID:", e);
+            }
+            return null;
+        }
+
+        // Preload details on page load
+        getRepairServiceDetails().then(details => {
+            if (details.optionId) {
+                repairOptionId = details.optionId;
+            }
+            if (details.price !== null) {
+                repairServicePrice = details.price;
+            }
+        });
+
+        async function isNewCustomer() {
+            const customerId = "{{customer.id}}";
+            if (!customerId || customerId === "0" || customerId === "") {
+                // Guests are treated as new customers
+                return true;
+            }
+
+            try {
+                // Fetch the customer's order history page to check for completed orders
+                let response = await fetch('/account.php?action=order_status');
+                let htmlText = await response.text();
+
+                // Typical Cornerstone indications of no orders
+                if (htmlText.includes("You have completed no orders") ||
+                    htmlText.includes("You haven't placed any orders") ||
+                    htmlText.includes("no orders") ||
+                    (!htmlText.includes("account-listItem") && !htmlText.includes("order-list"))) {
+                    return true;
+                }
+                return false;
+            } catch (e) {
+                console.error("Error checking customer orders:", e);
+                return true; // Fallback
+            }
+        }
+
+        async function checkCheckoutPromotion() {
+            try {
+                let res = await fetch('/api/storefront/carts?include=lineItems.physicalItems.options,lineItems.digitalItems.options', {
+                    credentials: 'include',
+                    headers: { 'Accept': 'application/json' }
+                });
+                let cartData = await res.json();
+                if (!cartData || cartData.length === 0) return;
+
+                let cart = cartData[0];
+                let cartId = cart.id;
+
+                // Check appliance and repair service counts
+                let applianceCount = 0;
+                let repairServiceCount = 0;
+                let itemsToCheck = [];
+                let coveredSkus = [];
+
+                if (cart.lineItems) {
+                    let collectCovered = (item) => {
+                        if (item.productId == 1206) {
+                            repairServiceCount += item.quantity;
+                            if (item.options) {
+                                item.options.forEach(opt => {
+                                    if (opt.value) {
+                                        opt.value.split(',').forEach(v => {
+                                            let trimmed = v.trim();
+                                            if (trimmed) coveredSkus.push(trimmed);
+                                        });
+                                    }
+                                });
+                            }
+                        } else {
+                            itemsToCheck.push(item);
+                        }
+                    };
+                    if (cart.lineItems.physicalItems) {
+                        cart.lineItems.physicalItems.forEach(collectCovered);
+                    }
+                    if (cart.lineItems.digitalItems) {
+                        cart.lineItems.digitalItems.forEach(collectCovered);
+                    }
+                }
+
+                let results = await Promise.all(itemsToCheck.map(item => isItemAppliance(item)));
+                let uncoveredSkus = [];
+                results.forEach((isAppliance, idx) => {
+                    if (isAppliance) {
+                        let item = itemsToCheck[idx];
+                        applianceCount += item.quantity;
+                        let sku = item.sku || 'No SKU';
+                        let countInCart = item.quantity;
+                        let countCovered = coveredSkus.filter(s => s === sku).length;
+                        let needed = countInCart - countCovered;
+                        for (let i = 0; i < needed; i++) {
+                            uncoveredSkus.push(sku);
+                        }
+                    }
+                });
+
+                if (applianceCount > 0 && repairServiceCount === 0) {
+                    // Check if they already declined or accepted the modal
+                    if (sessionStorage.getItem('free_repair_modal_shown') === 'true') {
+                        return;
+                    }
+
+                    // Check if they have entered their email yet by calling Checkout API
+                    let checkoutRes = await fetch(`/api/storefront/checkouts/${cartId}`, {
+                        credentials: 'include',
+                        headers: { 'Accept': 'application/json' }
+                    });
+                    let checkout = await checkoutRes.json();
+                    let email = null;
+                    if (checkout && checkout.billingAddress && checkout.billingAddress.email) {
+                        email = checkout.billingAddress.email;
+                    } else if (checkout && checkout.customer && checkout.customer.email) {
+                        email = checkout.customer.email;
+                    }
+
+                    // If email is not entered yet, we wait (return and let the next polling check handle it)
+                    if (!email) {
+                        return;
+                    }
+
+                    // Email is present! Check if new customer
+                    let isNew = await isNewCustomer();
+                    if (isNew) {
+                        // Show the beautiful modal dialog!
+                        showFreeRepairModal(cartId, uncoveredSkus);
+                    } else {
+                        // Existing customer, don't show modal
+                        sessionStorage.setItem('free_repair_modal_shown', 'true');
+                    }
+                }
+            } catch (e) {
+                console.error("Error in checkout promotion:", e);
+            }
+        }
+
+        function showErrorModal(errorMsg) {
+            if ($('.error-modal-overlay').length > 0) return;
+
+            if ($('#error-modal-styles').length === 0) {
+                $('head').append(`
+                    <style id="error-modal-styles">
+                        .error-modal-overlay {
+                            position: fixed;
+                            top: 0;
+                            left: 0;
+                            width: 100vw;
+                            height: 100vh;
+                            background: rgba(15, 23, 42, 0.6);
+                            backdrop-filter: blur(6px);
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            z-index: 999999;
+                            opacity: 0;
+                            transition: opacity 0.3s ease;
+                        }
+                        .error-modal-overlay.active {
+                            opacity: 1;
+                        }
+                        .error-modal-card {
+                            background: #ffffff;
+                            border-radius: 16px;
+                            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+                            width: 90%;
+                            max-width: 480px;
+                            padding: 30px;
+                            text-align: center;
+                            border: 1px solid #e2e8f0;
+                            transform: scale(0.9);
+                            transition: transform 0.3s ease;
+                        }
+                        .error-modal-overlay.active .error-modal-card {
+                            transform: scale(1);
+                        }
+                        .error-modal-icon {
+                            font-size: 44px;
+                            color: #ef4444;
+                            margin-bottom: 16px;
+                            display: flex;
+                            justify-content: center;
+                        }
+                        .error-modal-icon svg {
+                            width: 64px !important;
+                            height: 64px !important;
+                            display: inline-block;
+                        }
+                        .error-modal-tag {
+                            background: #fee2e2;
+                            color: #b91c1c;
+                            font-size: 11px;
+                            font-weight: 700;
+                            padding: 4px 12px;
+                            border-radius: 20px;
+                            text-transform: uppercase;
+                            letter-spacing: 1px;
+                            display: inline-block;
+                            margin-bottom: 12px;
+                        }
+                        .error-modal-title {
+                            font-size: 22px;
+                            font-weight: 800;
+                            color: #b91c1c;
+                            margin: 0 0 10px 0;
+                            line-height: 1.3;
+                        }
+                        .error-modal-desc {
+                            font-size: 14px;
+                            color: #475569;
+                            line-height: 1.5;
+                            margin: 0 0 24px 0;
+                        }
+                        .error-modal-btn-close {
+                            background: #ef4444;
+                            color: #ffffff !important;
+                            border: none;
+                            padding: 14px 20px;
+                            border-radius: 8px;
+                            font-size: 16px;
+                            font-weight: 700;
+                            cursor: pointer;
+                            transition: background 0.2s ease;
+                            display: block;
+                            width: 100%;
+                            text-decoration: none !important;
+                        }
+                        .error-modal-btn-close:hover {
+                            background: #b91c1c;
+                        }
+                    </style>
+                `);
+            }
+
+            let errorModalHtml = `
+                <div class="error-modal-overlay">
+                    <div class="error-modal-card">
+                        <div class="error-modal-icon">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="15" y1="9" x2="9" y2="15"></line>
+                                <line x1="9" y1="9" x2="15" y2="15"></line>
+                            </svg>
+                        </div>
+                        <span class="error-modal-tag">Promotion Error</span>
+                        <h3 class="error-modal-title">Coupon Not Applied</h3>
+                        <p class="error-modal-desc">${errorMsg}</p>
+                        <button class="error-modal-btn-close" id="error-modal-close-btn">
+                            OK
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            $('body').append(errorModalHtml);
+
+            setTimeout(() => {
+                $('.error-modal-overlay').addClass('active');
+            }, 100);
+
+            $(document).on('click', '#error-modal-close-btn', function () {
+                $('.error-modal-overlay').removeClass('active');
+                setTimeout(() => {
+                    $('.error-modal-overlay').remove();
+                    window.location.reload();
+                }, 300);
+            });
+        }
+
+        function showFreeRepairModal(cartId, uncoveredSkus) {
+            // Prevent duplicate modals
+            if ($('.repair-modal-overlay').length > 0) return;
+            sessionStorage.setItem('free_repair_modal_shown', 'true');
+
+            // Inject CSS styles for the modal
+            if ($('#repair-modal-styles').length === 0) {
+                $('head').append(`
+                    <style id="repair-modal-styles">
+                        .repair-modal-overlay {
+                            position: fixed;
+                            top: 0;
+                            left: 0;
+                            width: 100vw;
+                            height: 100vh;
+                            background: rgba(15, 23, 42, 0.6);
+                            backdrop-filter: blur(6px);
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            z-index: 999999;
+                            opacity: 0;
+                            transition: opacity 0.3s ease;
+                        }
+                        .repair-modal-overlay.active {
+                            opacity: 1;
+                        }
+                        .repair-modal-card {
+                            background: #ffffff;
+                            border-radius: 16px;
+                            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+                            width: 90%;
+                            max-width: 480px;
+                            padding: 30px;
+                            text-align: center;
+                            border: 1px solid #e2e8f0;
+                            transform: scale(0.9);
+                            transition: transform 0.3s ease;
+                        }
+                        .repair-modal-overlay.active .repair-modal-card {
+                            transform: scale(1);
+                        }
+                        .repair-modal-icon {
+                            font-size: 44px;
+                            color: #10b981;
+                            margin-bottom: 16px;
+                        }
+                        .repair-modal-icon svg {
+                            width: 64px !important;
+                            height: 64px !important;
+                            display: inline-block;
+                        }
+                        .repair-modal-tag {
+                            background: #dcfce7;
+                            color: #15803d;
+                            font-size: 11px;
+                            font-weight: 700;
+                            padding: 4px 12px;
+                            border-radius: 20px;
+                            text-transform: uppercase;
+                            letter-spacing: 1px;
+                            display: inline-block;
+                            margin-bottom: 12px;
+                        }
+                        .repair-modal-title {
+                            font-size: 22px;
+                            font-weight: 800;
+                            color: #1e3a8a;
+                            margin: 0 0 10px 0;
+                            line-height: 1.3;
+                        }
+                        .repair-modal-desc {
+                            font-size: 14px;
+                            color: #475569;
+                            line-height: 1.5;
+                            margin: 0 0 24px 0;
+                        }
+                        .repair-modal-buttons {
+                            display: flex;
+                            flex-direction: column;
+                            gap: 10px;
+                        }
+                        .repair-modal-btn-claim {
+                            background: #1959d1;
+                            color: #ffffff !important;
+                            border: none;
+                            padding: 14px 20px;
+                            border-radius: 8px;
+                            font-size: 16px;
+                            font-weight: 700;
+                            cursor: pointer;
+                            transition: background 0.2s ease;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            gap: 8px;
+                            text-decoration: none !important;
+                        }
+                        .repair-modal-btn-claim:hover {
+                            background: #1b4594;
+                        }
+                        .repair-modal-btn-decline {
+                            background: transparent;
+                            color: #64748b !important;
+                            border: 1px solid #cbd5e1;
+                            padding: 12px 20px;
+                            border-radius: 8px;
+                            font-size: 14px;
+                            font-weight: 600;
+                            cursor: pointer;
+                            transition: all 0.2s ease;
+                            text-decoration: none !important;
+                        }
+                        .repair-modal-btn-decline:hover {
+                            background: #f1f5f9;
+                            color: #334155 !important;
+                        }
+                    </style>
+                `);
+            }
+
+            // Create modal HTML
+            let modalHtml = `
+                <div class="repair-modal-overlay">
+                    <div class="repair-modal-card">
+                        <div class="repair-modal-icon">
+                            <svg viewBox="0 0 1024 1024" class="icon" version="1.1" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M804.6 473.9v292.6c0 21.9-17.8 39.7-39.7 39.7H259.7c-21.9 0-39.7-17.8-39.7-39.7V473.9h-18.8c-21.9 0-39.7-17.8-39.7-39.7v-68.3c0-21.9 17.8-39.7 39.7-39.7h622.1c21.9 0 39.7 17.8 39.7 39.7v68.3c0 21.9-17.8 39.7-39.7 39.7h-18.7z" fill="#FFFFFF"></path><path d="M764.9 832.7H259.7c-36.5 0-66.2-29.7-66.2-66.2V499.9c-32.9-3.8-58.5-31.9-58.5-65.7v-68.3c0-36.5 29.7-66.2 66.2-66.2h622.1c36.5 0 66.2 29.7 66.2 66.2v68.3c0 33.9-25.6 61.9-58.5 65.7v266.6c0.1 36.5-29.6 66.2-66.1 66.2z m-563.7-480c-7.3 0-13.2 5.9-13.2 13.2v68.3c0 7.3 5.9 13.2 13.2 13.2h45.2v319.1c0 7.3 5.9 13.2 13.2 13.2h505.3c7.3 0 13.2-5.9 13.2-13.2V447.4h45.2c7.3 0 13.2-5.9 13.2-13.2v-68.3c0-7.3-5.9-13.2-13.2-13.2H201.2z" fill="#333333"></path><path d="M473.3 492.3h78v295.4h-78z" fill="#3a91ee"></path><path d="M239.5 447.4h545.6v51.7H239.5z" fill="#333333"></path><path d="M305.751 228.226l19.659-11.35c15.502-8.95 35.246-3.952 44.665 11.163l41.115 66.213-104.068 2.35-13.486-23.16c-9.237-15.799-3.82-36.016 11.979-45.252 0.05 0.086 0.05 0.086 0.136 0.036z" fill="#3a91ee"></path><path d="M277.11 350.417l-29.174-50.129c-23.786-41-9.93-93.801 31.069-117.588l0.26-0.15 19.658-11.35c40.444-23.35 91.48-10.553 116.078 29.053l90.15 144.944-228.041 5.22z m28.641-122.19l-0.346 0.2c-15.539 9.086-20.906 29.39-11.806 45.151l13.437 23.073 104.154-2.399-41.115-66.213c-9.52-15.288-29.163-20.113-44.665-11.163l-19.659 11.35zM414.8 492.3h58.5v295.4h-58.5zM551.3 492.3h58.5v295.4h-58.5z" fill="#333333"></path><path d="M716.76 228.266l-19.66-11.35c-15.501-8.95-35.245-3.952-44.665 11.163l-41.115 66.213 104.068 2.349 13.437-23.073c9.237-15.798 3.82-36.015-11.979-45.252l-0.086-0.05z" fill="#3a91ee"></path><path d="M745.364 350.32l-228.041-5.22 90.15-144.943c24.649-39.694 75.634-52.404 116.078-29.054l20.611 11.9c19.509 11.61 33.455 30.054 39.262 51.997 5.88 22.217 2.787 45.373-8.8 65.241l-29.26 50.08zM611.27 294.38l104.068 2.349 13.487-23.16c4.4-7.62 5.655-16.596 3.386-25.065-2.22-8.556-7.707-15.65-15.278-20.137l-19.832-11.45c-15.589-9-35.196-4.039-44.666 11.163l-41.165 66.3z" fill="#333333"></path></g></svg>
+                        </div>
+                        <span class="repair-modal-tag">Only For You</span>
+                        <h3 class="repair-modal-title">Get Free Lifetime Repair Service</h3>
+                        <p class="repair-modal-desc">
+                            Since you are a new customer, you are eligible to receive our <strong>Lifetime Half-Price Repair Service completely FREE</strong> (${repairServicePrice ? '$' + Math.round(repairServicePrice) : '$75'} value)!
+                        </p>
+                        <div class="repair-modal-buttons">
+                            <button class="repair-modal-btn-claim" id="repair-claim-btn">
+                                Yes, Claim My Free Protection
+                            </button>
+                            <button class="repair-modal-btn-decline" id="repair-decline-btn">
+                                No thanks, I'm not interested
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Append modal to body
+            $('body').append(modalHtml);
+
+            // Animate entrance
+            setTimeout(() => {
+                $('.repair-modal-overlay').addClass('active');
+            }, 100);
+
+            // Handle claim click
+            $(document).on('click', '#repair-claim-btn', async function () {
+                $(this).prop('disabled', true).html('Claiming... please wait...');
+                try {
+                    let optionId = await getRepairServiceOptionId();
+
+                    let lineItems = uncoveredSkus.map(sku => {
+                        let payload = {
+                            quantity: 1,
+                            productId: 1206
+                        };
+                        if (optionId) {
+                            payload.optionSelections = [
+                                {
+                                    optionId: optionId,
+                                    optionValue: sku
+                                }
+                            ];
+                        }
+                        return payload;
+                    });
+
+                    // Add to cart
+                    let addRes = await fetch(`/api/storefront/carts/${cartId}/items`, {
+                        method: "POST",
+                        credentials: "include",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Accept": "application/json"
+                        },
+                        body: JSON.stringify({
+                            lineItems: lineItems
+                        })
+                    });
+
+                    if (addRes.ok) {
+                        let updatedCart = await addRes.json();
+                        
+                        // Apply coupon
+                        let couponRes = await fetch(`/api/storefront/checkouts/${cartId}/coupons`, {
+                            method: "POST",
+                            credentials: "include",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "Accept": "application/json"
+                            },
+                            body: JSON.stringify({
+                                couponCode: "FREEREPAIR"
+                            })
+                        });
+
+                        if (couponRes.ok) {
+                            // Reload checkout page
+                            window.location.reload();
+                        } else {
+                            let errorData = null;
+                            try {
+                                errorData = await couponRes.json();
+                            } catch (e) {}
+
+                            let errorMsg = "This coupon code is either invalid or you have already used it.";
+
+                            // Delete the added items so they are not charged full price
+                            try {
+                                let addedItemIds = [];
+                                if (updatedCart && updatedCart.lineItems) {
+                                    let checkAndAdd = (item) => {
+                                        if (item.productId == 1206) {
+                                            addedItemIds.push(item.id);
+                                        }
+                                    };
+                                    if (updatedCart.lineItems.physicalItems) {
+                                        updatedCart.lineItems.physicalItems.forEach(checkAndAdd);
+                                    }
+                                    if (updatedCart.lineItems.digitalItems) {
+                                        updatedCart.lineItems.digitalItems.forEach(checkAndAdd);
+                                    }
+                                }
+                                
+                                // Delete them in parallel
+                                await Promise.all(addedItemIds.map(itemId =>
+                                    fetch(`/api/storefront/carts/${cartId}/items/${itemId}`, {
+                                        method: "DELETE",
+                                        credentials: "include"
+                                    })
+                                ));
+                            } catch (deleteError) {
+                                console.error("Failed to cleanup added items after coupon error:", deleteError);
+                            }
+
+                            closeModal();
+                            showErrorModal(errorMsg);
+                        }
+                    } else {
+                        alert("Could not add free protection. Please try again or check out.");
+                        closeModal();
+                    }
+                } catch (e) {
+                    console.error("Failed to add free service:", e);
+                    closeModal();
+                }
+            });
+
+            // Handle decline click
+            $(document).on('click', '#repair-decline-btn', function () {
+                closeModal();
+            });
+
+            function closeModal() {
+                $('.repair-modal-overlay').removeClass('active');
+                setTimeout(() => {
+                    $('.repair-modal-overlay').remove();
+                }, 300);
+            }
+        }
+
+        // Run check every 3 seconds to monitor when email step is filled
+        setInterval(checkCheckoutPromotion, 3000);
+        // Also run once immediately
+        checkCheckoutPromotion();
+    });
 </script>
 
 
+
+
 <style>
+    #custom-humm-payment label::before,
+    #custom-humm-payment label::after {
+        display: none !important;
+        content: none !important;
+    }
+
+    #custom-humm-payment .paymentProviderHeader-name {
+        margin: 0 !important;
+        padding: 0 !important;
+        line-height: normal !important;
+        display: inline-block !important;
+        position: static !important;
+        transform: none !important;
+    }
+
     span.cart-priceItem-postFix.optimizedCheckout-contentSecondary {
         display: none;
         color: red;
@@ -405,3 +1617,321 @@
         font-size: 1.14286rem;
     }
 </style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ========================================================================= -->
+<!-- INTERAC E-TRANSFER $10 DISCOUNT & AUTO PAYMENT SELECTION                  -->
+<!-- ========================================================================= -->
+
+<style>
+  /* E-Transfer $10 Promo Banner Style */
+  .etransfer-promo-banner {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: #ffffff;
+    padding: 14px 20px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 15px;
+    text-align: center;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+</style>
+
+<script>
+  (function() {
+    const COUPON_CODE = "ETRANSFER10"; // BigCommerce Admin Coupon Code
+    let isProcessing = false;
+
+    // 1. Render Promo Banner at Top of Checkout
+    function renderPromoBanner() {
+      if (document.querySelector('.etransfer-promo-banner')) return;
+      const checkoutContainer = document.querySelector('.checkout-steps, .checkoutHeader, #checkout-app, .layout-main, .cart');
+      if (checkoutContainer) {
+        const banner = document.createElement('div');
+        banner.className = 'etransfer-promo-banner';
+        banner.innerHTML = '💸 <span>SAVE $10 — PAY BY INTERAC E-TRANSFER AUTO DEPOSIT</span>';
+        checkoutContainer.parentNode.insertBefore(banner, checkoutContainer);
+      }
+    }
+
+    // 2. Automatically Find & Click/Select the Interac E-Transfer Radio Button
+    function selectETransferRadio() {
+      const allRadios = document.querySelectorAll('input[name="paymentProviderRadio"], input[type="radio"]');
+      let found = false;
+
+      allRadios.forEach(radio => {
+        const parent = radio.closest('label') || radio.closest('.form-checklist-item') || radio.parentElement;
+        const text = parent ? parent.textContent.toUpperCase() : '';
+        const val = (radio.value || '').toUpperCase();
+        const id = (radio.id || '').toUpperCase();
+
+        if (text.includes("INTERAC") || text.includes("E-TRANSFER") || text.includes("MONEY ORDER") || val.includes("MONEY") || val.includes("OFFLINE") || id.includes("MONEY") || id.includes("OFFLINE")) {
+          found = true;
+          if (!radio.checked) {
+            radio.click();
+            radio.checked = true;
+            radio.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+        }
+      });
+
+      return found;
+    }
+
+    // 3. Helper to Check if Interac E-Transfer is Checked
+    function isETransferRadio(radio) {
+      if (!radio) return false;
+      const parent = radio.closest('label') || radio.closest('.form-checklist-item') || radio.parentElement;
+      const text = parent ? parent.textContent.toUpperCase() : '';
+      const val = (radio.value || '').toUpperCase();
+      const id = (radio.id || '').toUpperCase();
+      return text.includes("INTERAC") || text.includes("E-TRANSFER") || text.includes("MONEY ORDER") || val.includes("MONEY") || val.includes("OFFLINE") || id.includes("MONEY") || id.includes("OFFLINE");
+    }
+
+    // 4. Restore e-Transfer Check Visually on Page Load
+    function restoreSelectedPaymentOnLoad() {
+      const savedState = sessionStorage.getItem('etransfer_active');
+      if (savedState === 'true') {
+        selectETransferRadio();
+      }
+    }
+
+    // 5. Get Active Checkout ID
+    async function getCheckoutId() {
+      if (window.checkoutConfig && window.checkoutConfig.checkoutId) {
+        return window.checkoutConfig.checkoutId;
+      }
+      try {
+        const cartRes = await fetch('/api/storefront/carts', { credentials: 'same-origin' });
+        if (cartRes.ok) {
+          const carts = await cartRes.json();
+          if (carts && carts[0]) return carts[0].id;
+        }
+      } catch (e) {
+        console.error("Cart ID fetch error:", e);
+      }
+      return null;
+    }
+
+    // 6. Apply Coupon Code ONCE & Select E-Transfer
+    async function applyEtransferCoupon() {
+      if (isProcessing) return;
+      isProcessing = true;
+
+      try {
+        const checkoutId = await getCheckoutId();
+        if (!checkoutId) return;
+
+        console.log("Applying ETRANSFER10 coupon...");
+        let res = await fetch(`/api/storefront/checkouts/${checkoutId}/coupons`, {
+          method: 'POST',
+          credentials: 'same-origin',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({ couponCode: COUPON_CODE })
+        });
+
+        if (!res.ok) {
+          res = await fetch(`/api/storefront/carts/${checkoutId}/coupons`, {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify({ couponCode: COUPON_CODE })
+          });
+        }
+
+        sessionStorage.setItem('etransfer_active', 'true');
+        selectETransferRadio();
+        console.log("✅ Coupon ETRANSFER10 Applied & E-Transfer Selected!");
+        window.location.reload();
+      } catch (err) {
+        console.error("Error applying coupon:", err);
+      } finally {
+        isProcessing = false;
+      }
+    }
+
+    // 7. Remove Coupon Code ONCE
+    async function removeEtransferCoupon() {
+      if (isProcessing) return;
+      isProcessing = true;
+
+      try {
+        const checkoutId = await getCheckoutId();
+        if (!checkoutId) return;
+
+        console.log("Removing ETRANSFER10 coupon...");
+        let res = await fetch(`/api/storefront/checkouts/${checkoutId}/coupons/${COUPON_CODE}`, {
+          method: 'DELETE',
+          credentials: 'same-origin',
+          headers: { 'Accept': 'application/json' }
+        });
+
+        if (!res.ok) {
+          res = await fetch(`/api/storefront/carts/${checkoutId}/coupons/${COUPON_CODE}`, {
+            method: 'DELETE',
+            credentials: 'same-origin',
+            headers: { 'Accept': 'application/json' }
+          });
+        }
+
+        sessionStorage.removeItem('etransfer_active');
+        console.log("❌ Coupon ETRANSFER10 Removed!");
+        window.location.reload();
+      } catch (err) {
+        console.error("Error removing coupon:", err);
+      } finally {
+        isProcessing = false;
+      }
+    }
+
+    // 8. INSTANT Coupon Code Input & Applied Coupon Detection
+    function checkAndAutoSelectOnCoupon(valueStr) {
+      if (!valueStr) return;
+      const cleanVal = valueStr.trim().toUpperCase();
+      if (cleanVal === COUPON_CODE || cleanVal.includes('ETRANSFER')) {
+        console.log("ETRANSFER coupon detected! Auto-selecting E-Transfer...");
+        sessionStorage.setItem('etransfer_active', 'true');
+        selectETransferRadio();
+      }
+    }
+
+    // Global Input Listener (Instant triggering as user types/pastes "ETRANSFER10")
+    document.addEventListener('input', function(e) {
+      if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) {
+        checkAndAutoSelectOnCoupon(e.target.value);
+      }
+    }, true);
+
+    // Global Keydown Listener (Trigger when user hits Enter on coupon field)
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && e.target && e.target.tagName === 'INPUT') {
+        const val = (e.target.value || '').trim().toUpperCase();
+        if (val === COUPON_CODE || val.includes('ETRANSFER')) {
+          sessionStorage.setItem('etransfer_active', 'true');
+          selectETransferRadio();
+          const wasApplied = sessionStorage.getItem('etransfer_active') === 'true';
+          if (!wasApplied) {
+            applyEtransferCoupon();
+          }
+        }
+      }
+    }, true);
+
+    // Global Click Listener (Trigger when user clicks "Apply" coupon button)
+    document.addEventListener('click', function(e) {
+      const btn = e.target.closest('button, input[type="submit"], a');
+      if (btn) {
+        const btnText = (btn.textContent || btn.value || '').toUpperCase();
+        if (btnText.includes('APPLY') || btnText.includes('SUBMIT') || btn.closest('[data-test*="coupon"]') || btn.closest('#coupon') || btn.closest('.coupon')) {
+          // Check any coupon input on page
+          const inputs = document.querySelectorAll('input[name*="coupon"], input[id*="coupon"], input[placeholder*="Coupon"], input[placeholder*="Promo"], [data-test*="coupon"] input');
+          inputs.forEach(inp => {
+            const val = (inp.value || '').trim().toUpperCase();
+            if (val === COUPON_CODE || val.includes('ETRANSFER')) {
+              sessionStorage.setItem('etransfer_active', 'true');
+              selectETransferRadio();
+            }
+          });
+        }
+      }
+    }, true);
+
+    // 9. Handle User Payment Radio Clicks
+    function handleUserPaymentSelection(radio) {
+      if (isETransferRadio(radio)) {
+        const wasApplied = sessionStorage.getItem('etransfer_active') === 'true';
+        if (!wasApplied) {
+          applyEtransferCoupon();
+        }
+      } else {
+        const wasApplied = sessionStorage.getItem('etransfer_active') === 'true';
+        if (wasApplied) {
+          removeEtransferCoupon();
+        }
+      }
+    }
+
+    // 10. DOM Watcher for Dynamic React Render & Applied Coupon Badge
+    const observer = new MutationObserver(function() {
+      renderPromoBanner();
+      restoreSelectedPaymentOnLoad();
+
+      // Check if coupon badge ETRANSFER10 appears in order summary DOM
+      const pageText = document.body ? document.body.innerText.toUpperCase() : '';
+      if (pageText.includes('ETRANSFER10') && sessionStorage.getItem('etransfer_active') !== 'true') {
+        sessionStorage.setItem('etransfer_active', 'true');
+        selectETransferRadio();
+      }
+    });
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function() {
+        observer.observe(document.body, { childList: true, subtree: true });
+        restoreSelectedPaymentOnLoad();
+      });
+    } else {
+      observer.observe(document.body, { childList: true, subtree: true });
+      restoreSelectedPaymentOnLoad();
+    }
+
+    // Direct User Payment Radio Selection
+    document.addEventListener('change', function(e) {
+      if (e.target && e.target.type === 'radio' && e.isTrusted) {
+        handleUserPaymentSelection(e.target);
+      }
+    }, true);
+
+    document.addEventListener('click', function(e) {
+      if (!e.isTrusted) return;
+      const radio = e.target.closest('input[type="radio"]') || (e.target.closest('label') ? document.getElementById(e.target.closest('label').getAttribute('for')) : null);
+      if (radio) {
+        handleUserPaymentSelection(radio);
+      }
+    }, true);
+
+  })();
+</script>
